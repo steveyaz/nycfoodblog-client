@@ -9,13 +9,14 @@ import logo from './rosie.png';
 export interface AppState {
   posts: WirePost[];
   inError: boolean;
+  authToken: string;
 }
 
 class App extends React.Component<any, AppState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { posts: [], inError: false };
+    this.state = { posts: [], inError: false, authToken: "" };
   }
 
   public componentDidMount() {
@@ -23,6 +24,17 @@ class App extends React.Component<any, AppState> {
       this.setState({ posts, inError: false });
     }).catch(e => {
       this.setState({ posts: [], inError: true });
+    });
+    DataRequestor.checkAuthentication().then((isAuthed) => {
+      const authToken = "blah";
+      if (isAuthed) {
+        this.setState({ authToken });
+        console.log("SUCCESSFUL LOGIN");
+      } else {
+        console.log("FAILED LOGIN");
+      }
+    }).catch(e => {
+      this.setState({ inError: true });
     });
   }
 
