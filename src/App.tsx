@@ -1,7 +1,9 @@
 import * as React from 'react';
 import './App.css';
 
-import { DataRequestor } from './data/DataRequestor';
+import { LoginForm } from './auth/LoginForm';
+import { LogoutForm } from './auth/LogoutForm';
+import { RequestClient } from './data/RequestClient';
 import { WirePost } from './data/WirePost';
 import { Post } from './post/Post';
 import logo from './rosie.png';
@@ -9,32 +11,28 @@ import logo from './rosie.png';
 export interface AppState {
   posts: WirePost[];
   inError: boolean;
-  authToken: string;
+  username: string;
+  isAuthed: boolean;
+  displayAuth: boolean;
 }
 
 class App extends React.Component<any, AppState> {
+  private requestClient: RequestClient;
 
   constructor(props: any) {
     super(props);
-    this.state = { posts: [], inError: false, authToken: "" };
+    this.state = { posts: [], inError: false, username: "", isAuthed: false, displayAuth: false };
+    this.requestClient = new RequestClient();
+    this.onLogin = this.onLogin.bind(this);
+    this.onLogout = this.onLogout.bind(this);
+    this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
   }
 
   public componentDidMount() {
-    DataRequestor.getAllPosts().then((posts: WirePost[]) => {
+    this.requestClient.getAllPosts().then((posts: WirePost[]) => {
       this.setState({ posts, inError: false });
     }).catch(e => {
       this.setState({ posts: [], inError: true });
-    });
-    DataRequestor.checkAuthentication().then((isAuthed) => {
-      const authToken = "blah";
-      if (isAuthed) {
-        this.setState({ authToken });
-        console.log("SUCCESSFUL LOGIN");
-      } else {
-        console.log("FAILED LOGIN");
-      }
-    }).catch(e => {
-      this.setState({ inError: true });
     });
   }
 
@@ -52,10 +50,32 @@ class App extends React.Component<any, AppState> {
             })}
           </div>
           { this.state.inError && <p>Error 😢</p> }
-          <p>❤️ Sonya</p>
+          <p onClick={this.toggleAuthDisplay}>❤️ Sonya</p>
         </div>
+        {this.state.displayAuth && !this.state.isAuthed && <LoginForm onSubmit={this.onLogin} />}
+        {this.state.displayAuth && this.state.isAuthed && <LogoutForm onSubmit={this.onLogout} />}
+        {this.state.isAuthed && <div>Hello, {this.state.username}!</div>}
       </div>
     );
+  }
+
+  private toggleAuthDisplay() {
+    this.setState({ displayAuth: !this.state.displayAuth });
+  }
+
+  private onLogin(username: string, password: string) {
+    this.requestClient.login(username, password).then((isAuthed) => {
+      if (isAuthed) {
+        this.setState({ username, isAuthed });
+      }
+    }).catch(e => {
+      this.setState({ inError: true });
+    });
+  }
+
+  private onLogout() {
+    this.requestClient.logout();
+    this.setState({ username: "", isAuthed: false });
   }
 }
 
