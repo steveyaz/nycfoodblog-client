@@ -9,7 +9,7 @@ export type WirePost = {
   addressCity: string;
   addressState: string;
   addressZip: string;
-  order: string;
+  order: string[];
   cost: number;
   tags: string[];
 };

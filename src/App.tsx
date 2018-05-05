@@ -1,14 +1,15 @@
 import * as React from 'react';
 import './App.css';
 
-import { LoginForm } from './auth/LoginForm';
-import { LogoutForm } from './auth/LogoutForm';
+import { Auth } from './auth/Auth';
 import { RequestClient } from './data/RequestClient';
 import { WirePost } from './data/WirePost';
 import { Post } from './post/Post';
+import { PostForm } from './post/PostForm';
 import logo from './rosie.png';
 
 export interface AppState {
+  view: "ALL_POSTS" | "ADD_POST";
   posts: WirePost[];
   inError: boolean;
   username: string;
@@ -21,11 +22,12 @@ class App extends React.Component<any, AppState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { posts: [], inError: false, username: "", isAuthed: false, displayAuth: false };
+    this.state = { view: "ALL_POSTS", posts: [], inError: false, username: "", isAuthed: false, displayAuth: false };
     this.requestClient = new RequestClient();
     this.onLogin = this.onLogin.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
+    this.viewAddPost = this.viewAddPost.bind(this);
   }
 
   public componentDidMount() {
@@ -40,21 +42,37 @@ class App extends React.Component<any, AppState> {
     return (
       <div className="app">
         <header className="header">
+          {this.state.displayAuth &&
+            <Auth
+              isAuthed={this.state.isAuthed}
+              username={this.state.username}
+              onLogin={this.onLogin}
+              onLogout={this.onLogout}
+            />}
+          {this.state.isAuthed && 
+            <div>
+              <input type="submit" value="Add Post" onClick={this.viewAddPost} />
+            </div>
+          }
           <img src={logo} className="logo" alt="Rosie!" />
           <h1 className="title">NYC Food Blog</h1>
         </header>
         <div className="content">
-          <div className="posts">
-            {this.state.posts.map((post: WirePost) => {
-              return <Post key={post.id} post={post} />
-            })}
-          </div>
-          { this.state.inError && <p>Error 😢</p> }
-          <p onClick={this.toggleAuthDisplay}>❤️ Sonya</p>
+          {this.state.view === "ALL_POSTS" &&
+            <div>
+              <div className="posts">
+                {this.state.posts.map((post: WirePost) => {
+                  return <Post key={post.id} post={post} />
+                })}
+              </div>
+              { this.state.inError && <p>Error 😢</p> }
+              <p onClick={this.toggleAuthDisplay}>❤️ Sonya</p>
+            </div>
+          }
+          {this.state.view === "ADD_POST" &&
+            <PostForm />
+          }
         </div>
-        {this.state.displayAuth && !this.state.isAuthed && <LoginForm onSubmit={this.onLogin} />}
-        {this.state.displayAuth && this.state.isAuthed && <LogoutForm onSubmit={this.onLogout} />}
-        {this.state.isAuthed && <div>Hello, {this.state.username}!</div>}
       </div>
     );
   }
@@ -75,7 +93,11 @@ class App extends React.Component<any, AppState> {
 
   private onLogout() {
     this.requestClient.logout();
-    this.setState({ username: "", isAuthed: false });
+    this.setState({ username: "", isAuthed: false, view: "ALL_POSTS" });
+  }
+
+  private viewAddPost() {
+    this.setState({ view: "ADD_POST" });
   }
 }
 

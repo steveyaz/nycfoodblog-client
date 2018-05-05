@@ -21,14 +21,14 @@ export class LoginForm extends React.PureComponent<LoginFormProps, LoginFormStat
   public render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Username:
+        <span>
+          <span>Username</span>
           <input type="text" value={this.state.username} onChange={this.handleChange.bind(this, "username")} />
-        </label>
-        <label>
-          Password:
+        </span>
+        <span>
+          <span>Password</span>
           <input type="password" value={this.state.password} onChange={this.handleChange.bind(this, "password")} />
-        </label>
+        </span>
         <input type="submit" value="Login" />
       </form>
     );

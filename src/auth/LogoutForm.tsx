@@ -12,13 +12,11 @@ export class LogoutForm extends React.PureComponent<LogoutFormProps> {
 
   public render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input type="submit" value="Logout" />
-      </form>
+      <input type="submit" value="Logout" onClick={this.handleSubmit} />
     );
   }
 
-  private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  private handleSubmit(event: React.FormEvent<HTMLInputElement>) {
     this.props.onSubmit();
     event.preventDefault();
   }
