@@ -2,12 +2,16 @@ import * as moment from 'moment';
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { WirePost } from '../data/WirePost';
+
+export interface PostFormProps {
+  createPost: (post: WirePost) => void,
+}
 
 export interface PostFormState {
   restaurantName: string;
   dateVisited: moment.Moment;
   neighborhood: string;
-  cuisineType: string;
   addressStreet: string;
   addressCity: string;
   addressState: string;
@@ -17,15 +21,42 @@ export interface PostFormState {
   tags: string[];
 }
 
-export class PostForm extends React.PureComponent<any, PostFormState> {
+export const NEIGHBORHOODS: Map<string, string> = new Map([
+  ["upperWestSide", "Upper West Side"],
+  ["brooklyn", "Brooklyn"],
+  ["centralPark", "Central Park"],
+  ["chelsea", "Chelsea"],
+  ["chinatown", "Chinatown"],
+  ["eastHarlem", "East Harlem"],
+  ["eastVillage", "East Village"],
+  ["financialDistrict", "Financial District"],
+  ["garmentDistrict", "Garment District"],
+  ["gramercy", "Gramercy"],
+  ["greenwichVillage", "Greenwich Village"],
+  ["harlem", "Harlem"],
+  ["littleItaly", "Little Italy"],
+  ["lowerEastSide", "Lower East Side"],
+  ["midtownEast", "Midtown East"],
+  ["midtownWest", "Midtown West"],
+  ["morningsideHeights", "Morningside Heights"],
+  ["murrayHill", "Murray Hill"],
+  ["queens", "Queens"],
+  ["soho", "SoHo"],
+  ["stuyvesantTown", "Stuyvesant Town"],
+  ["timesSquare", "Times Square"],
+  ["tribeca", "TriBeCa"],
+  ["upperEastSide", "Upper East Side"],
+  ["other", "Other"],
+]);
+
+export class PostForm extends React.PureComponent<PostFormProps, PostFormState> {
   public constructor(props: any) {
     super(props);
     this.state =
     {
       restaurantName: "",
       dateVisited: moment(),
-      neighborhood: "",
-      cuisineType: "",
+      neighborhood: "upperWestSide",
       addressStreet: "",
       addressCity: "New York",
       addressState: "NY",
@@ -36,6 +67,8 @@ export class PostForm extends React.PureComponent<any, PostFormState> {
     };
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleNeighborhoodChange = this.handleNeighborhoodChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   public render() {
@@ -58,37 +91,11 @@ export class PostForm extends React.PureComponent<any, PostFormState> {
         </div>
         <div className="form-field">
           <span>Neighborhood</span>
-          <select>
-            <option value="upperWestSide">Upper West Side</option>
-            <option value="brooklyn">Brooklyn</option>
-            <option value="centralPark">Central Park</option>
-            <option value="chelsea">Chelsea</option>
-            <option value="chinatown">Chinatown</option>
-            <option value="eastHarlem">East Harlem</option>
-            <option value="eastVillage">East Village</option>
-            <option value="financialDistrict">Financial District</option>
-            <option value="garmentDistrict">Garment District</option>
-            <option value="gramercy">Gramercy</option>
-            <option value="greenwichVillage">Greenwich Village</option>
-            <option value="harlem">Harlem</option>
-            <option value="littleItaly">Little Italy</option>
-            <option value="lowerEastSide">Lower East Side</option>
-            <option value="midtownEast">Midtown East</option>
-            <option value="midtownWest">Midtown West</option>
-            <option value="morningsideHeights">Morningside Heights</option>
-            <option value="murrayHill">Murray Hill</option>
-            <option value="queens">Queens</option>
-            <option value="soho">SoHo</option>
-            <option value="stuyvesantTown">Stuyvesant Town</option>
-            <option value="timesSquare">Times Square</option>
-            <option value="tribeca">TriBeCa</option>
-            <option value="upperEastSide">Upper East Side</option>
-            <option value="other">Other</option>
+          <select value={this.state.neighborhood} onChange={this.handleNeighborhoodChange}>
+            {Array.from(NEIGHBORHOODS.keys()).map(key => {
+              return <option key={key} value={key}>{NEIGHBORHOODS.get(key)}</option>
+            })}
           </select>
-        </div>
-        <div className="form-field">
-          <span>Cuisine Type</span>
-          <input type="cuisineType" value={this.state.cuisineType} onChange={this.handleTextChange.bind(this, "cuisineType")} />
         </div>
         <div className="form-field">
           <span>Street Address</span>
@@ -169,7 +176,25 @@ export class PostForm extends React.PureComponent<any, PostFormState> {
     event.preventDefault();
   }
 
+  private handleNeighborhoodChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({neighborhood: event.currentTarget.value});
+    event.preventDefault();
+  }
+
   private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const post: WirePost = {
+      restaurantName: this.state.restaurantName,
+      dateVisited: this.state.dateVisited.toDate(),
+      neighborhood: this.state.neighborhood,
+      addressStreet: this.state.addressStreet,
+      addressCity: this.state.addressCity,
+      addressState: this.state.addressState,
+      addressZip: this.state.addressZip,
+      order: this.state.order,
+      cost: this.state.cost,
+      tags: this.state.tags,
+    }
+    this.props.createPost(post);
     event.preventDefault();
   }
 

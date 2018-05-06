@@ -1,10 +1,8 @@
 export type WirePost = {
-  id: number;
-  dateCreated: Date;
+  id?: number;
   restaurantName: string;
   dateVisited: Date;
   neighborhood: string;
-  cuisineType: string;
   addressStreet: string;
   addressCity: string;
   addressState: string;

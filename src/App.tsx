@@ -28,6 +28,7 @@ class App extends React.Component<any, AppState> {
     this.onLogout = this.onLogout.bind(this);
     this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
     this.viewAddPost = this.viewAddPost.bind(this);
+    this.createPost = this.createPost.bind(this);
   }
 
   public componentDidMount() {
@@ -61,16 +62,19 @@ class App extends React.Component<any, AppState> {
           {this.state.view === "ALL_POSTS" &&
             <div>
               <div className="posts">
-                {this.state.posts.map((post: WirePost) => {
-                  return <Post key={post.id} post={post} />
-                })}
+                {this.state.posts
+                  .sort((a: WirePost, b: WirePost) => {
+                    return a.dateVisited < b.dateVisited ? 1 : -1;
+                  }).map((post: WirePost) => {
+                    return <Post key={post.id!} post={post} />
+                  })}
               </div>
               { this.state.inError && <p>Error 😢</p> }
               <p onClick={this.toggleAuthDisplay}>❤️ Sonya</p>
             </div>
           }
           {this.state.view === "ADD_POST" &&
-            <PostForm />
+            <PostForm createPost={this.createPost} />
           }
         </div>
       </div>
@@ -98,6 +102,16 @@ class App extends React.Component<any, AppState> {
 
   private viewAddPost() {
     this.setState({ view: "ADD_POST" });
+  }
+
+  private createPost(post: WirePost) {
+    this.requestClient.createPost(post)
+      .then(id => {
+        post.id = id;
+        this.setState({ posts: [post, ...this.state.posts], view: "ALL_POSTS" });
+      }).catch(e => {
+        this.setState({ inError: true });
+      });
   }
 }
 

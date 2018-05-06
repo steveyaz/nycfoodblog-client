@@ -1,3 +1,9 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
 .app {
   text-align: center;
 }
@@ -12,6 +18,7 @@
   height: 150px;
   padding: 20px;
   color: white;
+  margin-bottom: 8px;
 }
 
 .title {
@@ -30,6 +37,13 @@
 .react-datepicker__time-list {
   -webkit-padding-start: 0px;
   padding-right: 0px;
+}
+
+.post {
+  border: 1px;
+  border-style: solid;
+  border-color: gray;
+  margin-bottom: 8px;
 }
 
 .post-form {
