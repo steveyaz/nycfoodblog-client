@@ -29,6 +29,13 @@ body {
   font-size: large;
 }
 
+.posts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 @keyframes logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -39,24 +46,17 @@ body {
   padding-right: 0px;
 }
 
-.post {
-  border: 1px;
-  border-style: solid;
-  border-color: gray;
-  margin-bottom: 8px;
+.easterEgg {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  text-align: right;
+  font-size: 8px;
+  opacity: 0;
+  height: 16px;
 }
 
-.post-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: row;
-}
-
-.multi-field {
-  display: flex;
-  flex-direction: column;
+.easterEgg:hover {
+  opacity: 100;
+  cursor: pointer;
 }

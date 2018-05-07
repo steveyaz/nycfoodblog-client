@@ -70,7 +70,7 @@ class App extends React.Component<any, AppState> {
                   })}
               </div>
               { this.state.inError && <p>Error 😢</p> }
-              <p onClick={this.toggleAuthDisplay}>❤️ Sonya</p>
+              <div className="easterEgg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
             </div>
           }
           {this.state.view === "ADD_POST" &&
