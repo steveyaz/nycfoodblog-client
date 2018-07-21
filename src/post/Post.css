@@ -1,19 +1,30 @@
 .post {
-  background: #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin-bottom: 8px;
+  padding: 8px;
   border: 1px;
   border-style: solid;
   border-color: #E0E0E0;
-  margin-bottom: 8px;
-  width: 700px;
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
+  background: #F5F5F5;
 }
 
 .restaurant-name {
   font-size: 26px;
   font-family: monospace;
   align-self: flex-start;
+}
+
+.post-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.restaurant-details {
+  display: flex;
+  flex-direction: column;
 }
 
 .restaurant-subtitle {
@@ -50,6 +61,21 @@
   font-size: 12px;
   display: flex;
   flex-direction: row;
+}
+
+.reviews {
+  display: flex;
+  flex-direction: row;
+}
+
+.review {
+  background-color: #00ffbf;
+  padding: 10px;
+  margin: 10px;
+}
+
+.username {
+  text-transform: capitalize;
 }
 
 .post-form {

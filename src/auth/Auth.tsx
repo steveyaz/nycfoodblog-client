@@ -4,7 +4,7 @@ import { LogoutForm } from './LogoutForm';
 
 export interface AuthProps {
   isAuthed: boolean;
-  username: string;
+  username?: string;
   onLogin: (username: string, password: string) => void;
   onLogout: () => void;
 }
