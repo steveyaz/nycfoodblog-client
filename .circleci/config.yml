@@ -53,7 +53,7 @@ jobs:
 
       - run:
           name: Uncompress Build
-          run: unzip ~/repo/nycfoodblog-client.zip nycfoodblog-client
+          command: unzip ~/repo/nycfoodblog-client.zip nycfoodblog-client
 
       - run:
           name: Deploy Site
