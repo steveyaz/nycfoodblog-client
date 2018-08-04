@@ -2,7 +2,7 @@ import { RequestInitBuilder } from "./RequestInitBuilder";
 import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
-const BASE_URL = 'http://localhost:8090';
+const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
