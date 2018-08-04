@@ -28,7 +28,7 @@ jobs:
 
       - run:
           name: Compress build
-          command: zip -r nycfoodblog-client-{{ .Revision }}.zip build/* 
+          command: zip -r nycfoodblog-client.zip build/* 
 
       - save_cache:
           name: Cache build
@@ -53,11 +53,11 @@ jobs:
 
       - run:
           name: Uncompress Build
-          run: unzip ~/repo/nycfoodblog-client-{{ .Revision }} .
+          run: unzip ~/repo/nycfoodblog-client.zip nycfoodblog-client
 
       - run:
           name: Deploy Site
-          command: scp -o StrictHostKeyChecking=no -r . ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
+          command: scp -o StrictHostKeyChecking=no -r nycfoodblog-client/* ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
 
 workflows:
   version: 2
