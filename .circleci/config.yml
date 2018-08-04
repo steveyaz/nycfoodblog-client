@@ -19,7 +19,8 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
+      - checkout:
+          name: Checkout repo
 
       - restore_cache:
           name: Download cached dependencies
@@ -28,9 +29,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - install:
+      - run:
           name: Build
-          run: yarn install build
+          command: yarn install build
 
       - save_cache:
           name: Cache build
