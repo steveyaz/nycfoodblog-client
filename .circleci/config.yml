@@ -18,29 +18,41 @@ jobs:
 
     steps:
       - checkout
+          name: Checkout repo
 
-      # Download and cache dependencies
       - restore_cache:
+          name: Download cached dependencies
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - install:
+          name: Build
+          run: yarn install build
 
       - save_cache:
+          name: Cache build
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          keys:
+          # save dependencies for next build job
+          - v1-dependencies-{{ checksum "package.json" }}
+          # save build for deploy job
+          - v1-build-{{ .BuildNum }}
         
-      # run tests!
-      - run: yarn test
+      - test:
+          name: Test
+          run: yarn test
 
   deploy:
     docker:
       - image: circleci/python:2.7-jessie
-    working_directory: ~/circleci-docs
+    working_directory: ~/repo
     steps:
+      - restore_cache:
+          name: Download build
+          key: v1-build-{{ .BuildNum }}
       - run:
           name: Deploy Site
           command: scp ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
