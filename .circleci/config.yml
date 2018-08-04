@@ -24,7 +24,7 @@ jobs:
 
       - run:
           name: Build
-          command: yarn build
+          command: yarn add build && yarn build
 
       - run:
           name: Compress build
