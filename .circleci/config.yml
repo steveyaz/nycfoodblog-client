@@ -26,10 +26,14 @@ jobs:
           name: Build
           command: yarn add build
 
+      - run:
+          name: Compress build
+          command: zip -r build/* nycfoodblog-client-{{ .Revision }}
+
       - save_cache:
           name: Cache build
           paths:
-            - build
+            - nycfoodblog-client-{{ .Revision }}
           key: v1-build-{{ .Revision }}
         
       - run:
@@ -48,8 +52,12 @@ jobs:
           key: v1-build-{{ .Revision }}
 
       - run:
+          name: Uncompress Build
+          run: unzip ~/repo/nycfoodblog-client-{{ .Revision }} .
+
+      - run:
           name: Deploy Site
-          command: scp -o StrictHostKeyChecking=no -r ~/repo/build/* ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
+          command: scp -o StrictHostKeyChecking=no -r . ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
 
 workflows:
   version: 2
