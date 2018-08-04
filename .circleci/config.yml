@@ -28,7 +28,7 @@ jobs:
 
       - run:
           name: Compress build
-          command: zip -r build/* nycfoodblog-client-{{ .Revision }}
+          command: zip -r nycfoodblog-client-{{ .Revision }}.zip build/* 
 
       - save_cache:
           name: Cache build
