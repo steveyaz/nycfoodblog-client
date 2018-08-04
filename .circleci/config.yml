@@ -43,9 +43,9 @@ jobs:
           # save build for deploy job
           - v1-build-{{ .BuildNum }}
         
-      - test:
+      - run:
           name: Test
-          run: yarn test
+          command: yarn test
 
   deploy:
 
