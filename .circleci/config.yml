@@ -4,7 +4,9 @@
 #
 version: 2
 jobs:
+
   build:
+
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -18,7 +20,6 @@ jobs:
 
     steps:
       - checkout
-          name: Checkout repo
 
       - restore_cache:
           name: Download cached dependencies
@@ -46,13 +47,16 @@ jobs:
           run: yarn test
 
   deploy:
+
     docker:
       - image: circleci/python:2.7-jessie
     working_directory: ~/repo
+
     steps:
       - restore_cache:
           name: Download build
           key: v1-build-{{ .BuildNum }}
+
       - run:
           name: Deploy Site
           command: scp ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
