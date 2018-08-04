@@ -53,11 +53,15 @@ jobs:
 
       - run:
           name: Uncompress Build
-          command: unzip ~/repo/nycfoodblog-client.zip nycfoodblog-client
+          command: unzip ~/repo/nycfoodblog-client.zip
+
+      - run:
+          name: Delete old site
+          command: ssh ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com rm -rf /var/www/html/efs-mount-point/nycfoodblog/*
 
       - run:
           name: Deploy Site
-          command: scp -o StrictHostKeyChecking=no -r nycfoodblog-client/* ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/test 
+          command: scp -o StrictHostKeyChecking=no -r build/* ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/nycfoodblog/
 
 workflows:
   version: 2
