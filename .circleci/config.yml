@@ -24,7 +24,7 @@ jobs:
 
       - run:
           name: Build
-          command: yarn add build
+          command: yarn build
 
       - run:
           name: Compress build
@@ -33,7 +33,7 @@ jobs:
       - save_cache:
           name: Cache build
           paths:
-            - nycfoodblog-client-{{ .Revision }}
+            - nycfoodblog-client.zip
           key: v1-build-{{ .Revision }}
         
       - run:
