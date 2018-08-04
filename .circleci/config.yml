@@ -57,7 +57,7 @@ jobs:
 
       - run:
           name: Delete old site
-          command: ssh ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com rm -rf /var/www/html/efs-mount-point/nycfoodblog/*
+          command: ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com rm -rf /var/www/html/efs-mount-point/nycfoodblog/*
 
       - run:
           name: Deploy Site
