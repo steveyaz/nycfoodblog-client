@@ -22,13 +22,6 @@ jobs:
       - checkout:
           name: Checkout repo
 
-      - restore_cache:
-          name: Download cached dependencies
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
       - run:
           name: Build
           command: yarn install build
@@ -37,11 +30,7 @@ jobs:
           name: Cache build
           paths:
             - node_modules
-          keys:
-          # save dependencies for next build job
-          - v1-dependencies-{{ checksum "package.json" }}
-          # save build for deploy job
-          - v1-build-{{ .BuildNum }}
+          key: v1-build-{{ .BuildNum }}
         
       - run:
           name: Test
