@@ -30,7 +30,7 @@ jobs:
           name: Cache build
           paths:
             - node_modules
-          key: v1-build-{{ .BuildNum }}
+          key: v1-build-{{ .Revision }}
         
       - run:
           name: Test
@@ -45,7 +45,7 @@ jobs:
     steps:
       - restore_cache:
           name: Download build
-          key: v1-build-{{ .BuildNum }}
+          key: v1-build-{{ .Revision }}
 
       - run:
           name: Deploy Site
