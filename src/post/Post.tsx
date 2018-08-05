@@ -10,7 +10,8 @@ export interface PostProps {
   post: WirePost;
   reviews?: WireReview[];
   authedUsername?: string;
-  viewAddOrEditReview: (review: WireReview) => void;
+  viewAddOrEditPost: (postId: number) => void;
+  viewAddOrEditReview: (postId: number) => void;
 }
 
 const getBackgroundUrl = (instagramUrl: string) => {
@@ -27,7 +28,7 @@ export class Post extends React.PureComponent<PostProps, PostState> {
   public constructor(props: any) {
     super(props);
     this.state = { collapsed: true, backgroundUrl: this.props.post.instagramUrl ? getBackgroundUrl(props.post.instagramUrl) : undefined };
-    this.handleAddReview = this.handleAddReview.bind(this);
+    this.handleAddOrEditReview = this.handleAddOrEditReview.bind(this);
     this.handleCollapsedToggle = this.handleCollapsedToggle.bind(this);
   }
 
@@ -51,11 +52,14 @@ export class Post extends React.PureComponent<PostProps, PostState> {
             </div>
           </div>
           <div className="reviews">
+            { (this.props.authedUsername !== undefined) &&
+              <button onClick={this.props.viewAddOrEditPost.bind(this, this.props.post.id)}>Edit Post</button>
+            }
             { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
-              <button onClick={this.handleAddReview}>Add Review</button>
+              <button onClick={this.handleAddOrEditReview}>Add Review</button>
             }
             { (this.props.reviews !== undefined) && this.props.reviews.filter(review => review.username === this.props.authedUsername).map(review => {
-                return <Review key={review.postId + review.username} review={review} viewEditReview={this.props.viewAddOrEditReview} />
+                return <Review key={review.postId + review.username} review={review} viewEditReview={this.handleAddOrEditReview} />
             })}
             { (this.props.reviews !== undefined) && this.props.reviews.filter(review => review.username !== this.props.authedUsername).map(review => {
                 return <Review key={review.postId + review.username} review={review} />
@@ -72,15 +76,8 @@ export class Post extends React.PureComponent<PostProps, PostState> {
     );
   }
 
-  public handleAddReview() {
-    this.props.viewAddOrEditReview({
-      postId: this.props.post.id!,
-      username: this.props.authedUsername!,
-      foodRating: 0,
-      vibesRating: 0,
-      ecRating: 0,
-      text: "",
-    });
+  public handleAddOrEditReview() {
+    this.props.viewAddOrEditReview(this.props.post.id!);
   }
 
   public handleCollapsedToggle() {

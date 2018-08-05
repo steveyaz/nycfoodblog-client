@@ -11,7 +11,7 @@ import { ReviewForm } from './review/ReviewForm';
 import logo from './rosie.png';
 
 export interface AppState {
-  view: "ALL_POSTS" | "ADD_POST" | "ADD_OR_EDIT_REVIEW";
+  view: "ALL_POSTS" | "ADD_OR_EDIT_POST" | "ADD_OR_EDIT_REVIEW";
   posts: WirePost[];
   reviewMap: { [postId: number]: WireReview[] };
   inError: boolean;
@@ -35,11 +35,13 @@ class App extends React.Component<any, AppState> {
     this.onLogin = this.onLogin.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
-    this.viewAddPost = this.viewAddPost.bind(this);
+    this.viewAddOrEditPost = this.viewAddOrEditPost.bind(this);
     this.viewAddOrEditReview = this.viewAddOrEditReview.bind(this);
     this.viewAllPosts = this.viewAllPosts.bind(this);
     this.createPost = this.createPost.bind(this);
     this.createReview = this.createReview.bind(this);
+    this.getActivePost = this.getActivePost.bind(this);
+    this.getActiveReview = this.getActiveReview.bind(this);
   }
 
   public componentDidMount() {
@@ -65,7 +67,7 @@ class App extends React.Component<any, AppState> {
             <div>
               {this.state.authedUsername !== undefined && 
                 <div>
-                  <input type="submit" value="Add Post" onClick={this.viewAddPost} />
+                  <button onClick={this.viewAddOrEditPost.bind(this, undefined)}>Add Post</button>
                 </div>
               }
               <div className="posts">
@@ -78,6 +80,7 @@ class App extends React.Component<any, AppState> {
                         key={post.id!}
                         post={post}
                         reviews={this.state.reviewMap[post.id!]}
+                        viewAddOrEditPost={this.viewAddOrEditPost}
                         viewAddOrEditReview={this.viewAddOrEditReview}
                         authedUsername={this.state.authedUsername}
                       />);
@@ -87,13 +90,18 @@ class App extends React.Component<any, AppState> {
               <div className="easterEgg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
             </div>
           }
-          {this.state.view === "ADD_POST" &&
-            <PostForm createPost={this.createPost} closeForm={this.viewAllPosts} />
+          {this.state.view === "ADD_OR_EDIT_POST" &&
+            <PostForm
+              previousPost={this.getActivePost()}
+              createPost={this.createPost}
+              closeForm={this.viewAllPosts}
+            />
           }
           {(this.state.view === "ADD_OR_EDIT_REVIEW") && (this.state.authedUsername !== undefined) &&
             <ReviewForm
               username={this.state.authedUsername}
               postId={this.state.activePostId!}
+              previousReview={this.getActiveReview()}
               createReview={this.createReview}
               closeForm={this.viewAllPosts}
             />
@@ -154,12 +162,12 @@ class App extends React.Component<any, AppState> {
     this.setState({ authedUsername: undefined, view: "ALL_POSTS" });
   }
 
-  private viewAddPost() {
-    this.setState({ view: "ADD_POST" });
+  private viewAddOrEditPost(postId: number | undefined) {
+    this.setState({ view: "ADD_OR_EDIT_POST", activePostId: postId });
   }
 
-  private viewAddOrEditReview(review: WireReview) {
-    this.setState({ view: "ADD_OR_EDIT_REVIEW", activePostId: review.postId });
+  private viewAddOrEditReview(postId: number) {
+    this.setState({ view: "ADD_OR_EDIT_REVIEW", activePostId: postId });
   }
 
   private viewAllPosts() {
@@ -188,6 +196,20 @@ class App extends React.Component<any, AppState> {
       }).catch(e => {
         this.setState({ inError: true });
       });
+  }
+
+  private getActiveReview() {
+    if (this.state.activePostId === undefined || this.state.authedUsername === undefined || this.state.reviewMap[this.state.activePostId] === undefined) {
+      return undefined;
+    }
+    return this.state.reviewMap[this.state.activePostId].find(review => review.username === this.state.authedUsername)
+  }
+
+  private getActivePost() {
+    if (this.state.activePostId === undefined) {
+      return undefined;
+    }
+    return this.state.posts.find(post => post.id === this.state.activePostId)
   }
 }
 

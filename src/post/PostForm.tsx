@@ -5,22 +5,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { WirePost } from '../data/WirePost';
 
 export interface PostFormProps {
+  previousPost: WirePost | undefined;
   createPost: (post: WirePost) => void,
   closeForm: () => void,
-}
-
-export interface PostFormState {
-  restaurantName: string;
-  dateVisited: moment.Moment;
-  neighborhood: string;
-  addressStreet: string;
-  addressCity: string;
-  addressState: string;
-  addressZip: string;
-  instagramUrl: string;
-  order: string[];
-  cost: number;
-  tags: string[];
 }
 
 export const NEIGHBORHOODS: Map<string, string> = new Map([
@@ -51,11 +38,10 @@ export const NEIGHBORHOODS: Map<string, string> = new Map([
   ["other", "Other"],
 ]);
 
-export class PostForm extends React.PureComponent<PostFormProps, PostFormState> {
+export class PostForm extends React.PureComponent<PostFormProps, WirePost> {
   public constructor(props: any) {
     super(props);
-    this.state =
-    {
+    this.state = props.previousPost || {
       restaurantName: "",
       dateVisited: moment(),
       neighborhood: "upperWestSide",
@@ -66,7 +52,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
       instagramUrl: "",
       order: [""],
       cost: 0.00,
-      tags: [""]
+      tags: [""],
     };
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -85,7 +71,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
         <div className="form-field">
           <span>Date Visited</span>
           <DatePicker
-            selected={this.state.dateVisited}
+            selected={moment(this.state.dateVisited)}
             onChange={this.handleDateChange}
             showTimeSelect={true}
             timeFormat="HH:mm"
@@ -166,7 +152,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
 
   private handleDateChange(pickedDate: moment.Moment) {
     this.setState({
-      dateVisited: pickedDate
+      dateVisited: pickedDate.toDate(),
     });
   }
 
@@ -191,20 +177,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
   }
 
   private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    const post: WirePost = {
-      restaurantName: this.state.restaurantName,
-      dateVisited: this.state.dateVisited.toDate(),
-      neighborhood: this.state.neighborhood,
-      addressStreet: this.state.addressStreet,
-      addressCity: this.state.addressCity,
-      addressState: this.state.addressState,
-      addressZip: this.state.addressZip,
-      instagramUrl: this.state.instagramUrl,
-      order: this.state.order,
-      cost: this.state.cost,
-      tags: this.state.tags,
-    }
-    this.props.createPost(post);
+    this.props.createPost(this.state);
     this.props.closeForm();
     event.preventDefault();
   }

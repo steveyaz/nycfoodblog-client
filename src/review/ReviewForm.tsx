@@ -4,28 +4,22 @@ import { WireReview } from "../data/WireReview";
 export interface ReviewFormProps {
   username: string;
   postId: number;
+  previousReview: WireReview | undefined;
   createReview: (post: WireReview) => void,
   closeForm: () => void,
 }
 
-export interface ReviewFormState {
-  foodRating: number;
-  vibesRating: number;
-  ecRating: number;
-  text: string;
-}
-
-const INITIAL_STATE = {
-  foodRating: 0,
-  vibesRating: 0,
-  ecRating: 0,
-  text: "",
-};
-
-export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormState> {
+export class ReviewForm extends React.PureComponent<ReviewFormProps, WireReview> {
   constructor(props: ReviewFormProps){
     super(props);
-    this.state = INITIAL_STATE;
+    this.state = props.previousReview || {
+      username: props.username,
+      postId: props.postId,
+      foodRating: 0,
+      vibesRating: 0,
+      ecRating: 0,
+      text: "",
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -33,8 +27,6 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormS
   public render() {
     return (
       <div>
-        <div>{this.props.username}</div>
-        <div>{this.props.postId}</div>
         <form onSubmit={this.handleSubmit}>
           <span>
             <span>Food Rating</span>
@@ -66,14 +58,7 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormS
   }
 
   private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    this.props.createReview({
-      username: this.props.username.toLocaleLowerCase(),
-      postId: this.props.postId,
-      foodRating: this.state.foodRating,
-      vibesRating: this.state.vibesRating,
-      ecRating: this.state.ecRating,
-      text: this.state.text,
-    });
+    this.props.createReview(this.state);
     event.preventDefault();
     this.props.closeForm();
   }
