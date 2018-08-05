@@ -58,9 +58,8 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, WireReview>
   }
 
   private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    this.props.createReview(this.state);
     event.preventDefault();
-    this.props.closeForm();
+    this.props.createReview(this.state);
   }
 
   private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {

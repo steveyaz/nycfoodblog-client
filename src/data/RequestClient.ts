@@ -2,7 +2,8 @@ import { RequestInitBuilder } from "./RequestInitBuilder";
 import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
-const BASE_URL = 'https://nycfoodblog.net/api';
+const BASE_URL = 'http://stevey-mbp:8090';
+// const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
@@ -74,9 +75,7 @@ export class RequestClient {
   public createReview(review: WireReview): Promise<void> {
     const request = new Request(BASE_URL + '/review', RequestInitBuilder.request().withMethod("POST").withAuth(this.token).withBody(review).build());
     return fetch(request)
-      .then(response => {
-        return response.json();
-      }).then(() => {
+      .then(() => {
         return;
       }).catch(e => {
         return Promise.reject(e);

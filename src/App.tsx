@@ -182,7 +182,8 @@ class App extends React.Component<any, AppState> {
     this.requestClient.createPost(post)
       .then(id => {
         post.id = id;
-        this.setState({ posts: [post, ...this.state.posts], view: "ALL_POSTS" });
+        const filteredPosts = this.state.posts.filter(oldPost => oldPost.id !== post.id);
+        this.setState({ posts: [post, ...filteredPosts], view: "ALL_POSTS" });
       }).catch(e => {
         this.setState({ inError: true });
       });
