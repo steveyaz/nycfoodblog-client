@@ -67,7 +67,7 @@ export class Post extends React.PureComponent<PostProps, PostState> {
             <img src={this.state.backgroundUrl} />
           }
         </div>
-        <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>Expand</div>
+        <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>{this.state.collapsed ? '\u25BC' : '\u25B2' }</div>
       </div>
     );
   }
