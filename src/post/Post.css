@@ -8,6 +8,28 @@
   border-style: solid;
   border-color: #945D60;
   border-radius: 3px;
+  background-repeat: no-repeat;
+  background-position-y: 35%;
+  background-size: 100%;
+  background-color: hsla(0,0%,100%,0.70);
+  background-blend-mode: overlay;
+}
+
+.collapsedToggle:hover {
+  cursor: pointer;
+}
+
+.post-expanded-details.-collapsed {
+  display: none;
+}
+
+.post-expanded-details.-not-collapsed {
+  display: block;
+}
+
+.instagram-iframe {
+  height: 608px;
+  width: 400px;
 }
 
 .restaurant-name {

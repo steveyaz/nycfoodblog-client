@@ -16,6 +16,7 @@ export interface PostFormState {
   addressCity: string;
   addressState: string;
   addressZip: string;
+  instagramUrl: string;
   order: string[];
   cost: number;
   tags: string[];
@@ -61,6 +62,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
       addressCity: "New York",
       addressState: "NY",
       addressZip: "",
+      instagramUrl: "",
       order: [""],
       cost: 0.00,
       tags: [""]
@@ -108,6 +110,10 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
           <input type="addressState" value={this.state.addressState} onChange={this.handleTextChange.bind(this, "addressState")} />
           <span>Zip</span>
           <input type="addressZip" value={this.state.addressZip} onChange={this.handleTextChange.bind(this, "addressZip")} />
+        </div>
+        <div className="form-field">
+          <span>Instagram URL</span>
+          <input type="instagramUrl" value={this.state.instagramUrl} onChange={this.handleTextChange.bind(this, "instagramUrl")} />
         </div>
         <div className="form-field">
           <span>Bill Total $</span>
@@ -190,6 +196,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
       addressCity: this.state.addressCity,
       addressState: this.state.addressState,
       addressZip: this.state.addressZip,
+      instagramUrl: this.state.instagramUrl,
       order: this.state.order,
       cost: this.state.cost,
       tags: this.state.tags,

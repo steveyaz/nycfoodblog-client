@@ -13,15 +13,30 @@ export interface PostProps {
   viewAddOrEditReview: (review: WireReview) => void;
 }
 
-export class Post extends React.PureComponent<PostProps> {
+const getBackgroundUrl = (instagramUrl: string) => {
+  const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
+  return instagramUrl.match(regex) + "media/?size=l";
+}
+
+export interface PostState {
+  collapsed: boolean;
+  backgroundUrl?: string;
+}
+
+export class Post extends React.PureComponent<PostProps, PostState> {
   public constructor(props: any) {
     super(props);
-    this.addReview = this.addReview.bind(this);
+    this.state = { collapsed: true, backgroundUrl: this.props.post.instagramUrl ? getBackgroundUrl(props.post.instagramUrl) : undefined };
+    this.handleAddReview = this.handleAddReview.bind(this);
+    this.handleCollapsedToggle = this.handleCollapsedToggle.bind(this);
   }
 
   public render() {
+    const backgroundImage = this.state.backgroundUrl !== undefined ?
+      { backgroundImage: "url('" + this.state.backgroundUrl + "')" }
+      : {};
     return (
-      <div className="post">
+      <div className="post" style={backgroundImage}>
         <div className="restaurant-name">{this.props.post.restaurantName}</div>
         <div className="post-details">
           <div className="restaurant-details">
@@ -37,7 +52,7 @@ export class Post extends React.PureComponent<PostProps> {
           </div>
           <div className="reviews">
             { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
-              <button onClick={this.addReview}>Add Review</button>
+              <button onClick={this.handleAddReview}>Add Review</button>
             }
             { (this.props.reviews !== undefined) && this.props.reviews.filter(review => review.username === this.props.authedUsername).map(review => {
                 return <Review key={review.postId + review.username} review={review} viewEditReview={this.props.viewAddOrEditReview} />
@@ -47,11 +62,17 @@ export class Post extends React.PureComponent<PostProps> {
             })}
           </div>
         </div>
+        <div className={"post-expanded-details " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")}>
+          { this.state.backgroundUrl &&
+            <img src={this.state.backgroundUrl} />
+          }
+        </div>
+        <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>Expand</div>
       </div>
     );
   }
 
-  public addReview() {
+  public handleAddReview() {
     this.props.viewAddOrEditReview({
       postId: this.props.post.id!,
       username: this.props.authedUsername!,
@@ -60,5 +81,9 @@ export class Post extends React.PureComponent<PostProps> {
       ecRating: 0,
       text: "",
     });
+  }
+
+  public handleCollapsedToggle() {
+    this.setState({ collapsed: !this.state.collapsed })
   }
 }

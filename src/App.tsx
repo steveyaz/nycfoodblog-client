@@ -25,6 +25,10 @@ const EMPTY_STRING_ARRAY: string[] = [];
 const EMPTY_POST_ARRAY: WirePost[] = [];
 const EMPTY_MAP = {};
 
+const handleRefresh = () => {
+  location.reload(true);
+}
+
 class App extends React.Component<any, AppState> {
   private requestClient: RequestClient;
 
@@ -48,16 +52,16 @@ class App extends React.Component<any, AppState> {
   public render() {
     return (
       <div className="app">
+        {this.state.displayAuth &&
+          <Auth
+            isAuthed={this.state.authedUsername !== undefined}
+            username={this.state.authedUsername}
+            onLogin={this.onLogin}
+            onLogout={this.onLogout}
+          />}
         <header className="header">
-          {this.state.displayAuth &&
-            <Auth
-              isAuthed={this.state.authedUsername !== undefined}
-              username={this.state.authedUsername}
-              onLogin={this.onLogin}
-              onLogout={this.onLogout}
-            />}
-          <img src={logo} className="logo" alt="Rosie!" />
-          <h1 className="title">NYC Food Blog</h1>
+          <img src={logo} className="logo" alt="Rosie!" onClick={handleRefresh} />
+          <h1 className="title">The NYC Food Blog</h1>
         </header>
         <div className="content">
           {this.state.view === "ALL_POSTS" &&

@@ -7,6 +7,7 @@ export type WirePost = {
   addressCity: string;
   addressState: string;
   addressZip: string;
+  instagramUrl: string;
   order: string[];
   cost: number;
   tags: string[];
