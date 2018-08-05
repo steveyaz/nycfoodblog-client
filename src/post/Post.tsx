@@ -19,22 +19,26 @@ const getBackgroundUrl = (instagramUrl: string) => {
   return instagramUrl.match(regex) + "media/?size=l";
 }
 
+const getEmbedUrl = (instagramUrl: string) => {
+  const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
+  return instagramUrl.match(regex) + "embed";
+}
+
 export interface PostState {
   collapsed: boolean;
-  backgroundUrl?: string;
 }
 
 export class Post extends React.PureComponent<PostProps, PostState> {
   public constructor(props: any) {
     super(props);
-    this.state = { collapsed: true, backgroundUrl: this.props.post.instagramUrl ? getBackgroundUrl(props.post.instagramUrl) : undefined };
+    this.state = { collapsed: true };
     this.handleAddOrEditReview = this.handleAddOrEditReview.bind(this);
     this.handleCollapsedToggle = this.handleCollapsedToggle.bind(this);
   }
 
   public render() {
-    const backgroundImage = this.state.backgroundUrl !== undefined ?
-      { backgroundImage: "url('" + this.state.backgroundUrl + "')" }
+    const backgroundImage = this.props.post.instagramUrl ?
+      { backgroundImage: "url('" + getBackgroundUrl(this.props.post.instagramUrl) + "')" }
       : {};
     return (
       <div className="post" style={backgroundImage}>
@@ -67,8 +71,8 @@ export class Post extends React.PureComponent<PostProps, PostState> {
           </div>
         </div>
         <div className={"post-expanded-details " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")}>
-          { this.state.backgroundUrl &&
-            <img src={this.state.backgroundUrl} />
+          { this.props.post.instagramUrl &&
+            <iframe className="instagram-iframe" src={getEmbedUrl(this.props.post.instagramUrl)} />
           }
         </div>
         <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>{this.state.collapsed ? '\u25BC' : '\u25B2' }</div>
