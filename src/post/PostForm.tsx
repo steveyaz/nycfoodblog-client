@@ -6,6 +6,7 @@ import { WirePost } from '../data/WirePost';
 
 export interface PostFormProps {
   createPost: (post: WirePost) => void,
+  closeForm: () => void,
 }
 
 export interface PostFormState {
@@ -71,6 +72,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleNeighborhoodChange = this.handleNeighborhoodChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   public render() {
@@ -148,6 +150,7 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
           })}
         </div>
         <input type="submit" value="Submit" />
+        <button onClick={this.handleCancel}>Cancel</button>
       </form>
     );
   }
@@ -202,7 +205,13 @@ export class PostForm extends React.PureComponent<PostFormProps, PostFormState> 
       tags: this.state.tags,
     }
     this.props.createPost(post);
+    this.props.closeForm();
     event.preventDefault();
+  }
+
+  private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    this.props.closeForm();
   }
 
   private addMultiTextEntry(field: string, event: React.MouseEvent<HTMLButtonElement>) {

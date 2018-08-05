@@ -25,10 +25,6 @@ const EMPTY_STRING_ARRAY: string[] = [];
 const EMPTY_POST_ARRAY: WirePost[] = [];
 const EMPTY_MAP = {};
 
-const handleRefresh = () => {
-  location.reload(true);
-}
-
 class App extends React.Component<any, AppState> {
   private requestClient: RequestClient;
 
@@ -41,6 +37,7 @@ class App extends React.Component<any, AppState> {
     this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
     this.viewAddPost = this.viewAddPost.bind(this);
     this.viewAddOrEditReview = this.viewAddOrEditReview.bind(this);
+    this.viewAllPosts = this.viewAllPosts.bind(this);
     this.createPost = this.createPost.bind(this);
     this.createReview = this.createReview.bind(this);
   }
@@ -60,7 +57,7 @@ class App extends React.Component<any, AppState> {
             onLogout={this.onLogout}
           />}
         <header className="header">
-          <img src={logo} className="logo" alt="Rosie!" onClick={handleRefresh} />
+          <img src={logo} className="logo" alt="Rosie!" onClick={this.viewAllPosts} />
           <h1 className="title">The NYC Food Blog</h1>
         </header>
         <div className="content">
@@ -91,13 +88,14 @@ class App extends React.Component<any, AppState> {
             </div>
           }
           {this.state.view === "ADD_POST" &&
-            <PostForm createPost={this.createPost} />
+            <PostForm createPost={this.createPost} closeForm={this.viewAllPosts} />
           }
           {(this.state.view === "ADD_OR_EDIT_REVIEW") && (this.state.authedUsername !== undefined) &&
             <ReviewForm
               username={this.state.authedUsername}
               postId={this.state.activePostId!}
               createReview={this.createReview}
+              closeForm={this.viewAllPosts}
             />
           }
         </div>
@@ -162,6 +160,14 @@ class App extends React.Component<any, AppState> {
 
   private viewAddOrEditReview(review: WireReview) {
     this.setState({ view: "ADD_OR_EDIT_REVIEW", activePostId: review.postId });
+  }
+
+  private viewAllPosts() {
+    if (this.state.view === "ALL_POSTS") {
+      location.reload(true);
+    } else {
+      this.setState({ view: "ALL_POSTS" });
+    }
   }
 
   private createPost(post: WirePost) {

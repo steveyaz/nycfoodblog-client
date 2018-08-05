@@ -5,6 +5,7 @@ export interface ReviewFormProps {
   username: string;
   postId: number;
   createReview: (post: WireReview) => void,
+  closeForm: () => void,
 }
 
 export interface ReviewFormState {
@@ -26,6 +27,7 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormS
     super(props);
     this.state = INITIAL_STATE;
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   public render() {
@@ -51,6 +53,7 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormS
             <input type="text" value={this.state.text} onChange={this.handleChange.bind(this, "text")} />
           </span>
           <input type="submit" value="Submit" />
+          <button onClick={this.handleCancel}>Cancel</button>
         </form>
       </div>
     );
@@ -72,6 +75,11 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, ReviewFormS
       text: this.state.text,
     });
     event.preventDefault();
-    this.setState(INITIAL_STATE);
+    this.props.closeForm();
+  }
+
+  private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    this.props.closeForm();
   }
 }
