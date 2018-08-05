@@ -4,16 +4,17 @@
   width: 90%;
   margin-bottom: 8px;
   padding: 8px;
-  border: 1px;
+  border: 3px;
   border-style: solid;
-  border-color: #E0E0E0;
-  background: #F5F5F5;
+  border-color: #945D60;
+  border-radius: 3px;
 }
 
 .restaurant-name {
   font-size: 26px;
   font-family: monospace;
   align-self: flex-start;
+  color: #3C3C3C;
 }
 
 .post-details {
@@ -38,21 +39,18 @@
 
 .date-visited {
   margin-right: 10px;
-  color: 	#B0B0B0;
+  color: 	#4E584C;
 }
 
 .tag {
-  background: #00DDFF;
-  border: 1px;
-  border-style: solid;
-  border-color: #00BBFF;
+  background: #DCDCDC;
   padding: 2px;
-  color: #484848;
+  color: #945D60;
   margin: 2px;
 }
 
 .tag:hover {
-  background: #00BBFF;
+  background: #C4C4C4;
   cursor: pointer;
 }
 
@@ -69,9 +67,16 @@
 }
 
 .review {
-  background-color: #00ffbf;
+  width: 50px;
   padding: 10px;
   margin: 10px;
+  color: #945D60;
+  background-color: #DCDCDC;
+}
+
+.review:hover {
+  background-color: #C4C4C4;
+  cursor: pointer;
 }
 
 .username {

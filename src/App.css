@@ -1,7 +1,16 @@
+/*
+white: #F5F5F5, #DCDCDC, #C4C4C4
+terracotta: #945D60, #764A4C
+herb: #626E60, #4E584C
+chili: #AF473C, #8C3830
+charcoal: #3C3C3C
+*/
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-color: #F5F5F5;
 }
 
 .app {
@@ -14,10 +23,9 @@ body {
 }
 
 .header {
-  background-color: #222;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: #3C3C3C;
   margin-bottom: 8px;
 }
 
