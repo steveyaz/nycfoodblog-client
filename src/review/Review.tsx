@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { WireReview } from '../data/WireReview';
+import './Review.css';
 
 export interface ReviewProps {
   review: WireReview;

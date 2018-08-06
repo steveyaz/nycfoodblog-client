@@ -127,13 +127,3 @@
   display: flex;
   flex-direction: column;
 }
-
-.form-field {
-  display: flex;
-  flex-direction: row;
-}
-
-.multi-field {
-  display: flex;
-  flex-direction: column;
-}

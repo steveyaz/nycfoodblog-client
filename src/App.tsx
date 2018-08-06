@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './App.css';
+import './form/FormField.css';
 
 import { Auth } from './auth/Auth';
 import { RequestClient } from './data/RequestClient';
@@ -80,7 +81,7 @@ class App extends React.Component<any, AppState> {
                         key={post.id!}
                         post={post}
                         reviews={this.state.reviewMap[post.id!]}
-                        viewAddOrEditPost={this.viewAddOrEditPost}
+                        viewEditPost={this.viewAddOrEditPost}
                         viewAddOrEditReview={this.viewAddOrEditReview}
                         authedUsername={this.state.authedUsername}
                       />);

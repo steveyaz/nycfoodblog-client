@@ -1,0 +1,20 @@
+.form-field {
+  display: flex;
+  flex-direction: row;
+}
+
+.form-field-label {
+  width: 200px;
+  margin-right: 8px;
+  text-align: right;
+}
+
+.multi-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-area-input {
+  height: 100px;
+  width: 300px;
+}

@@ -1,17 +1,25 @@
 import * as moment from 'moment';
 import * as React from 'react';
+import { NEIGHBORHOODS } from '../constants';
 import { WirePost } from '../data/WirePost';
 import { WireReview } from '../data/WireReview';
 import { Review } from '../review/Review';
 import './Post.css';
-import { NEIGHBORHOODS } from './PostForm';
 
-export interface PostProps {
-  post: WirePost;
-  reviews?: WireReview[];
-  authedUsername?: string;
-  viewAddOrEditPost: (postId: number) => void;
-  viewAddOrEditReview: (postId: number) => void;
+export namespace Post {
+
+  export interface Props {
+    post: WirePost;
+    reviews?: Array<WireReview>;
+    authedUsername?: string;
+    viewEditPost: (postId: number) => void;
+    viewAddOrEditReview: (postId: number) => void;
+  }
+
+  export interface State {
+    collapsed: boolean;
+  }
+
 }
 
 const getBackgroundUrl = (instagramUrl: string) => {
@@ -24,11 +32,8 @@ const getEmbedUrl = (instagramUrl: string) => {
   return instagramUrl.match(regex) + "embed";
 }
 
-export interface PostState {
-  collapsed: boolean;
-}
+export class Post extends React.PureComponent<Post.Props, Post.State> {
 
-export class Post extends React.PureComponent<PostProps, PostState> {
   public constructor(props: any) {
     super(props);
     this.state = { collapsed: true };
@@ -57,7 +62,7 @@ export class Post extends React.PureComponent<PostProps, PostState> {
           </div>
           <div className="reviews">
             { (this.props.authedUsername !== undefined) &&
-              <button onClick={this.props.viewAddOrEditPost.bind(this, this.props.post.id)}>Edit Post</button>
+              <button onClick={this.props.viewEditPost.bind(this, this.props.post.id)}>Edit Post</button>
             }
             { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
               <button onClick={this.handleAddOrEditReview}>Add Review</button>
@@ -86,7 +91,9 @@ export class Post extends React.PureComponent<PostProps, PostState> {
   }
 
   public handleAddOrEditReview() {
-    this.props.viewAddOrEditReview(this.props.post.id!);
+    if (this.props.post.id !== undefined) {
+      this.props.viewAddOrEditReview(this.props.post.id);
+    }
   }
 
   public handleCollapsedToggle() {

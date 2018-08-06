@@ -1,16 +1,23 @@
-import * as React from 'react';
+import * as React from "react";
+import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../constants";
 import { WireReview } from "../data/WireReview";
+import { SelectionFormField } from "../form/SelectionFormField";
+import { TextAreaFormField } from "../form/TextAreaFormField";
 
-export interface ReviewFormProps {
-  username: string;
-  postId: number;
-  previousReview: WireReview | undefined;
-  createReview: (post: WireReview) => void,
-  closeForm: () => void,
+export namespace ReviewForm {
+
+  export interface Props {
+    username: string;
+    postId: number;
+    previousReview: WireReview | undefined;
+    createReview: (post: WireReview) => void,
+    closeForm: () => void,
+  }
+
 }
 
-export class ReviewForm extends React.PureComponent<ReviewFormProps, WireReview> {
-  constructor(props: ReviewFormProps){
+export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview> {
+  constructor(props: ReviewForm.Props){
     super(props);
     this.state = props.previousReview || {
       username: props.username,
@@ -20,50 +27,38 @@ export class ReviewForm extends React.PureComponent<ReviewFormProps, WireReview>
       ecRating: 0,
       text: "",
     };
+    this.handleValueChange = this.handleValueChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   public render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <span>
-            <span>Food Rating</span>
-            <input type="text" value={this.state.foodRating} onChange={this.handleChange.bind(this, "foodRating")} />
-          </span>
-          <span>
-            <span>Vibes Rating</span>
-            <input type="text" value={this.state.vibesRating} onChange={this.handleChange.bind(this, "vibesRating")} />
-          </span>
-          <span>
-            <span>EC Rating</span>
-            <input type="text" value={this.state.ecRating} onChange={this.handleChange.bind(this, "ecRating")} />
-          </span>
-          <span>
-            <span>Review Text</span>
-            <input type="text" value={this.state.text} onChange={this.handleChange.bind(this, "text")} />
-          </span>
-          <input type="submit" value="Submit" />
-          <button onClick={this.handleCancel}>Cancel</button>
-        </form>
+      <div className="review-form">
+        <SelectionFormField id="foodRating" label="Food Rating" value={this.state.foodRating.toString()} selectionOptions={FOOD_RATINGS} onValueChange={this.handleValueChange} />
+        <SelectionFormField id="vibesRating" label="Vibes Rating" value={this.state.vibesRating.toString()} selectionOptions={VIBES_RATINGS} onValueChange={this.handleValueChange} />
+        <SelectionFormField id="ecRating" label="Extra Credit" value={this.state.ecRating.toString()} selectionOptions={EC_RATINGS} onValueChange={this.handleValueChange} />
+        <TextAreaFormField id="text" label="Review Text" value={this.state.text} onValueChange={this.handleValueChange} />
+        <button onClick={this.handleSubmit}>Submit</button>
+        <button onClick={this.handleCancel}>Cancel</button>
       </div>
     );
   }
 
-  private handleChange(field: string, event: React.FormEvent<HTMLInputElement>) {
+  private handleValueChange(id: string, value: any) {
     const newState = {};
-    newState[field] = event.currentTarget.value;
+    newState[id] = value;
     this.setState(newState);
   }
 
-  private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  private handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
     this.props.createReview(this.state);
+    this.props.closeForm();
+    event.preventDefault();
   }
 
   private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
     this.props.closeForm();
+    event.preventDefault();
   }
 }
