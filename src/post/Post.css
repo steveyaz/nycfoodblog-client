@@ -20,16 +20,34 @@
 }
 
 .post-expanded-details.-collapsed {
-  display: none;
+  height: 0px;
 }
 
 .post-expanded-details.-not-collapsed {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  height: 400px;
+  padding: 8px 0px;
 }
 
-.instagram-iframe {
-  height: 608px;
-  width: 400px;
+.instagram-iframe.-collapsed {
+  display: none;
+}
+
+.instagram-iframe.-not-collapsed {
+  display: block;
+  width: 260px;
+  border-radius: 3px;
+  border: 1px solid rgb(219, 219, 219);
+  height: 100%;
+}
+
+.review-texts.-collapsed {
+  display: none;
+}
+
+.review-texts.-not-collapsed {
+  display: block;
 }
 
 .restaurant-name {

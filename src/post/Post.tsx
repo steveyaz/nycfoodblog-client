@@ -72,8 +72,13 @@ export class Post extends React.PureComponent<PostProps, PostState> {
         </div>
         <div className={"post-expanded-details " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")}>
           { this.props.post.instagramUrl &&
-            <iframe className="instagram-iframe" src={getEmbedUrl(this.props.post.instagramUrl)} />
+            <iframe className={"instagram-iframe " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")} src={getEmbedUrl(this.props.post.instagramUrl)} />
           }
+          <div className={"review-texts " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")}>
+            {this.props.reviews && this.props.reviews.map(review => {
+              return <div key={review.postId + ":" + review.username}>{review.username + ": " + review.text}</div>;
+            })}
+          </div>
         </div>
         <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>{this.state.collapsed ? '\u25BC' : '\u25B2' }</div>
       </div>
