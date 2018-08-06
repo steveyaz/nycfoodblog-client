@@ -2,8 +2,8 @@ import { RequestInitBuilder } from "./RequestInitBuilder";
 import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
-const BASE_URL = 'http://stevey-mbp:8090';
-// const BASE_URL = 'https://nycfoodblog.net/api';
+// const BASE_URL = 'http://stevey-mbp:8090';
+const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
