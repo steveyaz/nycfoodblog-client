@@ -1,3 +1,4 @@
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../constants";
 import { WireReview } from "../data/WireReview";
@@ -39,8 +40,10 @@ export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview
         <SelectionFormField id="vibesRating" label="Vibes Rating" value={this.state.vibesRating.toString()} selectionOptions={VIBES_RATINGS} onValueChange={this.handleValueChange} />
         <SelectionFormField id="ecRating" label="Extra Credit" value={this.state.ecRating.toString()} selectionOptions={EC_RATINGS} onValueChange={this.handleValueChange} />
         <TextAreaFormField id="text" label="Review Text" value={this.state.text} onValueChange={this.handleValueChange} />
-        <button onClick={this.handleSubmit}>Submit</button>
-        <button onClick={this.handleCancel}>Cancel</button>
+        <div className="review-form-buttons">
+          <Button className="post-form-submit" icon="endorsed" text="Submit" onClick={this.handleSubmit} />
+          <Button text="Cancel" onClick={this.handleCancel} />
+        </div>
       </div>
     );
   }

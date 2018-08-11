@@ -1,0 +1,16 @@
+.review-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-form-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 16px;
+  margin-bottom: 60px;
+}
+
+.review-form-submit {
+  margin-right: 8px;
+}

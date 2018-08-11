@@ -1,3 +1,4 @@
+import { Intent, TextArea } from "@blueprintjs/core";
 import * as React from "react";
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
@@ -22,7 +23,12 @@ export class TextAreaFormField extends React.PureComponent<TextAreaFormField.Pro
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <textarea className="text-area-input" value={this.props.value} onChangeCapture={this.handleTextChange} />
+        <TextArea
+          className="text-area-field"
+          intent={Intent.PRIMARY}
+          onChange={this.handleTextChange}
+          value={this.props.value}
+        />
       </FormFieldWrapper>
     );
   }

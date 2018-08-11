@@ -10,6 +10,11 @@
   text-align: right;
 }
 
+.form-field-input {
+  width: 300px;
+  text-align: left;
+}
+
 .multi-field {
   display: flex;
   flex-direction: column;
@@ -18,4 +23,9 @@
 .text-area-input {
   height: 100px;
   width: 300px;
+}
+
+.form-field .text-area-field {
+  height: 200px;
+  width: 100%;
 }
