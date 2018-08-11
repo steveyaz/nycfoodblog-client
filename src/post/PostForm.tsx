@@ -1,3 +1,4 @@
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { NEIGHBORHOODS } from "../constants";
 import { WirePost } from "../data/WirePost";
@@ -54,8 +55,10 @@ export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {
         <CurrencyFormField id="cost" label="Bill Total $" value={this.state.cost} onValueChange={this.handleValueChange} />
         <MultiTextFormField id="order" label="Order" value={this.state.order} onValueChange={this.handleValueChange} />
         <MultiTextFormField id="tags" label="Tags" value={this.state.tags} onValueChange={this.handleValueChange} />
-        <button onClick={this.handleSubmit}>Submit</button>
-        <button onClick={this.handleCancel}>Cancel</button>
+        <div className="post-form-buttons">
+          <Button className="post-form-submit" icon="endorsed" text="Submit" onClick={this.handleSubmit} />
+          <Button text="Cancel" onClick={this.handleCancel} />
+        </div>
       </div>
     );
   }

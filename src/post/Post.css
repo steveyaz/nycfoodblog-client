@@ -126,4 +126,17 @@
 .post-form {
   display: flex;
   flex-direction: column;
+  margin-left: calc(30%);
+}
+
+.post-form-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-left: calc(25%);
+  margin-top: 16px;
+  margin-bottom: 60px;
+}
+
+.post-form-submit {
+  margin-right: 8px;
 }

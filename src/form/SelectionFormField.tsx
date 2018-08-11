@@ -1,3 +1,4 @@
+import { HTMLSelect } from "@blueprintjs/core";
 import * as React from "react";
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
@@ -23,11 +24,11 @@ export class SelectionFormField extends React.PureComponent<SelectionFormField.P
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <select value={this.props.value} onChange={this.handleSelectionChange}>
+        <HTMLSelect value={this.props.value} onChange={this.handleSelectionChange}>
           {Array.from(this.props.selectionOptions.keys()).map(key => {
             return <option key={key} value={key}>{this.props.selectionOptions.get(key)}</option>
           })}
-        </select>
+        </HTMLSelect>
       </FormFieldWrapper>
     );
   }

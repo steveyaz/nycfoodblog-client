@@ -1,3 +1,4 @@
+import { TagInput } from "@blueprintjs/core";
 import * as React from "react";
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
@@ -16,63 +17,23 @@ export class MultiTextFormField extends React.PureComponent<MultiTextFormField.P
 
   public constructor(props: MultiTextFormField.Props) {
     super(props);
-    this.handleAddEntry = this.handleAddEntry.bind(this);
+    this.handleEntryChange = this.handleEntryChange.bind(this);
   }
 
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <div className="multi-field">
-          <button onClick={this.handleAddEntry}>+</button>
-          {this.props.value.map((item, index) => {
-            return (
-              <div key={index}>
-                <input value={item} onChange={this.handleEntryChange.bind(this, index)} />
-                <button onClick={this.handleRemoveEntry.bind(this, index)}>-</button>
-              </div>
-            )
-          })}
-        </div>
+        <TagInput
+          values={this.props.value.map(item => item)}
+          onChange={this.handleEntryChange}
+        />
       </FormFieldWrapper>
     );
   }
 
-  private handleEntryChange(index: number, event: React.FormEvent<HTMLInputElement>) {
-    const newValue = [];
-    let entryIndex = 0;
-    for (const entry of this.props.value) {
-      if (entryIndex === index) {
-        newValue.push(event.currentTarget.value);
-      } else {
-        newValue.push(entry);
-      }
-      entryIndex += 1;
-    }
-    this.props.onValueChange(this.props.id, newValue);
-    event.preventDefault();
-  }
-
-  private handleAddEntry(event: React.MouseEvent<HTMLButtonElement>) {
-    const newValue = [];
-    for (const entry of this.props.value) {
-      newValue.push(entry);
-    }
-    newValue.push("");
-    this.props.onValueChange(this.props.id, newValue);
-    event.preventDefault();
-  }
-
-  private handleRemoveEntry(index: number, event: React.MouseEvent<HTMLButtonElement>) {
-    const newValue = [];
-    let entryIndex = 0;
-    for (const entry of this.props.value) {
-      if (entryIndex !== index) {
-        newValue.push(entry);
-      }
-      entryIndex += 1;
-    }
-    this.props.onValueChange(this.props.id, newValue);
-    event.preventDefault();
+  private handleEntryChange(values: React.ReactNode[]) {
+    const validValues = values.filter(value => value !== undefined && value != null);
+    this.props.onValueChange(this.props.id, validValues.map(value => value!.toString()));
   }
 
 }

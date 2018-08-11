@@ -27,12 +27,10 @@ const EMPTY_POST_ARRAY: WirePost[] = [];
 const EMPTY_MAP = {};
 
 class App extends React.Component<any, AppState> {
-  private requestClient: RequestClient;
 
   constructor(props: any) {
     super(props);
     this.state = { view: "ALL_POSTS", posts: EMPTY_POST_ARRAY, reviewMap: EMPTY_MAP, inError: false, usernames: EMPTY_STRING_ARRAY, authedUsername: undefined, displayAuth: false };
-    this.requestClient = new RequestClient();
     this.onLogin = this.onLogin.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.toggleAuthDisplay = this.toggleAuthDisplay.bind(this);
@@ -113,15 +111,15 @@ class App extends React.Component<any, AppState> {
   }
 
   private retrieveAllData() {
-    const usernamesPromise = this.requestClient.getAllUsernames();
-    const postsPromise = this.requestClient.getAllPosts();
+    const usernamesPromise = RequestClient.getInstance().getAllUsernames();
+    const postsPromise = RequestClient.getInstance().getAllPosts();
     Promise.all([postsPromise, usernamesPromise])
       .then(values => {
         const reviewPromises = [];
         this.setState({ posts: values[0], usernames: values[1], inError: false });
         for (const username of values[1]) {
           for (const post of values[0]) {
-            reviewPromises.push(this.requestClient.getReview(username.toLowerCase(), post.id!));
+            reviewPromises.push(RequestClient.getInstance().getReview(username.toLowerCase(), post.id!));
           }
         }
         Promise.all(reviewPromises)
@@ -149,7 +147,7 @@ class App extends React.Component<any, AppState> {
   }
 
   private onLogin(username: string, password: string) {
-    this.requestClient.login(username, password).then((isAuthed) => {
+    RequestClient.getInstance().login(username, password).then((isAuthed) => {
       if (isAuthed) {
         this.setState({ authedUsername: username });
       }
@@ -159,7 +157,7 @@ class App extends React.Component<any, AppState> {
   }
 
   private onLogout() {
-    this.requestClient.logout();
+    RequestClient.getInstance().logout();
     this.setState({ authedUsername: undefined, view: "ALL_POSTS" });
   }
 
@@ -180,7 +178,7 @@ class App extends React.Component<any, AppState> {
   }
 
   private createPost(post: WirePost) {
-    this.requestClient.createPost(post)
+    RequestClient.getInstance().createPost(post)
       .then(id => {
         post.id = id;
         const filteredPosts = this.state.posts.filter(oldPost => oldPost.id !== post.id);
@@ -191,7 +189,7 @@ class App extends React.Component<any, AppState> {
   }
 
   private createReview(review: WireReview) {
-    this.requestClient.createReview(review)
+    RequestClient.getInstance().createReview(review)
       .then(() => {
         this.retrieveAllData();
         this.setState({ view: "ALL_POSTS" });

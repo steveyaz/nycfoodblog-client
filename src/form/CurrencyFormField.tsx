@@ -1,3 +1,4 @@
+import { InputGroup } from "@blueprintjs/core";
 import * as React from 'react';
 import { FormFieldWrapper } from './FormFieldWrapper';
 
@@ -22,7 +23,7 @@ export class CurrencyFormField extends React.PureComponent<CurrencyFormField.Pro
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <input type="text" value={this.getDisplayedValue()} onChange={this.handleCurrencyChange} />
+        <InputGroup value={this.getDisplayedValue()} onChange={this.handleCurrencyChange} />
       </FormFieldWrapper>
     );
   }
@@ -44,7 +45,7 @@ export class CurrencyFormField extends React.PureComponent<CurrencyFormField.Pro
     if (Number.isNaN(this.props.value)) {
       return "";
     } else {
-      return this.props.value;
+      return this.props.value.toString();
     }
   }
 

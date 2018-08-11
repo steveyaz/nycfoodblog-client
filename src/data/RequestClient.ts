@@ -7,7 +7,17 @@ const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
+  public static getInstance() {
+    if (this.instance === null || this.instance === undefined) {
+      this.instance = new RequestClient();
+    }
+    return this.instance;
+  }
+
+  private static instance: RequestClient;
   private token: string;
+
+  private constructor() {}
 
   public getAllUsernames(): Promise<string[]> {
     const request = new Request(BASE_URL + '/user/all', RequestInitBuilder.request().withMethod("GET").build());

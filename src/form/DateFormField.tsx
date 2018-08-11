@@ -1,7 +1,5 @@
-import * as moment from "moment";
+import { DateTimePicker } from "@blueprintjs/datetime";
 import * as React from "react";
-import DatePicker from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css';
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
 export namespace DateFormField {
@@ -25,20 +23,16 @@ export class DateFormField extends React.PureComponent<DateFormField.Props> {
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <DatePicker
-          selected={moment(this.props.value)}
+        <DateTimePicker
+          value={new Date(this.props.value)}
           onChange={this.handleDateChange}
-          showTimeSelect={true}
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          dateFormat="LLL"
         />
       </FormFieldWrapper>
     );
   }
 
-  private handleDateChange(date: moment.Moment) {
-    this.props.onValueChange(this.props.id, date.toDate());
+  private handleDateChange(selectedDate: Date) {
+    this.props.onValueChange(this.props.id, selectedDate);
   }
 
 }

@@ -1,3 +1,4 @@
+import { InputGroup } from "@blueprintjs/core";
 import * as React from "react";
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
@@ -22,7 +23,7 @@ export class TextFormField extends React.PureComponent<TextFormField.Props> {
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
-        <input type="text" value={this.props.value} onChange={this.handleTextChange} />
+        <InputGroup value={this.props.value} onChange={this.handleTextChange} />
       </FormFieldWrapper>
     );
   }
