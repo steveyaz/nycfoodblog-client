@@ -2,7 +2,7 @@ import { InputGroup } from "@blueprintjs/core";
 import * as React from "react";
 import { FormFieldWrapper } from "./FormFieldWrapper";
 
-export namespace TextFormField {
+export namespace PasswordFormField {
 
   export interface Props {
     id: string;
@@ -14,12 +14,12 @@ export namespace TextFormField {
 
 }
 
-export class TextFormField extends React.PureComponent<TextFormField.Props> {
+export class PasswordFormField extends React.PureComponent<PasswordFormField.Props> {
 
   public render() {
     return (
       <FormFieldWrapper label={this.props.label} className={this.props.className}>
-        <InputGroup value={this.props.value} onChange={this.handleTextChange} />
+        <InputGroup type="password" value={this.props.value} onChange={this.handleTextChange} />
       </FormFieldWrapper>
     );
   }

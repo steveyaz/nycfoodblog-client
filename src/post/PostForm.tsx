@@ -36,9 +36,6 @@ export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {
   public constructor(props: any) {
     super(props);
     this.state = props.previousPost || NEW_POST;
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
   public render() {
@@ -63,19 +60,19 @@ export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {
     );
   }
 
-  private handleValueChange(id: string, value: any) {
+  private handleValueChange = (id: string, value: any) => {
     const newState = {};
     newState[id] = value;
     this.setState(newState);
   }
 
-  private handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
+  private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.props.createPost(this.state);
     this.props.closeForm();
     event.preventDefault();
   }
 
-  private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
+  private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.props.closeForm();
     event.preventDefault();
   }

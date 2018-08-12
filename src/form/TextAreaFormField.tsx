@@ -15,11 +15,6 @@ export namespace TextAreaFormField {
 
 export class TextAreaFormField extends React.PureComponent<TextAreaFormField.Props> {
 
-  public constructor(props: TextAreaFormField.Props) {
-    super(props);
-    this.handleTextChange = this.handleTextChange.bind(this);
-  }
-
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
@@ -33,7 +28,7 @@ export class TextAreaFormField extends React.PureComponent<TextAreaFormField.Pro
     );
   }
 
-  private handleTextChange(event: React.FormEvent<HTMLTextAreaElement>) {
+  private handleTextChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     this.props.onValueChange(this.props.id, event.currentTarget.value);
     event.preventDefault();
   }

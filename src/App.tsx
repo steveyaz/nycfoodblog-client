@@ -2,6 +2,8 @@ import * as React from 'react';
 import './App.css';
 import './form/FormField.css';
 
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { Auth } from './auth/Auth';
 import { RequestClient } from './data/RequestClient';
 import { WirePost } from './data/WirePost';
@@ -48,65 +50,64 @@ class App extends React.Component<any, AppState> {
   }
 
   public render() {
+    const store = createStore(this.reducer);
     return (
-      <div className="app">
-        {this.state.displayAuth &&
-          <Auth
-            isAuthed={this.state.authedUsername !== undefined}
-            username={this.state.authedUsername}
-            onLogin={this.onLogin}
-            onLogout={this.onLogout}
-          />}
-        <header className="header">
-          <img src={logo} className="logo" alt="Rosie!" onClick={this.viewAllPosts} />
-          <h1 className="title">The NYC Food Blog</h1>
-        </header>
-        <div className="content">
-          {this.state.view === "ALL_POSTS" &&
-            <div>
-              {this.state.authedUsername !== undefined && 
-                <div>
-                  <button onClick={this.viewAddOrEditPost.bind(this, undefined)}>Add Post</button>
-                </div>
-              }
-              <div className="posts">
-                {this.state.posts
-                  .sort((a: WirePost, b: WirePost) => {
-                    return a.dateVisited < b.dateVisited ? 1 : -1;
-                  }).map((post: WirePost) => {
-                    return (
-                      <Post
-                        key={post.id!}
-                        post={post}
-                        reviews={this.state.reviewMap[post.id!]}
-                        viewEditPost={this.viewAddOrEditPost}
-                        viewAddOrEditReview={this.viewAddOrEditReview}
-                        authedUsername={this.state.authedUsername}
-                      />);
-                  })}
-              </div>
-              { this.state.inError && <p>Error 😢</p> }
-              <div className="easterEgg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
-            </div>
-          }
-          {this.state.view === "ADD_OR_EDIT_POST" &&
-            <PostForm
-              previousPost={this.getActivePost()}
-              createPost={this.createPost}
-              closeForm={this.viewAllPosts}
-            />
-          }
-          {(this.state.view === "ADD_OR_EDIT_REVIEW") && (this.state.authedUsername !== undefined) &&
-            <ReviewForm
+      <Provider store={store}>
+        <div className="app">
+          <header className="header">
+            <img src={logo} className="logo" alt="Rosie!" onClick={this.viewAllPosts} />
+            <h1 className="title">The NYC Food Blog</h1>
+          </header>
+          {this.state.displayAuth &&
+            <Auth
+              isAuthed={this.state.authedUsername !== undefined}
               username={this.state.authedUsername}
-              postId={this.state.activePostId!}
-              previousReview={this.getActiveReview()}
-              createReview={this.createReview}
-              closeForm={this.viewAllPosts}
-            />
-          }
+              onLogin={this.onLogin}
+              onLogout={this.onLogout}
+              onAddPost={this.viewAddOrEditPost.bind(this, undefined)}
+            />}
+          <div className="content">
+            {this.state.view === "ALL_POSTS" &&
+              <div>
+                <div className="posts">
+                  {this.state.posts
+                    .sort((a: WirePost, b: WirePost) => {
+                      return a.dateVisited < b.dateVisited ? 1 : -1;
+                    }).map((post: WirePost) => {
+                      return (
+                        <Post
+                          key={post.id!}
+                          post={post}
+                          reviews={this.state.reviewMap[post.id!]}
+                          viewEditPost={this.viewAddOrEditPost}
+                          viewAddOrEditReview={this.viewAddOrEditReview}
+                          authedUsername={this.state.authedUsername}
+                        />);
+                    })}
+                </div>
+                { this.state.inError && <p>Error 😢</p> }
+                <div className="easterEgg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
+              </div>
+            }
+            {this.state.view === "ADD_OR_EDIT_POST" &&
+              <PostForm
+                previousPost={this.getActivePost()}
+                createPost={this.createPost}
+                closeForm={this.viewAllPosts}
+              />
+            }
+            {(this.state.view === "ADD_OR_EDIT_REVIEW") && (this.state.authedUsername !== undefined) &&
+              <ReviewForm
+                username={this.state.authedUsername}
+                postId={this.state.activePostId!}
+                previousReview={this.getActiveReview()}
+                createReview={this.createReview}
+                closeForm={this.viewAllPosts}
+              />
+            }
+          </div>
         </div>
-      </div>
+      </Provider>
     );
   }
 
@@ -140,6 +141,18 @@ class App extends React.Component<any, AppState> {
       .catch(e => {
         this.setState({ posts: EMPTY_POST_ARRAY, usernames: EMPTY_STRING_ARRAY, inError: true });
       });
+  }
+
+  private reducer() {
+    return { 
+      view: "ALL_POSTS",
+      posts: EMPTY_POST_ARRAY,
+      reviewMap: EMPTY_MAP,
+      inError: false,
+      usernames: EMPTY_STRING_ARRAY,
+      authedUsername: undefined,
+      displayAuth: false
+    };
   }
 
   private toggleAuthDisplay() {
@@ -211,6 +224,7 @@ class App extends React.Component<any, AppState> {
     }
     return this.state.posts.find(post => post.id === this.state.activePostId)
   }
+
 }
 
 export default App;

@@ -28,9 +28,6 @@ export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview
       ecRating: 0,
       text: "",
     };
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
   public render() {
@@ -48,19 +45,19 @@ export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview
     );
   }
 
-  private handleValueChange(id: string, value: any) {
+  private handleValueChange = (id: string, value: any) => {
     const newState = {};
     newState[id] = value;
     this.setState(newState);
   }
 
-  private handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
+  private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.props.createReview(this.state);
     this.props.closeForm();
     event.preventDefault();
   }
 
-  private handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
+  private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.props.closeForm();
     event.preventDefault();
   }

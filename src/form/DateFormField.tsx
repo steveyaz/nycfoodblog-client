@@ -15,11 +15,6 @@ export namespace DateFormField {
 
 export class DateFormField extends React.PureComponent<DateFormField.Props> {
 
-  public constructor(props: DateFormField.Props) {
-    super(props);
-    this.handleDateChange = this.handleDateChange.bind(this);
-  }
-
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
@@ -31,7 +26,7 @@ export class DateFormField extends React.PureComponent<DateFormField.Props> {
     );
   }
 
-  private handleDateChange(selectedDate: Date) {
+  private handleDateChange = (selectedDate: Date) => {
     this.props.onValueChange(this.props.id, selectedDate);
   }
 

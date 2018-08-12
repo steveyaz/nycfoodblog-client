@@ -16,11 +16,6 @@ export namespace SelectionFormField {
 
 export class SelectionFormField extends React.PureComponent<SelectionFormField.Props> {
 
-  public constructor(props: SelectionFormField.Props) {
-    super(props);
-    this.handleSelectionChange = this.handleSelectionChange.bind(this);
-  }
-
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
@@ -33,7 +28,7 @@ export class SelectionFormField extends React.PureComponent<SelectionFormField.P
     );
   }
 
-  private handleSelectionChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  private handleSelectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.props.onValueChange(this.props.id, event.currentTarget.value);
     event.preventDefault();
   }

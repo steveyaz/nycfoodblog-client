@@ -15,11 +15,6 @@ export namespace MultiTextFormField {
 
 export class MultiTextFormField extends React.PureComponent<MultiTextFormField.Props> {
 
-  public constructor(props: MultiTextFormField.Props) {
-    super(props);
-    this.handleEntryChange = this.handleEntryChange.bind(this);
-  }
-
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
@@ -31,7 +26,7 @@ export class MultiTextFormField extends React.PureComponent<MultiTextFormField.P
     );
   }
 
-  private handleEntryChange(values: React.ReactNode[]) {
+  private handleEntryChange = (values: React.ReactNode[]) => {
     const validValues = values.filter(value => value !== undefined && value != null);
     this.props.onValueChange(this.props.id, validValues.map(value => value!.toString()));
   }

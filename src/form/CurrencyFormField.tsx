@@ -15,11 +15,6 @@ export namespace CurrencyFormField {
 
 export class CurrencyFormField extends React.PureComponent<CurrencyFormField.Props> {
 
-  public constructor(props: CurrencyFormField.Props) {
-    super(props);
-    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
-  }
-
   public render() {
     return (
       <FormFieldWrapper label={this.props.label}>
@@ -28,7 +23,7 @@ export class CurrencyFormField extends React.PureComponent<CurrencyFormField.Pro
     );
   }
 
-  private handleCurrencyChange(event: React.FormEvent<HTMLInputElement>) {
+  private handleCurrencyChange = (event: React.FormEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === undefined || event.currentTarget.value === "") {
       this.props.onValueChange(this.props.id, NaN);
     }
