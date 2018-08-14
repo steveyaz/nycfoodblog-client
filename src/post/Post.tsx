@@ -1,4 +1,4 @@
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 import * as moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -74,7 +74,7 @@ class PostInternal extends React.PureComponent<Post.Props, Post.State> {
           <div className="restaurant-details">
             <div className="restaurant-subtitle">
               <div className="date-visited">{moment(this.props.post.dateVisited).format("MMM D, YYYY")}</div>
-              <div className="tag">{NEIGHBORHOODS.get(this.props.post.neighborhood)}</div>
+              <div className="tag"><Icon className="location-marker" icon="map-marker" />{NEIGHBORHOODS.get(this.props.post.neighborhood)}</div>
             </div>
             <div className="tags">
               {this.props.post.tags && this.props.post.tags.map(tag => {
