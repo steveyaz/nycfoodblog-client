@@ -34,8 +34,8 @@
   margin-right: 8px;
   margin-top: 8px;
   font-size: 15px;
-  background-color: #AC6C39;
-  color: #FBFBD4;
+  background-color: #EACBCB;
+  color: #3C3C3C;
 }
 
 .post-header-button {
@@ -114,14 +114,14 @@
 }
 
 .tag {
-  background: #00755E;
+  background: #E4F9C7;
   padding: 2px;
   margin: 2px;
   border-width: 1px;
   border-style: solid;
   border-color: #3C3C3C;
   border-radius: 3px;
-  color: #FBFBD4;
+  color: ##3C3C3C;
 }
 
 .tag:hover {
