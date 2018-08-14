@@ -6,6 +6,8 @@ chili: #AF473C, #8C3830
 charcoal: #3C3C3C
 */
 
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Pacifico');
+
 body {
   margin: 0;
   padding: 0;
@@ -37,8 +39,9 @@ body {
 
 .title {
   margin-top: 8px;
-  font-size: 1.5em;
-  font-family: Garamond;
+  font-size: 2em;
+  font-weight: 100;
+  font-family: 'Pacifico', cursive;
 }
 
 .content {

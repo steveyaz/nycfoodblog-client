@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RequestClient } from "../data/RequestClient";
-import { setAuthedUsername, setView } from "../redux/action";
+import { setActivePost, setAuthedUsername, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
 import "./Auth.css";
 import { LoginForm } from "./LoginForm";
@@ -13,6 +13,7 @@ export namespace Auth {
   export interface StoreProps {
     authedUsername?: string;
     view: VIEW_TYPE;
+    setActivePost: (postId: number | undefined) => void;
     setAuthedUsername: (username: string | undefined) => void;
     setView: (viewType: VIEW_TYPE) => void;
   }
@@ -39,6 +40,7 @@ class AuthInternal extends React.PureComponent<Auth.Props> {
   }
 
   private handleAddPost = () => {
+    this.props.setActivePost(undefined);
     this.props.setView("ADD_OR_EDIT_POST");
   }
 
@@ -68,6 +70,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
+    setActivePost: (postId: number | undefined) => dispatch(setActivePost(postId)),
     setAuthedUsername: (username: string) => dispatch(setAuthedUsername(username)),
     setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
   };

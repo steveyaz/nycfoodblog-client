@@ -27,9 +27,15 @@
   height: 28px;
   width: 28px;
   text-align:  center;
-  padding-top: 3px;
+  padding-top: 4px;
   margin-right: 8px;
+  margin-top: 8px;
   font-size: 15px;
+}
+
+.post-header-button {
+  margin-left: 8px;
+  height: 12px;
 }
 
 .collapsedToggle:hover {
@@ -68,8 +74,8 @@
 }
 
 .restaurant-name {
-  font-size: 26px;
-  font-family: monospace;
+  font-size: 42px;
+  font-family: 'Josefin Sans', sans-serif;
   align-self: flex-start;
   color: #3C3C3C;
 }
@@ -78,11 +84,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .restaurant-details {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .restaurant-subtitle {
@@ -92,6 +100,7 @@
   align-items: center;
   font-size: 14px;
   align-self: flex-start;
+  margin-left: 39px;
 }
 
 .date-visited {

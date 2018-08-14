@@ -1,20 +1,29 @@
-import { Button } from '@blueprintjs/core';
-import * as moment from 'moment';
-import * as React from 'react';
-import { NEIGHBORHOODS } from '../constants';
-import { WirePost } from '../data/WirePost';
-import { WireReview } from '../data/WireReview';
-import './Post.css';
+import { Button } from "@blueprintjs/core";
+import * as moment from "moment";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { NEIGHBORHOODS } from "../constants";
+import { WirePost } from "../data/WirePost";
+import { WireReview } from "../data/WireReview";
+import { setActivePost, setView } from "../redux/action";
+import { AppState, VIEW_TYPE } from "../redux/state";
+import "./Post.css";
 
 export namespace Post {
 
-  export interface Props {
+  export interface OwnProps {
     post: WirePost;
     reviews?: Array<WireReview>;
-    authedUsername?: string;
-    viewEditPost: (postId: number) => void;
-    viewAddOrEditReview: (postId: number) => void;
   }
+
+  export interface StoreProps {
+    authedUsername?: string;
+    setActivePost: (postId: number | undefined) => void;
+    setView: (viewType: VIEW_TYPE) => void;
+  }
+
+  export type Props = OwnProps & StoreProps;
 
   export interface State {
     collapsed: boolean;
@@ -34,8 +43,14 @@ const getEmbedUrl = (instagramUrl: string) => {
   return instagramUrl.match(regex) + "embed";
 }
 
-export class Post extends React.PureComponent<Post.Props, Post.State> {
+class PostInternal extends React.PureComponent<Post.Props, Post.State> {
   public state: Post.State = INITIAL_STATE;
+
+  constructor(props: Post.Props) {
+    super(props);
+    this.handleEditPost = this.handleEditPost.bind(this);
+    this.handleAddOrEditReview = this.handleAddOrEditReview.bind(this);
+  }
 
   public render() {
     const backgroundImage = this.props.post.instagramUrl ?
@@ -47,13 +62,13 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
           <div className="score">{this.getReviewScore()}</div>
           <div className="restaurant-name">{this.props.post.restaurantName}</div>
           { (this.props.authedUsername !== undefined) &&
-            <Button text="Edit Post" icon="edit" onClick={this.props.viewEditPost.bind(this, this.props.post.id)} />
+            <Button className="post-header-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
           }
           { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
-            <Button text="Add Review" icon="plus" onClick={this.handleAddOrEditReview.bind(this, this.props.post.id)} />
+            <Button className="post-header-button" text="Add Review" icon="plus" onClick={this.handleAddOrEditReview} />
           }
           { (this.props.authedUsername !== undefined) && (this.props.reviews !== undefined) && (this.props.reviews.filter(review => review.username === this.props.authedUsername).length > 0) &&
-            <Button text="Edit Review" icon="edit" onClick={this.handleAddOrEditReview.bind(this, this.props.post.id)} />
+            <Button className="post-header-button" text="Edit Review" icon="edit" onClick={this.handleAddOrEditReview} />
           }
         </div>
         <div className="post-details">
@@ -83,12 +98,16 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
     );
   }
 
-  public handleAddOrEditReview = (postId: number) => {
-    this.props.viewAddOrEditReview(postId);
+  private handleEditPost(event: React.MouseEvent<HTMLButtonElement>) {
+    this.props.setActivePost(this.props.post.id);
+    this.props.setView("ADD_OR_EDIT_POST");
+    event.preventDefault();
   }
 
-  public handleCollapsedToggle = () => {
-    this.setState({ collapsed: !this.state.collapsed })
+  private handleAddOrEditReview(event: React.MouseEvent<HTMLButtonElement>) {
+    this.props.setActivePost(this.props.post.id);
+    this.props.setView("ADD_OR_EDIT_REVIEW");
+    event.preventDefault();
   }
 
   private getReviewScore() {
@@ -103,3 +122,18 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
     }
   }
 }
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    authedUsername: state.authedUsername,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setActivePost: (postId: number | undefined) => dispatch(setActivePost(postId)),
+    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
+  };
+};
+
+export const Post = connect(mapStateToProps, mapDispatchToProps)(PostInternal);

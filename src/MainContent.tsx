@@ -14,6 +14,7 @@ export namespace MainContent {
 
   interface StoreProps {
     authedUsername?: string;
+    activePostId?: number;
     view: VIEW_TYPE;
     setView: (viewType: VIEW_TYPE) => void;
   }
@@ -24,7 +25,6 @@ export namespace MainContent {
     posts: Array<WirePost>;
     reviewMap: { [postId: number]: WireReview[] };
     displayAuth: boolean;
-    activePostId?: number;
     usernames: Array<string>;
   }
 
@@ -52,9 +52,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
                       key={post.id!}
                       post={post}
                       reviews={this.state.reviewMap[post.id!]}
-                      viewEditPost={this.viewAddOrEditPost}
-                      viewAddOrEditReview={this.viewAddOrEditReview}
-                      authedUsername={this.props.authedUsername}
                     />);
                 })}
             </div>
@@ -113,17 +110,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
       });
   }
 
-  private viewAddOrEditPost = (postId: number | undefined) => {
-    this.setState({ activePostId: postId });
-    this.props.setView("ADD_OR_EDIT_POST");
-  }
-
-  private viewAddOrEditReview = (postId: number) => {
-    this.setState({ activePostId: postId });
-    this.props.setView("ADD_OR_EDIT_REVIEW");
-
-  }
-
   private viewAllPosts = () => {
     if (this.props.view === "ALL_POSTS") {
       location.reload(true);
@@ -150,23 +136,24 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
   }
 
   private getActiveReview = () => {
-    if (this.state.activePostId === undefined || this.props.authedUsername === undefined || this.state.reviewMap[this.state.activePostId] === undefined) {
+    if (this.props.activePostId === undefined || this.props.authedUsername === undefined || this.state.reviewMap[this.props.activePostId!] === undefined) {
       return undefined;
     }
-    return this.state.reviewMap[this.state.activePostId].find(review => review.username === this.props.authedUsername)
+    return this.state.reviewMap[this.props.activePostId].find(review => review.username === this.props.authedUsername)
   }
 
   private getActivePost = () => {
-    if (this.state.activePostId === undefined) {
+    if (this.props.activePostId === undefined) {
       return undefined;
     }
-    return this.state.posts.find(post => post.id === this.state.activePostId)
+    return this.state.posts.find(post => post.id === this.props.activePostId)
   }
 
 }
 
 const mapStateToProps = (state: AppState) => {
   return {
+    activePostId: state.activePostId,
     authedUsername: state.authedUsername,
     view: state.view,
   };
@@ -174,7 +161,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType))
+    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
   };
 };
 
