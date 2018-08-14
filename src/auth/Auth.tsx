@@ -5,7 +5,6 @@ import { Dispatch } from "redux";
 import { RequestClient } from "../data/RequestClient";
 import { setActivePost, setAuthedUsername, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
-import "./Auth.css";
 import { LoginForm } from "./LoginForm";
 
 export namespace Auth {

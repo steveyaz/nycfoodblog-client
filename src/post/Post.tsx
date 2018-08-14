@@ -8,7 +8,6 @@ import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
 import { setActivePost, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
-import "./Post.css";
 
 export namespace Post {
 

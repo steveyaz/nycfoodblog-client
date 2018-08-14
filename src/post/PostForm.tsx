@@ -27,9 +27,9 @@ const NEW_POST: WirePost = {
   addressState: "NY",
   addressZip: "",
   instagramUrl: "",
-  order: [""],
+  order: [],
   cost: 0,
-  tags: [""],
+  tags: [],
 }
 
 export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {

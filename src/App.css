@@ -1,11 +1,7 @@
-/*
-white: #F5F5F5, #DCDCDC, #C4C4C4
-terracotta: #945D60, #764A4C
-herb: #626E60, #4E584C
-chili: #AF473C, #8C3830
-charcoal: #3C3C3C
-*/
-
+@import "./auth/Auth.css";
+@import "./form/FormField.css";
+@import "./post/Post.css";
+@import "./review/Review.css";
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Pacifico');
 
 body {

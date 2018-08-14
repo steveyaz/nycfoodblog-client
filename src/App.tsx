@@ -1,9 +1,11 @@
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import * as React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import "./App.css";
 import { Auth } from "./auth/Auth";
-import "./form/FormField.css";
 import { MainContent } from "./MainContent";
 import { reducer } from "./redux/reducer";
 import logo from "./rosie.png";
