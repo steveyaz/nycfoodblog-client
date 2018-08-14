@@ -5,9 +5,9 @@
   width: 100%;
   margin-bottom: 8px;
   padding: 8px;
-  border: 3px;
+  border: 2px;
   border-style: solid;
-  border-color: #945D60;
+  border-color: #3C3C3C;
   border-radius: 3px;
   background-repeat: no-repeat;
   background-position-y: 35%;
@@ -22,15 +22,20 @@
 }
 
 .score {
-  background-color: #D99E0B;
   border-radius: 28px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #3C3C3C;
   height: 28px;
   width: 28px;
   text-align:  center;
-  padding-top: 4px;
+  padding-top: 5px;
+  padding-right: 1px;
   margin-right: 8px;
   margin-top: 8px;
   font-size: 15px;
+  background-color: #AC6C39;
+  color: #FBFBD4;
 }
 
 .post-header-button {
