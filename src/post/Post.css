@@ -114,14 +114,19 @@
 }
 
 .tag {
-  background: #DCDCDC;
+  background: #00755E;
   padding: 2px;
-  color: #945D60;
   margin: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #3C3C3C;
+  border-radius: 3px;
+  color: #FBFBD4;
 }
 
 .tag:hover {
-  background: #C4C4C4;
+  background: #7df9ff;
+  color: #3C3C3C;
   cursor: pointer;
 }
 
