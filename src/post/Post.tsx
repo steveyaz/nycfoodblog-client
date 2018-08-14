@@ -1,9 +1,9 @@
+import { Button } from '@blueprintjs/core';
 import * as moment from 'moment';
 import * as React from 'react';
 import { NEIGHBORHOODS } from '../constants';
 import { WirePost } from '../data/WirePost';
 import { WireReview } from '../data/WireReview';
-import { Review } from '../review/Review';
 import './Post.css';
 
 export namespace Post {
@@ -22,6 +22,8 @@ export namespace Post {
 
 }
 
+const INITIAL_STATE = { collapsed: true };
+
 const getBackgroundUrl = (instagramUrl: string) => {
   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
   return instagramUrl.match(regex) + "media/?size=l";
@@ -33,13 +35,7 @@ const getEmbedUrl = (instagramUrl: string) => {
 }
 
 export class Post extends React.PureComponent<Post.Props, Post.State> {
-
-  public constructor(props: any) {
-    super(props);
-    this.state = { collapsed: true };
-    this.handleAddOrEditReview = this.handleAddOrEditReview.bind(this);
-    this.handleCollapsedToggle = this.handleCollapsedToggle.bind(this);
-  }
+  public state: Post.State = INITIAL_STATE;
 
   public render() {
     const backgroundImage = this.props.post.instagramUrl ?
@@ -47,7 +43,19 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
       : {};
     return (
       <div className="post" style={backgroundImage}>
-        <div className="restaurant-name">{this.props.post.restaurantName}</div>
+        <div className="post-header">
+          <div className="score">{this.getReviewScore()}</div>
+          <div className="restaurant-name">{this.props.post.restaurantName}</div>
+          { (this.props.authedUsername !== undefined) &&
+            <Button text="Edit Post" icon="edit" onClick={this.props.viewEditPost.bind(this, this.props.post.id)} />
+          }
+          { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
+            <Button text="Add Review" icon="plus" onClick={this.handleAddOrEditReview.bind(this, this.props.post.id)} />
+          }
+          { (this.props.authedUsername !== undefined) && (this.props.reviews !== undefined) && (this.props.reviews.filter(review => review.username === this.props.authedUsername).length > 0) &&
+            <Button text="Edit Review" icon="edit" onClick={this.handleAddOrEditReview.bind(this, this.props.post.id)} />
+          }
+        </div>
         <div className="post-details">
           <div className="restaurant-details">
             <div className="restaurant-subtitle">
@@ -60,20 +68,6 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
               })}
             </div>
           </div>
-          <div className="reviews">
-            { (this.props.authedUsername !== undefined) &&
-              <button onClick={this.props.viewEditPost.bind(this, this.props.post.id)}>Edit Post</button>
-            }
-            { (this.props.authedUsername !== undefined) && ((this.props.reviews === undefined) || (this.props.reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
-              <button onClick={this.handleAddOrEditReview}>Add Review</button>
-            }
-            { (this.props.reviews !== undefined) && this.props.reviews.filter(review => review.username === this.props.authedUsername).map(review => {
-                return <Review key={review.postId + review.username} review={review} viewEditReview={this.handleAddOrEditReview} />
-            })}
-            { (this.props.reviews !== undefined) && this.props.reviews.filter(review => review.username !== this.props.authedUsername).map(review => {
-                return <Review key={review.postId + review.username} review={review} />
-            })}
-          </div>
         </div>
         <div className={"post-expanded-details " + (this.state.collapsed ? "-collapsed" : "-not-collapsed")}>
           { this.props.post.instagramUrl &&
@@ -85,18 +79,27 @@ export class Post extends React.PureComponent<Post.Props, Post.State> {
             })}
           </div>
         </div>
-        <div className="collapsedToggle" onClick={this.handleCollapsedToggle}>{this.state.collapsed ? '\u25BC' : '\u25B2' }</div>
       </div>
     );
   }
 
-  public handleAddOrEditReview() {
-    if (this.props.post.id !== undefined) {
-      this.props.viewAddOrEditReview(this.props.post.id);
-    }
+  public handleAddOrEditReview = (postId: number) => {
+    this.props.viewAddOrEditReview(postId);
   }
 
-  public handleCollapsedToggle() {
+  public handleCollapsedToggle = () => {
     this.setState({ collapsed: !this.state.collapsed })
+  }
+
+  private getReviewScore() {
+    if (this.props.reviews === undefined) {
+      return "?";
+    } else {
+      let score = 0;
+      for (const review of this.props.reviews) {
+        score += review.ecRating + review.foodRating + review.vibesRating;
+      }
+      return score * 5;
+    }
   }
 }

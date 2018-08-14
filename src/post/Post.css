@@ -1,7 +1,8 @@
 .post {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  height: 180px;
+  width: 100%;
   margin-bottom: 8px;
   padding: 8px;
   border: 3px;
@@ -15,26 +16,38 @@
   background-blend-mode: overlay;
 }
 
+.post-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.score {
+  background-color: #D99E0B;
+  border-radius: 28px;
+  height: 28px;
+  width: 28px;
+  text-align:  center;
+  padding-top: 3px;
+  margin-right: 8px;
+  font-size: 15px;
+}
+
 .collapsedToggle:hover {
   cursor: pointer;
 }
 
-.post-expanded-details.-collapsed {
-  height: 0px;
-}
-
-.post-expanded-details.-not-collapsed {
+.post-expanded-details {
   display: flex;
   flex-direction: row;
   height: 400px;
   padding: 8px 0px;
 }
 
-.instagram-iframe.-collapsed {
-  display: none;
+.post-expanded-details.-collapsed {
+  height: 0px;
 }
 
-.instagram-iframe.-not-collapsed {
+.instagram-iframe {
   display: block;
   width: 260px;
   border-radius: 3px;
@@ -42,12 +55,16 @@
   height: 100%;
 }
 
-.review-texts.-collapsed {
+.instagram-iframe.-collapsed {
   display: none;
 }
 
-.review-texts.-not-collapsed {
+.review-texts {
   display: block;
+}
+
+.review-texts.-collapsed {
+  display: none;
 }
 
 .restaurant-name {
