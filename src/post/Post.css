@@ -32,9 +32,10 @@
 }
 
 .post-image {
-  background: gray;
   height: 200px;
   border-radius: 3px 3px 0 0;
+  background-size: cover;
+  background-position: center;
 }
 
 .post-below-image {
@@ -53,10 +54,11 @@
 }
 
 .post-tags {
-  margin-top: 4px;
+  margin-top: 8px;
   font-size: 12px;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .restaurant-name {

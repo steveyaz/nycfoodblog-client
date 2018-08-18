@@ -30,7 +30,7 @@ export namespace Post {
 
 const getBackgroundUrl = (instagramUrl: string) => {
   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
-  return instagramUrl.match(regex) + "media/?size=l";
+  return instagramUrl.match(regex) + "media/?size=m";
 }
 
 // const getEmbedUrl = (instagramUrl: string) => {
