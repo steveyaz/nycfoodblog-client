@@ -1,116 +1,76 @@
 .post {
   display: flex;
   flex-direction: column;
-  height: 180px;
   width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  border: 2px;
-  border-style: solid;
-  border-color: #3C3C3C;
-  border-radius: 3px;
-  background-repeat: no-repeat;
-  background-position-y: 35%;
-  background-size: 100%;
-  background-color: hsla(0,0%,100%,0.70);
-  background-blend-mode: overlay;
+  margin-bottom: 32px;
 }
 
-.post-header {
+.post-image {
+  background: gray;
+  height: 240px;
+  border-radius: 3px 3px 0 0;
+}
+
+.post-description {
   display: flex;
   flex-direction: row;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.post-reviews {
+  display: flex;
+  flex-direction: row;
+  border-width: 0 1px 1px 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0 0 3px 3px;
 }
 
 .score {
-  border-radius: 28px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #3C3C3C;
-  height: 28px;
-  width: 28px;
+  height: 108px;
+  width: 108px;
   text-align:  center;
   padding-top: 4px;
   padding-right: 1px;
   margin-right: 8px;
   margin-top: 8px;
-  font-size: 15px;
-  background-color: #EACBCB;
+  font-size: 48px;
   color: #3C3C3C;
 }
 
-.post-header-button {
-  margin-left: 8px;
-  height: 12px;
-}
-
-.collapsedToggle:hover {
-  cursor: pointer;
-}
-
-.post-expanded-details {
+.details {
   display: flex;
-  flex-direction: row;
-  height: 400px;
-  padding: 8px 0px;
-}
-
-.post-expanded-details.-collapsed {
-  height: 0px;
-}
-
-.instagram-iframe {
-  display: block;
-  width: 260px;
-  border-radius: 3px;
-  border: 1px solid rgb(219, 219, 219);
-  height: 100%;
-}
-
-.instagram-iframe.-collapsed {
-  display: none;
-}
-
-.review-texts {
-  display: block;
-}
-
-.review-texts.-collapsed {
-  display: none;
+  flex-direction: column;
 }
 
 .restaurant-name {
-  font-size: 42px;
+  font-size: 28px;
   font-family: 'Josefin Sans', sans-serif;
   align-self: flex-start;
   color: #3C3C3C;
 }
 
-.post-details {
+.post-description-button {
+  margin-left: 8px;
+  height: 12px;
+}
+
+.post-subtitle {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  flex-grow: 1;
 }
 
-.restaurant-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.location {
+  padding: 2px;
+  margin: 2px;
+  color: #3C3C3C;
 }
 
-.restaurant-subtitle {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  align-self: flex-start;
-  margin-left: 39px;
-}
-
-.date-visited {
-  margin-right: 10px;
-  color: 	#707070;
+.location:hover {
+  color: gray;
+  cursor: pointer;
 }
 
 .tag {
@@ -137,28 +97,6 @@
   flex-direction: row;
 }
 
-.reviews {
-  display: flex;
-  flex-direction: row;
-}
-
-.review {
-  width: 50px;
-  padding: 10px;
-  margin: 10px;
-  color: #945D60;
-  background-color: #DCDCDC;
-}
-
-.review:hover {
-  background-color: #C4C4C4;
-  cursor: pointer;
-}
-
-.username {
-  text-transform: capitalize;
-}
-
 .post-form {
   display: flex;
   flex-direction: column;
@@ -180,7 +118,7 @@
   color: #707070;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 889px) {
   .restaurant-name {
     font-size: 28px;
   }

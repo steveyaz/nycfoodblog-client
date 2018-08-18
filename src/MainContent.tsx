@@ -6,71 +6,59 @@ import { WirePost } from "./data/WirePost";
 import { WireReview } from "./data/WireReview";
 import { Post } from "./post/Post";
 import { PostForm } from "./post/PostForm";
-import { setView } from "./redux/action";
+import { setAllPosts, setAllReviews, setPostIds, setUsernames, setView } from "./redux/action";
 import { AppState, VIEW_TYPE } from "./redux/state";
 import { ReviewForm } from "./review/ReviewForm";
 
 export namespace MainContent {
 
   interface StoreProps {
-    authedUsername?: string;
-    activePostId?: number;
     view: VIEW_TYPE;
+    authedUsername?: string;
+    postIds: Array<number>;
     setView: (viewType: VIEW_TYPE) => void;
+    setPostIds: (postIds: Array<number>) => void;
+    setUsernames: (usernames: Array<string>) => void;
+    setAllPosts: (postMap: { [postId: number]: WirePost }) => void;
+    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
   }
 
   export type Props = StoreProps;
 
   export interface State {
-    posts: Array<WirePost>;
-    reviewMap: { [postId: number]: WireReview[] };
     displayAuth: boolean;
-    usernames: Array<string>;
+    activePostId?: number;
   }
 
 }
 
-const EMPTY_POST_ARRAY: WirePost[] = [];
-const EMPTY_MAP = {};
-const EMPTY_STRING_LIST: Array<string> = [];
-
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
-  public state: MainContent.State = { posts: EMPTY_POST_ARRAY, reviewMap: EMPTY_MAP, displayAuth: false, usernames: EMPTY_STRING_LIST };
+  public state: MainContent.State = { displayAuth: false };
 
   public render() {
     return (
       <div className="content">
-        {this.props.view === "ALL_POSTS" &&
-          <div>
-            <div className="posts">
-              {this.state.posts
-                .sort((a: WirePost, b: WirePost) => {
-                  return a.dateVisited < b.dateVisited ? 1 : -1;
-                }).map((post: WirePost) => {
-                  return (
-                    <Post
-                      key={post.id!}
-                      post={post}
-                      reviews={this.state.reviewMap[post.id!]}
-                    />);
-                })}
-            </div>
+        { (this.props.view === "ALL_POSTS") &&
+          <div className="posts">
+            {this.props.postIds
+              .map((postId: number) => {
+                return (
+                  <Post
+                    key={postId}
+                    postId={postId}
+                    setActivePost={this.setActivePost}
+                  />);
+              })}
           </div>
         }
-        {this.props.view === "ADD_OR_EDIT_POST" &&
+        { (this.props.view === "ADD_OR_EDIT_POST") &&
           <PostForm
-            previousPost={this.getActivePost()}
-            createPost={this.createPost}
-            closeForm={this.viewAllPosts}
+            postId={this.state.activePostId}
           />
         }
-        {(this.props.view === "ADD_OR_EDIT_REVIEW") && (this.props.authedUsername !== undefined) &&
+        { (this.props.view === "ADD_OR_EDIT_REVIEW") &&
           <ReviewForm
-            username={this.props.authedUsername}
-            postId={this.getActivePost()!.id!}
-            previousReview={this.getActiveReview()}
-            createReview={this.createReview}
-            closeForm={this.viewAllPosts}
+            postId={this.state.activePostId!}
           />
         }
       </div>
@@ -78,90 +66,57 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
   }
 
   public componentDidMount() {
-    this.retrieveAllData();
-  }
-
-  private retrieveAllData() {
     const usernamesPromise = RequestClient.getInstance().getAllUsernames();
-    const postsPromise = RequestClient.getInstance().getAllPosts();
+    const postsPromise = RequestClient.getInstance().getAllPostsIds();
     Promise.all([postsPromise, usernamesPromise])
-      .then(values => {
+      .then(postIdsAndUsernames => {
+        this.props.setPostIds(postIdsAndUsernames[0]);
+        this.props.setUsernames(postIdsAndUsernames[1]);
+        const postPromises = [];
         const reviewPromises = [];
-        this.setState({ posts: values[0], usernames: values[1] });
-        for (const username of values[1]) {
-          for (const post of values[0]) {
-            reviewPromises.push(RequestClient.getInstance().getReview(username.toLowerCase(), post.id!));
-          }
+        for (const postId of postIdsAndUsernames[0]) {
+          postPromises.push(RequestClient.getInstance().getPost(postId));
+          reviewPromises.push(RequestClient.getInstance().getReviews(postId));
         }
-        Promise.all(reviewPromises)
-          .then(reviews => {
-            const tempReviewMap: { [postId: number]: WireReview[] } = {};
-            for (const review of reviews) {
-              if (review === undefined) {
-                // NOOP
-              } else if (tempReviewMap[review.postId!] === undefined) {
-                tempReviewMap[review.postId!] = [review];
-              } else {
-                tempReviewMap[review.postId!] = [review, ...tempReviewMap[review.postId!]]
+        Promise.all([Promise.all(postPromises), Promise.all(reviewPromises)])
+          .then(postsAndReviews => {
+            const postMap = {};
+            for (const post of postsAndReviews[0]) {
+              postMap[post.id!] = post;
+            }
+            this.props.setAllPosts(postMap);
+            const reviewMap = {};
+            for (const reviews of postsAndReviews[1]) {
+              if (reviews.length > 0) {
+                reviewMap[reviews[0].postId] = reviews;
               }
             }
-            this.setState({reviewMap: tempReviewMap});
+            this.props.setAllReviews(reviewMap);
           });
       });
   }
 
-  private viewAllPosts = () => {
-    if (this.props.view === "ALL_POSTS") {
-      location.reload(true);
-    } else {
-      this.props.setView("ALL_POSTS");
-    }
-  }
-
-  private createPost = (post: WirePost) => {
-    RequestClient.getInstance().createPost(post)
-      .then(id => {
-        post.id = id;
-        const filteredPosts = this.state.posts.filter(oldPost => oldPost.id !== post.id);
-        this.setState({ posts: [post, ...filteredPosts] });
-        this.props.setView("ALL_POSTS");
-      });
-  }
-
-  private createReview = (review: WireReview) => {
-    RequestClient.getInstance().createReview(review)
-      .then(() => {
-        this.props.setView("ALL_POSTS");
-      });
-  }
-
-  private getActiveReview = () => {
-    if (this.props.activePostId === undefined || this.props.authedUsername === undefined || this.state.reviewMap[this.props.activePostId!] === undefined) {
-      return undefined;
-    }
-    return this.state.reviewMap[this.props.activePostId].find(review => review.username === this.props.authedUsername)
-  }
-
-  private getActivePost = () => {
-    if (this.props.activePostId === undefined) {
-      return undefined;
-    }
-    return this.state.posts.find(post => post.id === this.props.activePostId)
+  private setActivePost = (postId: number) => {
+    this.setState({ activePostId: postId });
   }
 
 }
 
 const mapStateToProps = (state: AppState) => {
   return {
-    activePostId: state.activePostId,
-    authedUsername: state.authedUsername,
     view: state.view,
+    authedUsername: state.authedUsername,
+    postIds: state.postIds,
   };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
+    setPostIds: (postIds: Array<number>) => dispatch(setPostIds(postIds)),
+    setUsernames: (usernames: Array<string>) => dispatch(setUsernames(usernames)),
+    setAllPosts: (postMap: { [postId: number]: WirePost }) => dispatch(setAllPosts(postMap)),
+    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => dispatch(setAllReviews(reviewMap)),
   };
 };
 

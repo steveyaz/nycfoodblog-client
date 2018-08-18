@@ -2,8 +2,8 @@ import { RequestInitBuilder } from "./RequestInitBuilder";
 import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
-// const BASE_URL = 'http://stevey-mbp:8090';
-const BASE_URL = 'https://nycfoodblog.net/api';
+const BASE_URL = 'http://stevey-mbp:8090';
+// const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
@@ -31,16 +31,13 @@ export class RequestClient {
       });
   }
   
-  public getAllPosts(): Promise<WirePost[]> {
-    
+  public getAllPostsIds(): Promise<number[]> {
     const request = new Request(BASE_URL + '/post/all', RequestInitBuilder.request().withMethod("GET").build());
     return fetch(request)
       .then(response => {
         return response.json();
       }).then((ids: number[]) => {
-        return Promise.all(ids.map((id: number) => {
-          return this.getPost(id);
-        }));
+        return ids;
       }).catch(e => {
         return Promise.reject(e);
       });
@@ -70,15 +67,15 @@ export class RequestClient {
       });
   }
 
-  public getReview(username: string, postId: number): Promise<WireReview | undefined> {
-    const request = new Request(BASE_URL + '/review/' + username + '/' + postId, RequestInitBuilder.request().withMethod("GET").build());
+  public getReviews(postId: number): Promise<Array<WireReview>> {
+    const request = new Request(BASE_URL + '/review/' + postId, RequestInitBuilder.request().withMethod("GET").build());
     return fetch(request)
       .then(response => {
         return response.json();
-      }).then((review: WireReview) => {
-        return review;
+      }).then((reviews: Array<WireReview>) => {
+        return reviews;
       }).catch(e => {
-        return undefined;
+        return Promise.reject(e);
       });
   }
 

@@ -1,20 +1,31 @@
 import { Button } from "@blueprintjs/core";
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { NEIGHBORHOODS } from "../constants";
+import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
 import { CurrencyFormField } from "../form/CurrencyFormField";
 import { DateFormField } from "../form/DateFormField";
 import { MultiTextFormField } from "../form/MultiTextFormField";
 import { SelectionFormField } from "../form/SelectionFormField";
 import { TextFormField } from "../form/TextFormField";
+import { setPost, setView } from "../redux/action";
+import { AppState, VIEW_TYPE } from "../redux/state";
 
 export namespace PostForm {
 
-  export interface Props {
-    previousPost: WirePost | undefined;
-    createPost: (post: WirePost) => void,
-    closeForm: () => void,
+  export interface OwnProps {
+    postId?: number;
   }
+
+  export interface StoreProps {
+    postMap: { [postId: number]: WirePost };
+    setView: (viewType: VIEW_TYPE) => void;
+    setPost: (post: WirePost) => void;
+  }
+
+  export type Props = OwnProps & StoreProps;
 
 }
 
@@ -32,10 +43,11 @@ const NEW_POST: WirePost = {
   tags: [],
 }
 
-export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {
-  public constructor(props: any) {
+class PostFormInternal extends React.PureComponent<PostForm.Props, WirePost> {
+  public constructor(props: PostForm.Props) {
     super(props);
-    this.state = props.previousPost || NEW_POST;
+    const post = props.postId !== undefined ? props.postMap[props.postId] : undefined;
+    this.state = post || NEW_POST;
   }
 
   public render() {
@@ -67,14 +79,30 @@ export class PostForm extends React.PureComponent<PostForm.Props, WirePost> {
   }
 
   private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.createPost(this.state);
-    this.props.closeForm();
+    RequestClient.getInstance().createPost(this.state);
+    this.props.setPost(this.state);
+    this.props.setView("ALL_POSTS");
     event.preventDefault();
   }
 
   private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.closeForm();
+    this.props.setView("ALL_POSTS");
     event.preventDefault();
   }
   
 }
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    postMap: state.postMap,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
+    setPost: (post: WirePost) => dispatch(setPost(post)),
+  };
+};
+
+export const PostForm = connect(mapStateToProps, mapDispatchToProps)(PostFormInternal);

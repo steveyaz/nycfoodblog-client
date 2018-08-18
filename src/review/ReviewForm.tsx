@@ -1,27 +1,45 @@
 import { Button } from "@blueprintjs/core";
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../constants";
+import { RequestClient } from "../data/RequestClient";
 import { WireReview } from "../data/WireReview";
 import { SelectionFormField } from "../form/SelectionFormField";
 import { TextAreaFormField } from "../form/TextAreaFormField";
+import { setReview, setView } from "../redux/action";
+import { AppState, VIEW_TYPE } from "../redux/state";
 
 export namespace ReviewForm {
 
-  export interface Props {
-    username: string;
+  export interface OwnProps {
     postId: number;
-    previousReview: WireReview | undefined;
-    createReview: (post: WireReview) => void,
-    closeForm: () => void,
   }
+
+  export interface StoreProps {
+    authedUsername?: string;
+    reviewMap: { [postId: number]: Array<WireReview> };
+    setView: (viewType: VIEW_TYPE) => void;
+    setReview: (review: WireReview) => void;
+  }
+
+  export type Props = OwnProps & StoreProps;
 
 }
 
-export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview> {
+class ReviewFormInternal extends React.PureComponent<ReviewForm.Props, WireReview> {
   constructor(props: ReviewForm.Props){
     super(props);
-    this.state = props.previousReview || {
-      username: props.username,
+    let review;
+    if (props.reviewMap[props.postId] !== undefined) {
+      for (const storedReview of props.reviewMap[props.postId]) {
+        if (storedReview.username === props.authedUsername) {
+          review = storedReview;
+        }
+      }
+    }
+    this.state = review || {
+      username: props.authedUsername!,
       postId: props.postId,
       foodRating: 0,
       vibesRating: 0,
@@ -52,13 +70,30 @@ export class ReviewForm extends React.PureComponent<ReviewForm.Props, WireReview
   }
 
   private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.createReview(this.state);
-    this.props.closeForm();
+    RequestClient.getInstance().createReview(this.state);
+    this.props.setReview(this.state);
+    this.props.setView("ALL_POSTS");
     event.preventDefault();
   }
 
   private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.closeForm();
+    this.props.setView("ALL_POSTS");
     event.preventDefault();
   }
 }
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    authedUsername: state.authedUsername,
+    reviewMap: state.reviewMap,
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
+    setReview: (review: WireReview) => dispatch(setReview(review)),
+  };
+};
+
+export const ReviewForm = connect(mapStateToProps, mapDispatchToProps)(ReviewFormInternal);

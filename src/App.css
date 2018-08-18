@@ -41,7 +41,7 @@ body {
 }
 
 .content {
-  width: calc(80%);
+  width: 800px;
   font-size: large;
 }
 
@@ -75,4 +75,10 @@ body {
 .easterEgg:hover {
   opacity: 100;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 889px) {
+  .content {
+    width: calc(90%);
+  }
 }
