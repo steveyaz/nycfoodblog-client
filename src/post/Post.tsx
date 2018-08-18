@@ -1,4 +1,4 @@
-import { Button, Icon } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -57,33 +57,27 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
       : {};
     return (
       <div className="post">
-        <div className="post-image" style={backgroundImage}>
-          <div className="tags">
+        <div className="post-score">{this.getReviewScore(reviews)}</div>
+        <div className="post-image" style={backgroundImage} />
+        <div className="post-below-image">
+          <div className="post-description">
+            <div className="restaurant-name">{post.restaurantName}</div>
+            <div className="location">{NEIGHBORHOODS.get(post.neighborhood)}</div>
+          </div>
+          <div className="post-tags">
             {post.tags && post.tags.map(tag => {
               return <div key={tag} className="tag">{tag}</div>
             })}
           </div>
-        </div>
-        <div className="post-description">
-          <div className="score">{this.getReviewScore(reviews)}%</div>
-          <div className="details">
-            <div className="restaurant-name">{post.restaurantName}</div>
-              { (this.props.authedUsername !== undefined) &&
-                <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
-              }
-              { (this.props.authedUsername !== undefined) && ((reviews === undefined) || (reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
-                <Button className="post-description-button" text="Add Review" icon="plus" onClick={this.handleAddOrEditReview} />
-              }
-              { (this.props.authedUsername !== undefined) && (reviews !== undefined) && (reviews.filter(review => review.username === this.props.authedUsername).length > 0) &&
-                <Button className="post-description-button" text="Edit Review" icon="edit" onClick={this.handleAddOrEditReview} />
-              }
-            <div className="location"><Icon className="location-marker" icon="map-marker" />{NEIGHBORHOODS.get(post.neighborhood)}</div>
-          </div>
-        </div>
-        <div className="post-reviews">
-          { reviews && reviews.map(review => {
-            return(<div key={review.username}>{review.text}</div>);
-          })}
+          { (this.props.authedUsername !== undefined) &&
+            <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
+          }
+          { (this.props.authedUsername !== undefined) && ((reviews === undefined) || (reviews.filter(review => review.username === this.props.authedUsername).length === 0)) &&
+            <Button className="post-description-button" text="Add Review" icon="plus" onClick={this.handleAddOrEditReview} />
+          }
+          { (this.props.authedUsername !== undefined) && (reviews !== undefined) && (reviews.filter(review => review.username === this.props.authedUsername).length > 0) &&
+            <Button className="post-description-button" text="Edit Review" icon="edit" onClick={this.handleAddOrEditReview} />
+          }
         </div>
       </div>
     );

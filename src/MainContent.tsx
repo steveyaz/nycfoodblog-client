@@ -1,3 +1,4 @@
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -6,7 +7,7 @@ import { WirePost } from "./data/WirePost";
 import { WireReview } from "./data/WireReview";
 import { Post } from "./post/Post";
 import { PostForm } from "./post/PostForm";
-import { setAllPosts, setAllReviews, setPostIds, setUsernames, setView } from "./redux/action";
+import { setAllPosts, setAllReviews, setUsernames, setView } from "./redux/action";
 import { AppState, VIEW_TYPE } from "./redux/state";
 import { ReviewForm } from "./review/ReviewForm";
 
@@ -15,9 +16,8 @@ export namespace MainContent {
   interface StoreProps {
     view: VIEW_TYPE;
     authedUsername?: string;
-    postIds: Array<number>;
+    postMap: { [postId: number]: WirePost };
     setView: (viewType: VIEW_TYPE) => void;
-    setPostIds: (postIds: Array<number>) => void;
     setUsernames: (usernames: Array<string>) => void;
     setAllPosts: (postMap: { [postId: number]: WirePost }) => void;
     setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
@@ -26,29 +26,34 @@ export namespace MainContent {
   export type Props = StoreProps;
 
   export interface State {
-    displayAuth: boolean;
     activePostId?: number;
   }
 
 }
 
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
-  public state: MainContent.State = { displayAuth: false };
 
   public render() {
     return (
       <div className="content">
         { (this.props.view === "ALL_POSTS") &&
           <div className="posts">
-            {this.props.postIds
-              .map((postId: number) => {
-                return (
-                  <Post
-                    key={postId}
-                    postId={postId}
-                    setActivePost={this.setActivePost}
-                  />);
-              })}
+            { this.props.authedUsername && 
+              <div className="post -add-post">
+                <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
+              </div> }
+            { Object.keys(this.props.postMap)
+                .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
+                .map((postMapKey: string) => {
+                  return (
+                    <Post
+                      key={postMapKey}
+                      postId={this.props.postMap[postMapKey].id}
+                      setActivePost={this.setActivePost}
+                    />);
+              }) }
+            <div className="post -dummy" />
+            <div className="post -dummy" />
           </div>
         }
         { (this.props.view === "ADD_OR_EDIT_POST") &&
@@ -70,7 +75,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
     const postsPromise = RequestClient.getInstance().getAllPostsIds();
     Promise.all([postsPromise, usernamesPromise])
       .then(postIdsAndUsernames => {
-        this.props.setPostIds(postIdsAndUsernames[0]);
         this.props.setUsernames(postIdsAndUsernames[1]);
         const postPromises = [];
         const reviewPromises = [];
@@ -100,20 +104,24 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
     this.setState({ activePostId: postId });
   }
 
+  private handleAddPost = () => {
+    this.setState({ activePostId: undefined });
+    this.props.setView("ADD_OR_EDIT_POST");
+  }
+
 }
 
 const mapStateToProps = (state: AppState) => {
   return {
     view: state.view,
     authedUsername: state.authedUsername,
-    postIds: state.postIds,
+    postMap: state.postMap,
   };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
-    setPostIds: (postIds: Array<number>) => dispatch(setPostIds(postIds)),
     setUsernames: (usernames: Array<string>) => dispatch(setUsernames(usernames)),
     setAllPosts: (postMap: { [postId: number]: WirePost }) => dispatch(setAllPosts(postMap)),
     setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => dispatch(setAllReviews(reviewMap)),

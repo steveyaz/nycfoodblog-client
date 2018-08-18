@@ -1,71 +1,77 @@
 .post {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-bottom: 32px;
+  position: relative;
+  min-width: 300px;
+  max-width: 300px;
+  margin: 16px;
+}
+
+.post.-add-post {
+  align-items: center;
+  justify-content: center;
+}
+
+.post-score {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 36px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #3C3C3C;
+  left: -12px;
+  top: -12px;
+  font-size: 24px;
+  background: #D5D9B4;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #3C3C3C;
 }
 
 .post-image {
   background: gray;
-  height: 240px;
+  height: 200px;
   border-radius: 3px 3px 0 0;
+}
+
+.post-below-image {
+  border-width: 0 1px 1px 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0 0 3px 3px;
+  background: white;
+  padding: 4px;
 }
 
 .post-description {
   display: flex;
   flex-direction: row;
-  border-width: 0 1px;
-  border-style: solid;
-  border-color: black;
+  justify-content: space-between;
 }
 
-.post-reviews {
+.post-tags {
+  margin-top: 4px;
+  font-size: 12px;
   display: flex;
   flex-direction: row;
-  border-width: 0 1px 1px 1px;
-  border-style: solid;
-  border-color: black;
-  border-radius: 0 0 3px 3px;
-}
-
-.score {
-  height: 108px;
-  width: 108px;
-  text-align:  center;
-  padding-top: 4px;
-  padding-right: 1px;
-  margin-right: 8px;
-  margin-top: 8px;
-  font-size: 48px;
-  color: #3C3C3C;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
 }
 
 .restaurant-name {
-  font-size: 28px;
-  font-family: 'Josefin Sans', sans-serif;
+  font-size: 24px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
   align-self: flex-start;
-  color: #3C3C3C;
-}
-
-.post-description-button {
-  margin-left: 8px;
-  height: 12px;
-}
-
-.post-subtitle {
-  display: flex;
-  flex-direction: row;
+  color: #394B59;
 }
 
 .location {
   padding: 2px;
   margin: 2px;
-  color: #3C3C3C;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #738694;
 }
 
 .location:hover {
@@ -74,27 +80,28 @@
 }
 
 .tag {
-  background: #E4F9C7;
+  background: #E1E8ED;
   padding: 2px;
   margin: 2px;
   border-width: 1px;
   border-style: solid;
-  border-color: #3C3C3C;
+  border-color: #CED9E0;
   border-radius: 3px;
-  color: ##3C3C3C;
+  font-family: 'Open Sans', sans-serif;
+  text-transform: lowercase;
+  color: #5C7080;
 }
 
 .tag:hover {
-  background: #7df9ff;
-  color: #3C3C3C;
+  background: #CED9E0;
+  color: #5C7080;
   cursor: pointer;
 }
 
-.tags {
+.post-description-button {
+  margin-right: 8px;
   margin-top: 4px;
-  font-size: 12px;
-  display: flex;
-  flex-direction: row;
+  height: 12px;
 }
 
 .post-form {

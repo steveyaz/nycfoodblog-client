@@ -70,8 +70,16 @@ class ReviewFormInternal extends React.PureComponent<ReviewForm.Props, WireRevie
   }
 
   private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    RequestClient.getInstance().createReview(this.state);
-    this.props.setReview(this.state);
+    const review = {
+      username: this.state.username,
+      postId: this.state.postId,
+      foodRating: Number.parseInt(this.state.foodRating.toString()),
+      vibesRating: Number.parseInt(this.state.vibesRating.toString()),
+      ecRating: Number.parseInt(this.state.ecRating.toString()),
+      text: this.state.text,
+    };
+    RequestClient.getInstance().createReview(review);
+    this.props.setReview(review);
     this.props.setView("ALL_POSTS");
     event.preventDefault();
   }

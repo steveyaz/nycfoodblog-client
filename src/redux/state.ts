@@ -8,19 +8,16 @@ export interface AppState {
   authedUsername?: string;
 
   usernames: string[];
-  postIds: Array<number>;
   postMap: { [postId: number]: WirePost };
   reviewMap: { [postId: number]: Array<WireReview> };
 }
 
 const EMPTY_STRING_ARRAY: Array<string> = [];
-const EMPTY_NUMBER_ARRAY: Array<number> = [];
 const EMPTY_MAP = {};
 
 export const INITIAL_STATE: AppState = { 
   view: "ALL_POSTS",
   usernames: EMPTY_STRING_ARRAY,
-  postIds: EMPTY_NUMBER_ARRAY,
   postMap: EMPTY_MAP,
   reviewMap: EMPTY_MAP,
 };

@@ -2,13 +2,13 @@
 @import "./form/FormField.css";
 @import "./post/Post.css";
 @import "./review/Review.css";
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Pacifico');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300|Quattrocento');
 
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background-color: #7df9ff;
+  background-color: white;
 }
 
 .app {
@@ -37,19 +37,19 @@ body {
   margin-top: 8px;
   font-size: 2em;
   font-weight: 100;
-  font-family: 'Pacifico', cursive;
+  font-family: 'Quattrocento', serif;
 }
 
 .content {
-  width: 800px;
+  width: 90%;
   font-size: large;
 }
 
 .posts {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
 }
 
 @keyframes logo-spin {
@@ -75,10 +75,4 @@ body {
 .easterEgg:hover {
   opacity: 100;
   cursor: pointer;
-}
-
-@media only screen and (max-width: 889px) {
-  .content {
-    width: calc(90%);
-  }
 }

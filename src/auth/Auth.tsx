@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RequestClient } from "../data/RequestClient";
-import { setActivePost, setAuthedUsername, setView } from "../redux/action";
+import { setAuthedUsername, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
 import { LoginForm } from "./LoginForm";
 
@@ -12,7 +12,6 @@ export namespace Auth {
   export interface StoreProps {
     authedUsername?: string;
     view: VIEW_TYPE;
-    setActivePost: (postId: number | undefined) => void;
     setAuthedUsername: (username: string | undefined) => void;
     setView: (viewType: VIEW_TYPE) => void;
   }
@@ -30,17 +29,11 @@ class AuthInternal extends React.PureComponent<Auth.Props> {
         {this.props.authedUsername !== undefined ?
           <div className="logged-in">
             <div className="user-greeting">Hello, {this.props.authedUsername}!</div>
-            { this.props.view === "ALL_POSTS" && <Button text="Add Post" icon="add" onClick={this.handleAddPost} /> }
             <Button text="Logout" onClick={this.handleLogout} />
           </div> :
         <LoginForm onSubmit={this.handleLogin} />}
       </div>
     );
-  }
-
-  private handleAddPost = () => {
-    this.props.setActivePost(undefined);
-    this.props.setView("ADD_OR_EDIT_POST");
   }
 
   private handleLogin = (username: string, password: string) => {
@@ -69,7 +62,6 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setActivePost: (postId: number | undefined) => dispatch(setActivePost(postId)),
     setAuthedUsername: (username: string) => dispatch(setAuthedUsername(username)),
     setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
   };
