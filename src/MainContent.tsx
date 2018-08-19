@@ -6,6 +6,7 @@ import { RequestClient } from "./data/RequestClient";
 import { WirePost } from "./data/WirePost";
 import { WireReview } from "./data/WireReview";
 import { Post } from "./post/Post";
+import { PostDetails } from "./post/PostDetails";
 import { PostForm } from "./post/PostForm";
 import { setAllPosts, setAllReviews, setUsernames, setView } from "./redux/action";
 import { AppState, VIEW_TYPE } from "./redux/state";
@@ -27,11 +28,13 @@ export namespace MainContent {
 
   export interface State {
     activePostId?: number;
+    postDetailsOpen: boolean;
   }
 
 }
 
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
+  public state: MainContent.State = { postDetailsOpen: false }
 
   public render() {
     return (
@@ -50,6 +53,7 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
                       key={postMapKey}
                       postId={this.props.postMap[postMapKey].id}
                       setActivePost={this.setActivePost}
+                      showDetails={this.showDetails}
                     />);
               }) }
             <div className="post -dummy" />
@@ -66,6 +70,7 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
             postId={this.state.activePostId!}
           />
         }
+        <PostDetails postId={this.state.activePostId!} isOpen={this.state.postDetailsOpen} onDetailsClose={this.hideDetails}  />
       </div>
     );
   }
@@ -107,6 +112,14 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
   private handleAddPost = () => {
     this.setState({ activePostId: undefined });
     this.props.setView("ADD_OR_EDIT_POST");
+  }
+
+  private showDetails = (postId: number) => {
+    this.setState({ activePostId: postId, postDetailsOpen: true });
+  }
+
+  private hideDetails = () => {
+    this.setState({ postDetailsOpen: false });
   }
 
 }

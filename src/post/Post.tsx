@@ -1,4 +1,4 @@
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -12,7 +12,8 @@ export namespace Post {
 
   export interface OwnProps {
     postId: number;
-    setActivePost: (id: number) => void;
+    setActivePost: (postId: number) => void;
+    showDetails: (postId: number) => void;
   }
 
   export interface StoreProps {
@@ -32,11 +33,6 @@ const getBackgroundUrl = (instagramUrl: string) => {
   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
   return instagramUrl.match(regex) + "media/?size=m";
 }
-
-// const getEmbedUrl = (instagramUrl: string) => {
-//   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
-//   return instagramUrl.match(regex) + "embed";
-// }
 
 class PostInternal extends React.PureComponent<Post.Props, {}> {
 
@@ -68,6 +64,7 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
             {post.tags && post.tags.map(tag => {
               return <div key={tag} className="tag">{tag}</div>
             })}
+            <div className="post-expand"><Icon className="post-expand-button" onClick={this.handleShowDetails} icon="more" /></div>
           </div>
           { (this.props.authedUsername !== undefined) &&
             <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
@@ -92,6 +89,11 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
   private handleAddOrEditReview(event: React.MouseEvent<HTMLButtonElement>) {
     this.props.setActivePost(this.props.postId);
     this.props.setView("ADD_OR_EDIT_REVIEW");
+    event.preventDefault();
+  }
+
+  private handleShowDetails = (event: React.MouseEvent<SVGElement>) => {
+    this.props.showDetails(this.props.postId);
     event.preventDefault();
   }
 
