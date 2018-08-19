@@ -33,6 +33,8 @@ export const FOOD_RATINGS: Map<string, string> = new Map([
   ["3", "3"],
   ["4", "4"],
   ["5", "5"],
+  ["6", "6"],
+  ["7", "7"],
 ]);
 
 export const VIBES_RATINGS: Map<string, string> = new Map([
@@ -40,8 +42,6 @@ export const VIBES_RATINGS: Map<string, string> = new Map([
   ["1", "1"],
   ["2", "2"],
   ["3", "3"],
-  ["4", "4"],
-  ["5", "5"],
 ]);
 
 export const EC_RATINGS: Map<string, string> = new Map([
