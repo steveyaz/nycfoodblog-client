@@ -158,6 +158,18 @@
   background: #F5F8FA;
 }
 
+.post-details-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  color: #5C7080;
+}
+
+.post-details-close:hover {
+  cursor: pointer;
+  color: #394B59;
+}
+
 .restaurant-section {
   width: 200px;
   margin-right: 8px;
@@ -166,7 +178,7 @@
 
 .instagram-section {
   width: 200px;
-  margin-right: 8px;
+  margin-right: 24px;
   margin-bottom: 8px;
 }
 

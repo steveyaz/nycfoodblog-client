@@ -55,6 +55,7 @@ class PostDetailsInternal extends React.PureComponent<PostDetails.Props> {
         { post !== undefined && 
 
           <div className="post-details">
+            <div className="post-details-close"><Icon icon="cross" onClick={this.props.onDetailsClose} /></div>
             <div className="restaurant-section">
               <div className="details-restaurant-name">{post.restaurantName}</div>
               <div className="details-location">{NEIGHBORHOODS.get(post.neighborhood)}</div>
