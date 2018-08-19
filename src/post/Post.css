@@ -144,8 +144,10 @@
   justify-content: space-between;
   bottom: 16px;
   width: calc(80%);
+  max-height: calc(90%);
   left: 0; 
   right: 0; 
+  overflow-y: scroll;
   margin-left: auto; 
   margin-right: auto;
   border-width: 1px;
@@ -274,7 +276,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0 16px 8px 16px;
+  margin: 0 8px 8px 8px;
 }
 
 .review-score {
@@ -295,4 +297,18 @@
   margin-top: 16px;
   left: 0;
   top: 0;
+}
+
+@media only screen and (max-width: 520px) {
+  .reviews-section {
+    width: 300px;
+  }
+
+  .review-scores {
+    min-width: 100px;
+  }
+
+  .review-score-row {
+    margin: 0 16px 8px 16px;
+  }
 }
