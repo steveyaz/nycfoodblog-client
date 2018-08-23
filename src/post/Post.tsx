@@ -14,6 +14,7 @@ export namespace Post {
     postId: number;
     setActivePost: (postId: number) => void;
     showDetails: (postId: number) => void;
+    onAddLocationFilter: (neighborhood: string) => void;
   }
 
   export interface StoreProps {
@@ -54,17 +55,17 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
     return (
       <div className="post">
         <div className="post-score">{this.getReviewScore(reviews)}</div>
-        <div className="post-image" style={backgroundImage} />
+        <div className="post-image" onClick={this.handleShowDetails} style={backgroundImage} />
         <div className="post-below-image">
           <div className="post-description">
-            <div className="restaurant-name">{post.restaurantName}</div>
-            <div className="location">{NEIGHBORHOODS.get(post.neighborhood)}</div>
+            <div className="restaurant-name" onClick={this.handleShowDetails}>{post.restaurantName}</div>
+            <div className="location" onClick={this.onLocationClick}>{NEIGHBORHOODS.get(post.neighborhood)}</div>
           </div>
           <div className="post-tags">
             {post.tags && post.tags.map(tag => {
               return <div key={tag} className="tag">{tag}</div>
             })}
-            <div className="post-expand"><Icon className="post-expand-button" onClick={this.handleShowDetails} icon="more" /></div>
+            <div className="post-expand"><Icon className="post-expand-button" onClick={this.handleShowDetails} icon="share" /></div>
           </div>
           { (this.props.authedUsername !== undefined) &&
             <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
@@ -92,9 +93,8 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
     event.preventDefault();
   }
 
-  private handleShowDetails = (event: React.MouseEvent<SVGElement>) => {
+  private handleShowDetails = () => {
     this.props.showDetails(this.props.postId);
-    event.preventDefault();
   }
 
   private getReviewScore(reviews: Array<WireReview>) {
@@ -107,6 +107,11 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
       }
       return score * 5; // score is out of 20
     }
+  }
+
+  private onLocationClick = () => {
+    const post: WirePost = this.props.postMap[this.props.postId];
+    this.props.onAddLocationFilter(post.neighborhood);
   }
 }
 

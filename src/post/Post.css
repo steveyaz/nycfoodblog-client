@@ -38,6 +38,10 @@
   background-position: center;
 }
 
+.post-image:hover {
+  cursor: pointer;
+}
+
 .post-below-image {
   border-width: 0 1px 1px 1px;
   border-style: solid;
@@ -81,6 +85,10 @@
   font-weight: 700;
   align-self: flex-start;
   color: #394B59;
+}
+
+.restaurant-name:hover {
+  cursor: pointer;
 }
 
 .location {
@@ -289,6 +297,10 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 8px 8px 8px;
+}
+
+.review-score-row.-overall {
+  font-weight: 700;
 }
 
 .review-score {

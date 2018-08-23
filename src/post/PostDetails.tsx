@@ -73,7 +73,7 @@ class PostDetailsInternal extends React.PureComponent<PostDetails.Props> {
               <div className="review-content-row">
                 <div className="review-quote -left"><Icon className="review-quote-icon" icon="citation" />{sonyaReview && sonyaReview.text}</div>
                 <div className="review-scores">
-                  <div className="review-score-row">
+                  <div className="review-score-row -overall">
                     <div className="review-score">{sonyaReview && sonyaReview.foodRating + sonyaReview.vibesRating + sonyaReview.ecRating}</div>
                     <div className="review-score-type">Overall</div>
                     <div className="review-score">{steveReview && steveReview.foodRating + steveReview.vibesRating + steveReview.ecRating}</div>

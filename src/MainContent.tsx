@@ -1,7 +1,9 @@
-import { Button } from "@blueprintjs/core";
+import { Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import { ItemListRenderer, ItemPredicate, ItemRenderer, MultiSelect } from "@blueprintjs/select";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
+import { NEIGHBORHOODS } from "./constants";
 import { RequestClient } from "./data/RequestClient";
 import { WirePost } from "./data/WirePost";
 import { WireReview } from "./data/WireReview";
@@ -29,35 +31,93 @@ export namespace MainContent {
   export interface State {
     activePostId?: number;
     postDetailsOpen: boolean;
+    appliedFilters: Array<{ type: string, label: string }>;
   }
 
 }
 
+const EMPTY_ARRAY: Array<{ type: string, label: string }> = [];
+
+const renderFilterList: ItemListRenderer<{ type: string, label: string }> = ({ items, itemsParentRef, query, renderItem }) => {
+  const neighborhoodFilters = items.filter(filter => filter.type === "neighborhood").map(renderItem);
+  return (
+      <Menu ulRef={itemsParentRef}>
+        { neighborhoodFilters.length > 0 && <MenuItem text={"Neighborhood"} disabled={true} /> }
+        {neighborhoodFilters}
+        { neighborhoodFilters.length > 0 &&  <MenuDivider /> }
+      </Menu>
+  );
+};
+
+const renderTag = (item: { type: string, label: string }) => {
+  if (item.type === "neighborhood") {
+    return NEIGHBORHOODS.get(item.label);
+  } else {
+    return item.label;
+  }
+};
+
+const getFilterItems = () => {
+  const items: Array<{ type: string, label: string }> = [];
+  for (const key of Array.from(NEIGHBORHOODS.keys())) {
+    items.push({ type: "neighborhood", label: key });
+  }
+  return items;
+}
+
+const filterItemPredicate: ItemPredicate<{ type: string, label: string }> = (query: string, item: { type: string, label: string }) => {
+  const filterableLabel: string = item.type === "neighborhood" ? NEIGHBORHOODS.get(item.label)! : item.label;
+  return filterableLabel.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+}
+
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
-  public state: MainContent.State = { postDetailsOpen: false }
+  public state: MainContent.State = { postDetailsOpen: false, appliedFilters: EMPTY_ARRAY }
 
   public render() {
+
+    const clearFiltersButton = this.state.appliedFilters.length > 0 ? <Button icon="filter-remove" minimal={true} onClick={this.handleRemoveAllFilters} /> : undefined;
+
     return (
       <div className="content">
         { (this.props.view === "ALL_POSTS") &&
-          <div className="posts">
-            { this.props.authedUsername && 
-              <div className="post -add-post">
-                <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
-              </div> }
-            { Object.keys(this.props.postMap)
-                .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
-                .map((postMapKey: string) => {
-                  return (
-                    <Post
-                      key={postMapKey}
-                      postId={this.props.postMap[postMapKey].id}
-                      setActivePost={this.setActivePost}
-                      showDetails={this.showDetails}
-                    />);
-              }) }
-            <div className="post -dummy" />
-            <div className="post -dummy" />
+          <div className="all-posts">
+            <div className="filters">
+              <Icon className="filter-icon" icon="filter" />
+              <MultiSelect
+                className="filters-multi-select"
+                itemListRenderer={renderFilterList}
+                tagRenderer={renderTag}
+                items={getFilterItems()}
+                itemRenderer={this.renderFilterItem}
+                onItemSelect={this.handleItemSelect}
+                popoverProps={{ minimal: true }}
+                selectedItems={this.state.appliedFilters}
+                tagInputProps={{ className: "filters-input", placeholder: "Filter...", onRemove: this.handleFilterRemove, rightElement: clearFiltersButton }}
+                itemPredicate={filterItemPredicate}
+                resetOnSelect={true}
+              />
+            </div>
+            <div className="posts">
+              { this.props.authedUsername && 
+                <div className="post -add-post">
+                  <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
+                </div> }
+              { Object.keys(this.props.postMap)
+                  .filter(key => this.postPassesFilters(this.props.postMap[key]))
+                  .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
+                  .map((postMapKey: string) => {
+                    return (
+                      <Post
+                        key={postMapKey}
+                        postId={this.props.postMap[postMapKey].id}
+                        setActivePost={this.setActivePost}
+                        showDetails={this.showDetails}
+                        onAddLocationFilter={this.handleNeighborhoodSelect}
+                      />);
+                }) }
+              <div className="post -dummy" />
+              <div className="post -dummy" />
+            </div>
           </div>
         }
         { (this.props.view === "ADD_OR_EDIT_POST") &&
@@ -120,6 +180,68 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
 
   private hideDetails = () => {
     this.setState({ postDetailsOpen: false });
+  }
+
+  private handleNeighborhoodSelect = (neighborhood: string) => {
+    const selectedFilter = { type: "neighborhood", label: neighborhood };
+    if (!this.isFilterSelected(selectedFilter)) {
+      this.setState({ appliedFilters: [...this.state.appliedFilters, selectedFilter] });
+    } else {
+      this.setState({ appliedFilters: this.state.appliedFilters.filter(filter => filter.type !== selectedFilter.type || filter.label !== selectedFilter.label) });
+    }
+  }
+
+  private handleItemSelect = (item: { type: string, label: string }) => {
+    if (item.type === "neighborhood") {
+      this.handleNeighborhoodSelect(item.label);
+    }
+  }
+
+  private handleFilterRemove = (tag: string, index: number) => {
+    this.setState({ appliedFilters: this.state.appliedFilters.filter((filter, i) => i !== index) });
+  }
+
+  private isFilterSelected(filter: { type: string, label: string }) {
+    for (const appliedFilter of this.state.appliedFilters) {
+      if (appliedFilter.type === filter.type && appliedFilter.label === filter.label) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private renderFilterItem: ItemRenderer<{ type: string, label: string }> = (item, { handleClick, modifiers }) => {
+    if (!modifiers.matchesPredicate) {
+      return null;
+    }
+    const text = item.type === "neighborhood" ? NEIGHBORHOODS.get(item.label) : item.label;
+    return (
+        <MenuItem
+          active={modifiers.active}
+          key={item.label}
+          onClick={handleClick}
+          icon={this.isFilterSelected(item) ? "tick" : "blank"}
+          text={text}
+        />
+    );
+  };
+
+  private handleRemoveAllFilters = () => {
+    this.setState({ appliedFilters: EMPTY_ARRAY });
+  }
+
+  private postPassesFilters = (post: WirePost) => {
+    let neighborhoodFilterExists = false;
+    let passesNeighborhoodFilter = false;
+    for (const filter of this.state.appliedFilters) {
+      if (filter.type === "neighborhood") {
+        neighborhoodFilterExists = true;
+        if (filter.label === post.neighborhood) {
+          passesNeighborhoodFilter = true;
+        }
+      }
+    }
+    return !neighborhoodFilterExists || passesNeighborhoodFilter;
   }
 
 }

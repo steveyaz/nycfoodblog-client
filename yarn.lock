@@ -47,6 +47,14 @@
     classnames "^2.2"
     tslib "^1.9.0"
 
+"@blueprintjs/select@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@blueprintjs/select/-/select-3.1.0.tgz#5ec50aa31cc852ff90fd1d3666c00b6c32c408ba"
+  dependencies:
+    "@blueprintjs/core" "^3.1.0"
+    classnames "^2.2"
+    tslib "^1.9.0"
+
 "@types/dom4@^2.0.0":
   version "2.0.1"
   resolved "https://registry.npmjs.org/@types/dom4/-/dom4-2.0.1.tgz#506d5781b9bcab81bd9a878b198aec7dee2a6033"
