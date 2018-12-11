@@ -47,10 +47,10 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
     const post: WirePost = this.props.postMap[this.props.postId];
     const reviews: Array<WireReview> = this.props.reviewMap[this.props.postId];
     if (post === undefined) {
-      return;
+      return <div />;
     } else if (this.props.authedUsername === undefined
         && (post.instagramUrl.trim().length === 0 || reviews === undefined || reviews.length !== 2)) {
-      return;
+      return <div />;
     }
     const backgroundImage = post.instagramUrl ?
       { backgroundImage: "url('" + getBackgroundUrl(post.instagramUrl) + "')" }
