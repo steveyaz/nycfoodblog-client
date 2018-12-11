@@ -49,7 +49,7 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
     if (post === undefined) {
       return;
     } else if (this.props.authedUsername === undefined
-        && (post.instagramUrl.trim().length === 0 || reviews.length !== 2)) {
+        && (post.instagramUrl.trim().length === 0 || reviews === undefined || reviews.length !== 2)) {
       return;
     }
     const backgroundImage = post.instagramUrl ?
