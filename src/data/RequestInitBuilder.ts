@@ -12,6 +12,7 @@ export class RequestInitBuilder {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-cache",
     }
   }
 
