@@ -1,6 +1,9 @@
-import { Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import { Button, ButtonGroup, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import { IconNames } from "@blueprintjs/icons";
 import { ItemListRenderer, ItemPredicate, ItemRenderer, MultiSelect } from "@blueprintjs/select";
+import { LatLng } from "leaflet";
 import * as React from "react";
+import { Map as LeafletMap, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { NEIGHBORHOODS } from "./constants";
@@ -32,6 +35,7 @@ export namespace MainContent {
     activePostId?: number;
     postDetailsOpen: boolean;
     appliedFilters: Array<{ type: string, label: string }>;
+    isListViewActive: boolean;
   }
 
 }
@@ -71,53 +75,73 @@ const filterItemPredicate: ItemPredicate<{ type: string, label: string }> = (que
 }
 
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
-  public state: MainContent.State = { postDetailsOpen: false, appliedFilters: EMPTY_ARRAY }
+  public state: MainContent.State = { postDetailsOpen: false, appliedFilters: EMPTY_ARRAY, isListViewActive: true }
 
   public render() {
 
     const clearFiltersButton = this.state.appliedFilters.length > 0 ? <Button icon="filter-remove" minimal={true} onClick={this.handleRemoveAllFilters} /> : undefined;
+    const position = [51.505, -0.09]
 
     return (
       <div className="content">
         { (this.props.view === "ALL_POSTS") &&
           <div className="all-posts">
-            <div className="filters">
-              <Icon className="filter-icon" icon="filter" />
-              <MultiSelect
-                className="filters-multi-select"
-                itemListRenderer={renderFilterList}
-                tagRenderer={renderTag}
-                items={getFilterItems()}
-                itemRenderer={this.renderFilterItem}
-                onItemSelect={this.handleItemSelect}
-                popoverProps={{ minimal: true }}
-                selectedItems={this.state.appliedFilters}
-                tagInputProps={{ className: "filters-input", placeholder: "Filter...", onRemove: this.handleFilterRemove, rightElement: clearFiltersButton }}
-                itemPredicate={filterItemPredicate}
-                resetOnSelect={true}
-              />
+            <div className="content-header">
+              <div className="filters">
+                <Icon className="filter-icon" icon="filter" />
+                <MultiSelect
+                  className="filters-multi-select"
+                  itemListRenderer={renderFilterList}
+                  tagRenderer={renderTag}
+                  items={getFilterItems()}
+                  itemRenderer={this.renderFilterItem}
+                  onItemSelect={this.handleItemSelect}
+                  popoverProps={{ minimal: true }}
+                  selectedItems={this.state.appliedFilters}
+                  tagInputProps={{ className: "filters-input", placeholder: "Filter...", onRemove: this.handleFilterRemove, rightElement: clearFiltersButton }}
+                  itemPredicate={filterItemPredicate}
+                  resetOnSelect={true}
+                />
+              </div>
+              <div className="content-view-chooser">
+                  <ButtonGroup>
+                    <Button icon={IconNames.LIST} active={this.state.isListViewActive} onClick={this.setListViewActive} />
+                    <Button icon={IconNames.MAP} active={!this.state.isListViewActive} onClick={this.setMapViewActive} />
+                  </ButtonGroup>
+                </div>
             </div>
-            <div className="posts">
-              { this.props.authedUsername && 
-                <div className="post -add-post">
-                  <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
-                </div> }
-              { Object.keys(this.props.postMap)
-                  .filter(key => this.postPassesFilters(this.props.postMap[key]))
-                  .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
-                  .map((postMapKey: string) => {
-                    return (
-                      <Post
-                        key={postMapKey}
-                        postId={this.props.postMap[postMapKey].id}
-                        setActivePost={this.setActivePost}
-                        showDetails={this.showDetails}
-                        onAddLocationFilter={this.handleNeighborhoodSelect}
-                      />);
-                }) }
-              <div className="post -dummy" />
-              <div className="post -dummy" />
-            </div>
+            {this.state.isListViewActive ? (
+              <div className="post-list">
+                { this.props.authedUsername && 
+                  <div className="post -add-post">
+                    <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
+                  </div> }
+                { Object.keys(this.props.postMap)
+                    .filter(key => this.postPassesFilters(this.props.postMap[key]))
+                    .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
+                    .map((postMapKey: string) => {
+                      return (
+                        <Post
+                          key={postMapKey}
+                          postId={this.props.postMap[postMapKey].id}
+                          setActivePost={this.setActivePost}
+                          showDetails={this.showDetails}
+                          onAddLocationFilter={this.handleNeighborhoodSelect}
+                        />);
+                  }) }
+                <div className="post -dummy" />
+                <div className="post -dummy" />
+              </div>
+            ) : (
+              <div id="map-container">
+                <LeafletMap center={new LatLng(51.505, -0.09)} position={position} zoom={13}>
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                  />
+                </LeafletMap>
+              </div>
+            )}
           </div>
         }
         { (this.props.view === "ADD_OR_EDIT_POST") &&
@@ -163,6 +187,14 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
             this.props.setAllReviews(reviewMap);
           });
       });
+  }
+
+  public setListViewActive = () => {
+    this.setState({ isListViewActive: true });
+  }
+
+  public setMapViewActive = () => {
+    this.setState({ isListViewActive: false });
   }
 
   private setActivePost = (postId: number) => {

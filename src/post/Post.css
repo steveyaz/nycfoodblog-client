@@ -217,6 +217,15 @@
   color: #738694;
 }
 
+.lat-long-form-field {
+  display: flex;
+  flex-direction: row;
+}
+
+.lat-long {
+  padding-left: 8px;
+}
+
 .details-order {
   margin-top: 16px;
   font-size: 20px;
