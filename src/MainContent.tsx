@@ -1,9 +1,11 @@
-import { Button, ButtonGroup, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import { Button, ButtonGroup, Colors, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { ItemListRenderer, ItemPredicate, ItemRenderer, MultiSelect } from "@blueprintjs/select";
 import { LatLng } from "leaflet";
+import { DivIcon as LeafletIcon } from "leaflet";
 import * as React from "react";
-import { Map as LeafletMap, TileLayer } from "react-leaflet";
+import { renderToString } from 'react-dom/server'
+import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { NEIGHBORHOODS } from "./constants";
@@ -41,6 +43,12 @@ export namespace MainContent {
 }
 
 const EMPTY_ARRAY: Array<{ type: string, label: string }> = [];
+
+export const mapIcon = new LeafletIcon({
+  html: renderToString(<Icon icon="map-marker" iconSize={24} color={Colors.GOLD3} />),
+  iconAnchor: [14, 22],
+  popupAnchor: [0, -22],
+})
 
 const renderFilterList: ItemListRenderer<{ type: string, label: string }> = ({ items, itemsParentRef, query, renderItem }) => {
   const neighborhoodFilters = items.filter(filter => filter.type === "neighborhood").map(renderItem);
@@ -134,11 +142,24 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
               </div>
             ) : (
               <div id="map-container">
-                <LeafletMap center={new LatLng(51.505, -0.09)} position={position} zoom={13}>
+                <LeafletMap center={new LatLng(40.7685, -73.9809)} position={position} zoom={13}>
                   <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                    url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png"
+                    attribution="Map tiles by <a href=&quot;http://stamen.com&quot;>Stamen Design</a>, <a href=&quot;http://creativecommons.org/licenses/by/3.0&quot;>CC BY 3.0</a> &mdash; Map data &copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
                   />
+                  { Object.keys(this.props.postMap)
+                      .filter(key => this.postPassesFilters(this.props.postMap[key]))
+                      .map(key => {
+                        return (
+                          <Marker
+                            key={key}
+                            position={[this.props.postMap[key].latitude, this.props.postMap[key].longitude]}
+                            icon={mapIcon}
+                          >
+                            <Popup>{this.props.postMap[key].restaurantName}</Popup>
+                          </Marker>
+                        )
+                      })}
                 </LeafletMap>
               </div>
             )}
