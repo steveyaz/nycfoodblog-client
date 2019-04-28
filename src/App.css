@@ -123,3 +123,7 @@ body {
   margin-left: 4px;
   width: 400px;
 }
+
+.bp3-transition-container {
+  z-index: 999;
+}
