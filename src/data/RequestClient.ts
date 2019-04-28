@@ -2,8 +2,8 @@ import { RequestInitBuilder } from "./RequestInitBuilder";
 import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
-// const BASE_URL = 'http://localhost:8090';
-const BASE_URL = 'https://nycfoodblog.net/api';
+const BASE_URL = 'http://localhost:8090';
+// const BASE_URL = 'https://nycfoodblog.net/api';
 
 export class RequestClient {
 
@@ -106,6 +106,29 @@ export class RequestClient {
 
   public logout() {
     this.token = "";
+  }
+
+  public checkLatLong(addressStreet: string, addressCity: string, addressState: string, addressZip: string): Promise<Array<number>> {
+    if (addressStreet !== ""
+        && addressCity !== ""
+        && addressState !== ""
+        && addressZip !== "") {
+      const address = addressStreet.split(" ").join("+")
+          + ",+" + addressCity.split(" ").join("+")
+          + ",+" + addressState
+          + ",+" + addressZip;
+      const request = new Request(BASE_URL + '/geocode/' + address, RequestInitBuilder.request().withMethod("GET").withAuth(this.token).build());
+      return fetch(request)
+        .then(response => {
+          return response.json();
+        }).then((latLong: Array<number>) => {
+          return latLong;
+        }).catch(e => {
+          return Promise.reject(e);
+        });
+    } else {
+      return Promise.reject("missing required address components");
+    }
   }
 
 }
