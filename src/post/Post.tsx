@@ -1,6 +1,7 @@
 import { Button, Icon } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { Dispatch } from "redux";
 import { NEIGHBORHOODS } from "../constants";
 import { WirePost } from "../data/WirePost";
@@ -68,7 +69,9 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
             {post.tags && post.tags.map(tag => {
               return <div key={tag} className="tag">{tag}</div>
             })}
-            <div className="post-expand"><Icon className="post-expand-button" onClick={this.handleShowDetails} icon="share" /></div>
+            <div className="post-expand">
+              <Link to={`/post/${this.props.postId}`}><Icon className="post-expand-button" icon="share" /></Link>
+            </div>
           </div>
           { (this.props.authedUsername !== undefined) &&
             <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />

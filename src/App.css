@@ -1,5 +1,6 @@
 @import "./auth/Auth.css";
 @import "./form/FormField.css";
+@import "./header/Header.css";
 @import "./post/Post.css";
 @import "./review/Review.css";
 @import url('https://unpkg.com/leaflet@1.4.0/dist/leaflet.css');
@@ -16,29 +17,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.header {
-  display: flex;
-  flex-direction: row;
-  height: 150px;
-  padding: 20px;
-  color: #3C3C3C;
-  margin-bottom: 8px;
-}
-
-.logo {
-  animation: logo-spin infinite 20s linear;
-  height: 40px;
-  margin-right: 12px;
-  cursor: pointer;
-}
-
-.title {
-  margin-top: 8px;
-  font-size: 2em;
-  font-weight: 100;
-  font-family: 'Quattrocento', serif;
 }
 
 .content {
@@ -85,21 +63,6 @@ body {
 .react-datepicker__time-list {
   -webkit-padding-start: 0px;
   padding-right: 0px;
-}
-
-.easterEgg {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  text-align: right;
-  font-size: 8px;
-  opacity: 0;
-  height: 16px;
-}
-
-.easterEgg:hover {
-  opacity: 100;
-  cursor: pointer;
 }
 
 .all-posts {

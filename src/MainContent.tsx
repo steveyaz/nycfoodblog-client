@@ -175,7 +175,7 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
             postId={this.state.activePostId!}
           />
         }
-        <PostDetails postId={this.state.activePostId!} isOpen={this.state.postDetailsOpen} onDetailsClose={this.hideDetails}  />
+        <PostDetails postId={this.state.activePostId!} isOpen={this.state.postDetailsOpen} onDetailsClose={this.hideDetails} />
       </div>
     );
   }
