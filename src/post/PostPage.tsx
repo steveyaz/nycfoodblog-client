@@ -11,7 +11,7 @@ import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace PostPage {
 
-  export interface OwnProps {
+  export interface RouterProps {
     postId: string;
   }
 
@@ -22,7 +22,7 @@ export namespace PostPage {
     setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
   }
 
-  export type Props = RouteComponentProps<PostPage.OwnProps> & StoreProps;
+  export type Props = RouteComponentProps<PostPage.RouterProps> & StoreProps;
 
   export interface State {
     isLoading: boolean;
