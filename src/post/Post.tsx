@@ -3,11 +3,11 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Dispatch } from "redux";
-import { NEIGHBORHOODS } from "../constants";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
 import { setPost, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
+import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace Post {
 

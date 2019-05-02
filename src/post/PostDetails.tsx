@@ -1,10 +1,10 @@
 import { Icon, Overlay } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
-import { NEIGHBORHOODS } from "../constants";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
 import { AppState } from "../redux/state";
+import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace PostDetails {
 

@@ -1,10 +1,13 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { NEIGHBORHOODS } from "../constants";
+import { Dispatch } from "redux";
+import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
+import { setAllReviews, setPost } from "../redux/action";
 import { AppState } from "../redux/state";
+import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace PostPage {
 
@@ -14,61 +17,80 @@ export namespace PostPage {
 
   export interface StoreProps {
     post: WirePost | undefined;
-    reviews: Array<WireReview> | undefined;
+    reviews: ReadonlyArray<WireReview>;
+    setPost: (post: WirePost ) => void;
+    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
   }
 
-  export type Props = StoreProps;
+  export type Props = RouteComponentProps<PostPage.OwnProps> & StoreProps;
+
+  export interface State {
+    isLoading: boolean;
+  }
 
 }
 
 class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
+
+  public state: PostPage.State = { isLoading: false }
 
   constructor(props: PostPage.Props) {
     super(props);
   }
 
   public render() {
-    const { post, reviews } = this.props;
-    if (post === undefined || reviews === undefined) {
-      return <div>BLAH</div>;
-    }
-    return (
-      <div className="post">
-        <div className="post-score">{this.getReviewScore(reviews)}</div>
-        <div className="post-below-image">
-          <div className="post-description">
-            <div className="restaurant-name">{post.restaurantName}</div>
-            <div className="location">{NEIGHBORHOODS.get(post.neighborhood)}</div>
-          </div>
-          <div className="post-tags">
-            {post.tags && post.tags.map(tag => {
-              return <div key={tag} className="tag">{tag}</div>
-            })}
+    if (this.props.post === undefined) {
+      return (
+        <div className="post">
+          LOADING
+        </div>
+      );
+    } else {
+      return (
+        <div className="post">
+          <div className="post-below-image">
+            <div className="post-description">
+              <div className="restaurant-name">{this.props.post.restaurantName}</div>
+              <div className="location">{NEIGHBORHOODS.get(this.props.post.neighborhood)}</div>
+            </div>
+            <div className="post-tags">
+              {this.props.post.tags && this.props.post.tags.map(tag => {
+                return <div key={tag} className="tag">{tag}</div>
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  private getReviewScore(reviews: Array<WireReview>) {
-    if (reviews === undefined) {
-      return "?";
-    } else {
-      let score = 0;
-      for (const review of reviews) {
-        score += review.ecRating + review.foodRating + review.vibesRating;
-      }
-      return score * 5; // score is out of 20
+      );
     }
   }
+
+  public componentDidMount() {
+    const postId = parseInt(this.props.match.params.postId, 10);
+    const postPromise = RequestClient.getInstance().getPost(postId);
+    const reviewsPromise = RequestClient.getInstance().getReviews(postId);
+    Promise.all([postPromise, reviewsPromise])
+      .then(postAndReviews => {
+        this.props.setPost(postAndReviews[0]);
+        const reviewMap = {};
+        reviewMap[postId] = postAndReviews[1];
+        this.props.setAllReviews(reviewMap);
+      });
+  }
+
 }
 
-const mapStateToProps = (state: AppState, routerProps: RouteComponentProps<PostPage.OwnProps>) => {
-  const postId = parseInt(routerProps.match.params.postId, 10);
+const mapStateToProps = (state: AppState, props: PostPage.Props) => {
+  const postId = parseInt(props.match.params.postId, 10);
   return {
     post: state.postMap[postId],
-    reviews: state.reviewMap[postId],
   };
 }
 
-export const PostPage = connect(mapStateToProps)(PostPageInternal);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setPost: (post: WirePost ) => dispatch(setPost(post)),
+    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => dispatch(setAllReviews(reviewMap)),
+  };
+};
+
+export const PostPage = connect(mapStateToProps, mapDispatchToProps)(PostPageInternal);

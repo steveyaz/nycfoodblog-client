@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Auth } from "../auth/Auth";
-import logo from "../rosie.png";
+import logo from "../static/rosie.png";
 
 export namespace Header {
   export interface State {

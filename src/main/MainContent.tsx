@@ -8,16 +8,16 @@ import { renderToString } from 'react-dom/server'
 import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { NEIGHBORHOODS } from "./constants";
-import { RequestClient } from "./data/RequestClient";
-import { WirePost } from "./data/WirePost";
-import { WireReview } from "./data/WireReview";
-import { Post } from "./post/Post";
-import { PostDetails } from "./post/PostDetails";
-import { PostForm } from "./post/PostForm";
-import { setAllPosts, setAllReviews, setUsernames, setView } from "./redux/action";
-import { AppState, VIEW_TYPE } from "./redux/state";
-import { ReviewForm } from "./review/ReviewForm";
+import { RequestClient } from "../data/RequestClient";
+import { WirePost } from "../data/WirePost";
+import { WireReview } from "../data/WireReview";
+import { Post } from "../post/Post";
+import { PostDetails } from "../post/PostDetails";
+import { PostForm } from "../post/PostForm";
+import { setAllPosts, setAllReviews, setUsernames, setView } from "../redux/action";
+import { AppState, VIEW_TYPE } from "../redux/state";
+import { ReviewForm } from "../review/ReviewForm";
+import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace MainContent {
 

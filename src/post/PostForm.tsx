@@ -2,7 +2,6 @@ import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { NEIGHBORHOODS } from "../constants";
 import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
 import { CurrencyFormField } from "../form/CurrencyFormField";
@@ -13,6 +12,7 @@ import { SelectionFormField } from "../form/SelectionFormField";
 import { TextFormField } from "../form/TextFormField";
 import { setPost, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
+import { NEIGHBORHOODS } from "../static/constants";
 
 export namespace PostForm {
 

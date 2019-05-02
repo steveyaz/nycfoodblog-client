@@ -2,13 +2,13 @@ import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../constants";
 import { RequestClient } from "../data/RequestClient";
 import { WireReview } from "../data/WireReview";
 import { SelectionFormField } from "../form/SelectionFormField";
 import { TextAreaFormField } from "../form/TextAreaFormField";
 import { setReview, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
+import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../static/constants";
 
 export namespace ReviewForm {
 

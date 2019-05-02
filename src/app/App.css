@@ -1,8 +1,8 @@
-@import "./auth/Auth.css";
-@import "./form/FormField.css";
-@import "./header/Header.css";
-@import "./post/Post.css";
-@import "./review/Review.css";
+@import "../auth/Auth.css";
+@import "../form/FormField.css";
+@import "../post/Post.css";
+@import "../review/Review.css";
+@import "./Header.css";
 @import url('https://unpkg.com/leaflet@1.4.0/dist/leaflet.css');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300|Quattrocento');
 
@@ -13,7 +13,7 @@ body {
   background-color: white;
 }
 
-.app {
+.app-content {
   display: flex;
   flex-direction: column;
   align-items: center;
