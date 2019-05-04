@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { Auth } from "../auth/Auth";
 import logo from "../static/rosie.png";
 
@@ -16,7 +17,7 @@ export class Header extends React.Component<{}, Header.State> {
       <div className="header-wrapper">
         <div className="easter-egg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
         <header className="header">
-          <img src={logo} className="header-logo" alt="Rosie!" />
+          <Link to={`/`}><img src={logo} className="header-logo" alt="Rosie!" /></Link>
           <h1 className="header-title">The NYC Food Blog</h1>
         </header>
         { this.state.displayAuth && <Auth /> }

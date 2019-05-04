@@ -133,7 +133,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
                           key={postMapKey}
                           postId={this.props.postMap[postMapKey].id}
                           setActivePost={this.setActivePost}
-                          showDetails={this.showDetails}
                           onAddLocationFilter={this.handleNeighborhoodSelect}
                         />);
                   }) }
@@ -225,10 +224,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
   private handleAddPost = () => {
     this.setState({ activePostId: undefined });
     this.props.setView("ADD_OR_EDIT_POST");
-  }
-
-  private showDetails = (postId: number) => {
-    this.setState({ activePostId: postId, postDetailsOpen: true });
   }
 
   private hideDetails = () => {

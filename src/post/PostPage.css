@@ -1,0 +1,178 @@
+.postpage {
+  display: flex;
+  flex-direction: column;
+}
+
+.postpage-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 18px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #738694;
+}
+
+.postpage-restaurant-name {
+  font-size: 48px;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  color: #293742;
+}
+
+.postpage-neighborhood {
+  font-size: 18px;
+}
+
+.postpage-address {
+  font-size: 14px;
+}
+
+.postpage-tags {
+  margin-top: 4px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.postpage-content {
+  display: flex;
+  flex-direction: row;
+  padding-top: 12px;
+  border-top: 1px #738694 solid;
+}
+
+.postpage-instagram-section {
+  margin: 6px 0px 0px 36px;
+  width: 440px;
+}
+
+.postpage-instagram-iframe {
+  width: 440px;
+  min-height: 780px;
+  border: 0;
+}
+
+.postpage-review-section {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0px 0px 18px;
+  width: 460px;
+}
+
+.postpage-top {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 36px;
+}
+
+.postpage-review-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 24px;
+}
+
+.postpage-score {
+  width: 108px;
+  height: 108px;
+  padding-top: 18px;
+  text-align: center;
+  font-size: 48px;
+  position: relative;
+  font-family: 'Open Sans', sans-serif;
+  color: #293742;
+  border-radius: 72px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #3C3C3C;
+  margin-bottom: 4px;
+}
+
+.postpage-score-outof {
+  position: absolute;
+  right: 14px;
+  bottom: 16px;
+  font-size: 14px;
+  color: #738694;
+}
+
+.postpage-review-secondary {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.postpage-order {
+  font-size: 13px;
+  font-family: 'Open Sans', sans-serif;
+  color: #738694;
+  margin-bottom: 4px;
+}
+
+.postpage-price {
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  color: #738694;
+}
+
+.postpage-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.postpage-review {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 36px;
+}
+
+.postpage-review-name {
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  color: #394B59;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px #BFCCD6 solid;
+}
+
+.postpage-review-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.postpage-review-left {
+  display: flex;
+  flex-direction: column;
+  margin-right: 24px;
+}
+
+.postpage-review-score {
+  display: flex;
+  flex-direction: row;
+}
+
+.postpage-review-score-category {
+  width: 42px;
+  font-size: 14px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #738694;
+}
+
+.postpage-review-score-value {
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  color: #738694;
+}
+
+.postpage-review-right {
+  margin-top: 4px;
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
+  color: #738694;
+}
+
+.postpage-review-quote {
+  margin-right: 4px;
+  color: #394B59;
+}

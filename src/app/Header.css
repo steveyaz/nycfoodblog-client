@@ -1,10 +1,8 @@
 .header {
   display: flex;
   flex-direction: row;
-  height: 150px;
   padding: 20px;
-  color: #3C3C3C;
-  margin-bottom: 8px;
+  color: #394B59;
 }
 
 .header-logo {
@@ -16,7 +14,7 @@
 
 .header-title {
   margin-top: 8px;
-  font-size: 2em;
+  font-size: 24px;
   font-weight: 100;
   font-family: 'Quattrocento', serif;
 }

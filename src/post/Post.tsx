@@ -14,7 +14,6 @@ export namespace Post {
   export interface OwnProps {
     postId: number;
     setActivePost: (postId: number) => void;
-    showDetails: (postId: number) => void;
     onAddLocationFilter: (neighborhood: string) => void;
   }
 
@@ -34,6 +33,17 @@ export namespace Post {
 const getBackgroundUrl = (instagramUrl: string) => {
   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
   return instagramUrl.match(regex) + "media/?size=m";
+}
+
+const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
+  if (reviews.length === 0) {
+    return "?";
+  }
+  let score = 0;
+  reviews.forEach(review => {
+    score += review.ecRating + review.foodRating + review.vibesRating;
+  });
+  return (score / reviews.length).toString();
 }
 
 class PostInternal extends React.PureComponent<Post.Props, {}> {
@@ -58,20 +68,18 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
       : {};
     return (
       <div className="post">
-        <div className="post-score">{this.getReviewScore(reviews)}</div>
-        <div className="post-image" onClick={this.handleShowDetails} style={backgroundImage} />
+        <div className="post-score">{getReviewScore(reviews)}</div>
+        <div className="post-image" style={backgroundImage} />
         <div className="post-below-image">
           <div className="post-description">
-            <div className="restaurant-name" onClick={this.handleShowDetails}>{post.restaurantName}</div>
+            <div className="restaurant-name">{post.restaurantName}</div>
             <div className="location" onClick={this.onLocationClick}>{NEIGHBORHOODS.get(post.neighborhood)}</div>
           </div>
           <div className="post-tags">
             {post.tags && post.tags.map(tag => {
               return <div key={tag} className="tag">{tag}</div>
             })}
-            <div className="post-expand">
-              <Link to={`/post/${this.props.postId}`}><Icon className="post-expand-button" icon="share" /></Link>
-            </div>
+            <Link className="post-expand" to={`/post/${this.props.postId}`}><Icon className="post-expand-button" icon="share" />See review... </Link>
           </div>
           { (this.props.authedUsername !== undefined) &&
             <Button className="post-description-button" text="Edit Post" icon="edit" onClick={this.handleEditPost} />
@@ -97,22 +105,6 @@ class PostInternal extends React.PureComponent<Post.Props, {}> {
     this.props.setActivePost(this.props.postId);
     this.props.setView("ADD_OR_EDIT_REVIEW");
     event.preventDefault();
-  }
-
-  private handleShowDetails = () => {
-    this.props.showDetails(this.props.postId);
-  }
-
-  private getReviewScore(reviews: Array<WireReview>) {
-    if (reviews === undefined) {
-      return "?";
-    } else {
-      let score = 0;
-      for (const review of reviews) {
-        score += review.ecRating + review.foodRating + review.vibesRating;
-      }
-      return score * 5; // score is out of 20
-    }
   }
 
   private onLocationClick = () => {

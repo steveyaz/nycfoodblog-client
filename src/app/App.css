@@ -1,6 +1,7 @@
 @import "../auth/Auth.css";
 @import "../form/FormField.css";
 @import "../post/Post.css";
+@import "../post/PostPage.css";
 @import "../review/Review.css";
 @import "./Header.css";
 @import url('https://unpkg.com/leaflet@1.4.0/dist/leaflet.css');

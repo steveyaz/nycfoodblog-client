@@ -26,7 +26,7 @@
   left: -12px;
   top: -12px;
   font-size: 24px;
-  background: #D5D9B4;
+  background: white;
   font-family: 'Open Sans Condensed', sans-serif;
   color: #3C3C3C;
 }
@@ -36,10 +36,6 @@
   border-radius: 3px 3px 0 0;
   background-size: cover;
   background-position: center;
-}
-
-.post-image:hover {
-  cursor: pointer;
 }
 
 .post-below-image {
@@ -74,8 +70,12 @@
   color: #5C7080;
 }
 
-.post-expand-button:hover {
+.post-expand:hover {
   color: #394B59;
+}
+
+.post-expand-button {
+  margin-left: 4px;
 }
 
 .restaurant-name {
@@ -84,10 +84,6 @@
   font-weight: 700;
   align-self: flex-start;
   color: #394B59;
-}
-
-.restaurant-name:hover {
-  cursor: pointer;
 }
 
 .location {
