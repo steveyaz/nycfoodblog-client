@@ -1,7 +1,3 @@
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import "@blueprintjs/select/lib/css/blueprint-select.css";
 import * as React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -10,7 +6,6 @@ import { AdminPage } from "../admin-page/AdminPage";
 import { MainContent } from "../overview-page/MainContent";
 import { PostPage } from "../post-page/PostPage";
 import { reducer } from "../redux/reducer";
-import "./App.css";
 import { Header } from "./Header";
 import { ScrollToTop } from "./ScrollToTop";
 
