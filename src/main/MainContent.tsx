@@ -7,6 +7,7 @@ import * as React from "react";
 import { renderToString } from 'react-dom/server'
 import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { Dispatch } from "redux";
 import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
@@ -155,7 +156,13 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
                             position={[this.props.postMap[key].latitude, this.props.postMap[key].longitude]}
                             icon={mapIcon}
                           >
-                            <Popup>{this.props.postMap[key].restaurantName}</Popup>
+                            <Popup>
+                              <div>
+                                <Link className="map-popup-address" to={`/post/${key}`}>{this.props.postMap[key].restaurantName}</Link>
+                                <div className="map-popup-address">{this.props.postMap[key].addressStreet}</div>
+                                <div className="map-popup-address">{this.props.postMap[key].addressCity}, {this.props.postMap[key].addressState} {this.props.postMap[key].addressZip}</div>
+                              </div>
+                            </Popup>
                           </Marker>
                         )
                       })}

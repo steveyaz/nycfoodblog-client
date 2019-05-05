@@ -42,7 +42,7 @@
   border-top: 1px #738694 solid;
 }
 
-@media only screen {
+@media only screen and (max-width: 960px) {
   .postpage-content {
     flex-direction: column;
   }
