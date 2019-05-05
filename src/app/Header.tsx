@@ -6,13 +6,13 @@ export class Header extends React.Component {
 
   public render() {
     return (
-      <div className="header-wrapper">
+      <header className="header-wrapper">
         <Link className="easter-egg" to={`/admin`}>❤️ Sonya</Link>
-        <header className="header">
-          <Link to={`/`}><img src={logo} className="header-logo" alt="Rosie!" /></Link>
+        <Link className="header" to={`/`}>
+          <img src={logo} className="header-logo" alt="Rosie!" />
           <h1 className="header-title">The NYC Food Blog</h1>
-        </header>
-      </div>
+        </Link>
+      </header>
     );
   }
 

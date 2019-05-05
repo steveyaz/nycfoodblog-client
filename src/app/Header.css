@@ -5,6 +5,11 @@
   color: #394B59;
 }
 
+.header:hover {
+  color: #394B59;
+  text-decoration: none;
+}
+
 .header-logo {
   animation: logo-spin infinite 20s linear;
   height: 40px;
@@ -31,5 +36,6 @@
 
 .easter-egg:hover {
   opacity: 100;
-  cursor: pointer;
+  color: #394B59;
+  text-decoration: none;
 }
