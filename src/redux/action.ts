@@ -1,6 +1,5 @@
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
-import { VIEW_TYPE } from "./state";
 
 export const SET_VIEW = "SET_VIEW";
 export const SET_AUTHED_USERNAME = "SET_AUTHED_USERNAME";
@@ -10,7 +9,6 @@ export const SET_ALL_POSTS = "SET_ALL_POSTS";
 export const SET_REVIEW = "SET_REVIEW";
 export const SET_ALL_REVIEWS = "SET_ALL_REVIEWS";
 
-export const setView = (viewType: VIEW_TYPE) => ({ type: SET_VIEW, payload: viewType });
 export const setAuthedUsername = (username: string | undefined) => ({ type: SET_AUTHED_USERNAME, payload: username });
 export const setUsernames = (usernames: ReadonlyArray<string>) => ({ type: SET_USERNAMES, payload: usernames });
 export const setPost = (post: WirePost) => ({ type: SET_POST, payload: post });

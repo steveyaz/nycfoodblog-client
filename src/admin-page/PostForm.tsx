@@ -10,19 +10,20 @@ import { FormFieldWrapper } from "../forms/FormFieldWrapper";
 import { MultiTextFormField } from "../forms/MultiTextFormField";
 import { SelectionFormField } from "../forms/SelectionFormField";
 import { TextFormField } from "../forms/TextFormField";
-import { setPost, setView } from "../redux/action";
-import { AppState, VIEW_TYPE } from "../redux/state";
+import { setPost } from "../redux/action";
+import { AppState } from "../redux/state";
 import { NEIGHBORHOODS } from "../static/constants";
+import { ADMIN_VIEW_STATE } from "./AdminPage";
 
 export namespace PostForm {
 
   export interface OwnProps {
     postId?: number;
+    setAdminView: (viewState: ADMIN_VIEW_STATE) => void;
   }
 
   export interface StoreProps {
-    postMap: { [postId: number]: WirePost };
-    setView: (viewType: VIEW_TYPE) => void;
+    post?: WirePost;
     setPost: (post: WirePost) => void;
   }
 
@@ -49,8 +50,7 @@ const NEW_POST: WirePost = {
 class PostFormInternal extends React.PureComponent<PostForm.Props, WirePost> {
   public constructor(props: PostForm.Props) {
     super(props);
-    const post = props.postId !== undefined ? props.postMap[props.postId] : undefined;
-    this.state = post || NEW_POST;
+    this.state = props.post || NEW_POST;
   }
 
   public render() {
@@ -90,12 +90,12 @@ class PostFormInternal extends React.PureComponent<PostForm.Props, WirePost> {
   private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     RequestClient.getInstance().createPost(this.state);
     this.props.setPost(this.state);
-    this.props.setView("ALL_POSTS");
+    this.props.setAdminView("ADMIN_OVERVIEW");
     event.preventDefault();
   }
 
   private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.setView("ALL_POSTS");
+    this.props.setAdminView("ADMIN_OVERVIEW");
     event.preventDefault();
   }
 
@@ -108,15 +108,14 @@ class PostFormInternal extends React.PureComponent<PostForm.Props, WirePost> {
   
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState, ownProps: PostForm.OwnProps) => {
   return {
-    postMap: state.postMap,
+    post: ownProps.postId !== undefined ? state.postMap[ownProps.postId] : undefined,
   };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
     setPost: (post: WirePost) => dispatch(setPost(post)),
   };
 };

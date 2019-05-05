@@ -6,20 +6,21 @@ import { RequestClient } from "../data/RequestClient";
 import { WireReview } from "../data/WireReview";
 import { SelectionFormField } from "../forms/SelectionFormField";
 import { TextAreaFormField } from "../forms/TextAreaFormField";
-import { setReview, setView } from "../redux/action";
-import { AppState, VIEW_TYPE } from "../redux/state";
+import { setReview } from "../redux/action";
+import { AppState } from "../redux/state";
 import { EC_RATINGS, FOOD_RATINGS, VIBES_RATINGS } from "../static/constants";
+import { ADMIN_VIEW_STATE } from "./AdminPage";
 
 export namespace ReviewForm {
 
   export interface OwnProps {
     postId: number;
+    setAdminView: (viewState: ADMIN_VIEW_STATE) => void;
   }
 
   export interface StoreProps {
     authedUsername?: string;
-    reviewMap: { [postId: number]: Array<WireReview> };
-    setView: (viewType: VIEW_TYPE) => void;
+    review?: WireReview;
     setReview: (review: WireReview) => void;
   }
 
@@ -30,15 +31,7 @@ export namespace ReviewForm {
 class ReviewFormInternal extends React.PureComponent<ReviewForm.Props, WireReview> {
   constructor(props: ReviewForm.Props){
     super(props);
-    let review;
-    if (props.reviewMap[props.postId] !== undefined) {
-      for (const storedReview of props.reviewMap[props.postId]) {
-        if (storedReview.username === props.authedUsername) {
-          review = storedReview;
-        }
-      }
-    }
-    this.state = review || {
+    this.state = props.review || {
       username: props.authedUsername!,
       postId: props.postId,
       foodRating: 0,
@@ -80,26 +73,27 @@ class ReviewFormInternal extends React.PureComponent<ReviewForm.Props, WireRevie
     };
     RequestClient.getInstance().createReview(review);
     this.props.setReview(review);
-    this.props.setView("ALL_POSTS");
+    this.props.setAdminView("ADMIN_OVERVIEW");
     event.preventDefault();
   }
 
   private handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.setView("ALL_POSTS");
+    this.props.setAdminView("ADMIN_OVERVIEW");
     event.preventDefault();
   }
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState, ownProps: ReviewForm.OwnProps) => {
   return {
     authedUsername: state.authedUsername,
-    reviewMap: state.reviewMap,
+    review: (state.reviewMap[ownProps.postId] !== undefined && state.authedUsername !== undefined)
+      ? state.reviewMap[ownProps.postId].find(review => review.username === state.authedUsername)
+      : undefined,
   };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
     setReview: (review: WireReview) => dispatch(setReview(review)),
   };
 };

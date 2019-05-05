@@ -3,6 +3,7 @@
 @import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 @import "../node_modules/@blueprintjs/select/lib/css/blueprint-select.css";
 @import "../node_modules/leaflet/dist/leaflet.css";
+@import "./admin-page/AdminPage.css";
 @import "./admin-page/AuthForm.css";
 @import "./admin-page/ReviewForm.css";
 @import "./app/App.css";

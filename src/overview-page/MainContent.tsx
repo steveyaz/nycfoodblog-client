@@ -8,22 +8,16 @@ import { renderToString } from 'react-dom/server'
 import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Dispatch } from "redux";
-import { PostForm } from "../admin-page/PostForm";
-import { ReviewForm } from "../admin-page/ReviewForm";
 import { WirePost } from "../data/WirePost";
-import { setView } from "../redux/action";
-import { AppState, VIEW_TYPE } from "../redux/state";
+import { AppState } from "../redux/state";
 import { NEIGHBORHOODS } from "../static/constants";
 import { Post } from "./Post";
 
 export namespace MainContent {
 
   interface StoreProps {
-    view: VIEW_TYPE;
     authedUsername?: string;
     postMap: { [postId: number]: WirePost };
-    setView: (viewType: VIEW_TYPE) => void;
   }
 
   export type Props = StoreProps;
@@ -86,94 +80,78 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
 
     return (
       <div className="content">
-        { (this.props.view === "ALL_POSTS") &&
-          <div className="all-posts">
-            <div className="content-header">
-              <div className="filters">
-                <Icon className="filter-icon" icon="filter" />
-                <MultiSelect
-                  className="filters-multi-select"
-                  itemListRenderer={renderFilterList}
-                  tagRenderer={renderTag}
-                  items={getFilterItems()}
-                  itemRenderer={this.renderFilterItem}
-                  onItemSelect={this.handleItemSelect}
-                  popoverProps={{ minimal: true }}
-                  selectedItems={this.state.appliedFilters}
-                  tagInputProps={{ className: "filters-input", placeholder: "Filter...", onRemove: this.handleFilterRemove, rightElement: clearFiltersButton }}
-                  itemPredicate={filterItemPredicate}
-                  resetOnSelect={true}
-                />
-              </div>
-              <div className="content-view-chooser">
-                  <ButtonGroup>
-                    <Button icon={IconNames.LIST} active={this.state.isListViewActive} onClick={this.setListViewActive} />
-                    <Button icon={IconNames.MAP} active={!this.state.isListViewActive} onClick={this.setMapViewActive} />
-                  </ButtonGroup>
-                </div>
+        <div className="all-posts">
+          <div className="content-header">
+            <div className="filters">
+              <Icon className="filter-icon" icon="filter" />
+              <MultiSelect
+                className="filters-multi-select"
+                itemListRenderer={renderFilterList}
+                tagRenderer={renderTag}
+                items={getFilterItems()}
+                itemRenderer={this.renderFilterItem}
+                onItemSelect={this.handleItemSelect}
+                popoverProps={{ minimal: true }}
+                selectedItems={this.state.appliedFilters}
+                tagInputProps={{ className: "filters-input", placeholder: "Filter...", onRemove: this.handleFilterRemove, rightElement: clearFiltersButton }}
+                itemPredicate={filterItemPredicate}
+                resetOnSelect={true}
+              />
             </div>
-            {this.state.isListViewActive ? (
-              <div className="post-list">
-                { this.props.authedUsername && 
-                  <div className="post -add-post">
-                    <Button text="Add Post" icon="add" onClick={this.handleAddPost} />
-                  </div> }
+            <div className="content-view-chooser">
+                <ButtonGroup>
+                  <Button icon={IconNames.LIST} active={this.state.isListViewActive} onClick={this.setListViewActive} />
+                  <Button icon={IconNames.MAP} active={!this.state.isListViewActive} onClick={this.setMapViewActive} />
+                </ButtonGroup>
+              </div>
+          </div>
+          {this.state.isListViewActive ? (
+            <div className="post-list">
+              { Object.keys(this.props.postMap)
+                  .filter(key => this.postPassesFilters(this.props.postMap[key]))
+                  .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
+                  .map((postMapKey: string) => {
+                    return (
+                      <Post
+                        key={postMapKey}
+                        postId={this.props.postMap[postMapKey].id}
+                        setActivePost={this.setActivePost}
+                        onAddLocationFilter={this.handleNeighborhoodSelect}
+                      />);
+                }) }
+              <div className="post -dummy" />
+              <div className="post -dummy" />
+            </div>
+          ) : (
+            <div id="map-container">
+              <LeafletMap center={new LatLng(40.7685, -73.9809)} position={position} zoom={13}>
+                <TileLayer
+                  url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png"
+                  attribution="Map tiles by <a href=&quot;http://stamen.com&quot;>Stamen Design</a>, <a href=&quot;http://creativecommons.org/licenses/by/3.0&quot;>CC BY 3.0</a> &mdash; Map data &copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
+                />
                 { Object.keys(this.props.postMap)
                     .filter(key => this.postPassesFilters(this.props.postMap[key]))
-                    .sort((a, b) => this.props.postMap[a].dateVisited > this.props.postMap[b].dateVisited ? -1 : 1)
-                    .map((postMapKey: string) => {
+                    .map(key => {
                       return (
-                        <Post
-                          key={postMapKey}
-                          postId={this.props.postMap[postMapKey].id}
-                          setActivePost={this.setActivePost}
-                          onAddLocationFilter={this.handleNeighborhoodSelect}
-                        />);
-                  }) }
-                <div className="post -dummy" />
-                <div className="post -dummy" />
-              </div>
-            ) : (
-              <div id="map-container">
-                <LeafletMap center={new LatLng(40.7685, -73.9809)} position={position} zoom={13}>
-                  <TileLayer
-                    url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png"
-                    attribution="Map tiles by <a href=&quot;http://stamen.com&quot;>Stamen Design</a>, <a href=&quot;http://creativecommons.org/licenses/by/3.0&quot;>CC BY 3.0</a> &mdash; Map data &copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
-                  />
-                  { Object.keys(this.props.postMap)
-                      .filter(key => this.postPassesFilters(this.props.postMap[key]))
-                      .map(key => {
-                        return (
-                          <Marker
-                            key={key}
-                            position={[this.props.postMap[key].latitude, this.props.postMap[key].longitude]}
-                            icon={mapIcon}
-                          >
-                            <Popup>
-                              <div>
-                                <Link className="map-popup-address" to={`/post/${key}`}>{this.props.postMap[key].restaurantName}</Link>
-                                <div className="map-popup-address">{this.props.postMap[key].addressStreet}</div>
-                                <div className="map-popup-address">{this.props.postMap[key].addressCity}, {this.props.postMap[key].addressState} {this.props.postMap[key].addressZip}</div>
-                              </div>
-                            </Popup>
-                          </Marker>
-                        )
-                      })}
-                </LeafletMap>
-              </div>
-            )}
-          </div>
-        }
-        { (this.props.view === "ADD_OR_EDIT_POST") &&
-          <PostForm
-            postId={this.state.activePostId}
-          />
-        }
-        { (this.props.view === "ADD_OR_EDIT_REVIEW") &&
-          <ReviewForm
-            postId={this.state.activePostId!}
-          />
-        }
+                        <Marker
+                          key={key}
+                          position={[this.props.postMap[key].latitude, this.props.postMap[key].longitude]}
+                          icon={mapIcon}
+                        >
+                          <Popup>
+                            <div>
+                              <Link className="map-popup-address" to={`/post/${key}`}>{this.props.postMap[key].restaurantName}</Link>
+                              <div className="map-popup-address">{this.props.postMap[key].addressStreet}</div>
+                              <div className="map-popup-address">{this.props.postMap[key].addressCity}, {this.props.postMap[key].addressState} {this.props.postMap[key].addressZip}</div>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    })}
+              </LeafletMap>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -188,11 +166,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
 
   private setActivePost = (postId: number) => {
     this.setState({ activePostId: postId });
-  }
-
-  private handleAddPost = () => {
-    this.setState({ activePostId: undefined });
-    this.props.setView("ADD_OR_EDIT_POST");
   }
 
   private handleNeighborhoodSelect = (neighborhood: string) => {
@@ -261,16 +234,9 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
 
 const mapStateToProps = (state: AppState) => {
   return {
-    view: state.view,
     authedUsername: state.authedUsername,
     postMap: state.postMap,
   };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
-  };
-};
-
-export const MainContent = connect(mapStateToProps, mapDispatchToProps)(MainContentInternal);
+export const MainContent = connect(mapStateToProps)(MainContentInternal);
