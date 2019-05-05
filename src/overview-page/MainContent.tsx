@@ -11,10 +11,8 @@ import { Link } from "react-router-dom";
 import { Dispatch } from "redux";
 import { PostForm } from "../admin-page/PostForm";
 import { ReviewForm } from "../admin-page/ReviewForm";
-import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
-import { WireReview } from "../data/WireReview";
-import { setAllPosts, setAllReviews, setUsernames, setView } from "../redux/action";
+import { setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
 import { NEIGHBORHOODS } from "../static/constants";
 import { Post } from "./Post";
@@ -26,9 +24,6 @@ export namespace MainContent {
     authedUsername?: string;
     postMap: { [postId: number]: WirePost };
     setView: (viewType: VIEW_TYPE) => void;
-    setUsernames: (usernames: Array<string>) => void;
-    setAllPosts: (postMap: { [postId: number]: WirePost }) => void;
-    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
   }
 
   export type Props = StoreProps;
@@ -183,32 +178,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
     );
   }
 
-  public componentDidMount() {
-    const usernamesPromise = RequestClient.getInstance().getAllUsernames();
-    const postsPromise = RequestClient.getInstance().getAllPosts();
-    Promise.all([postsPromise, usernamesPromise])
-      .then(postIdsAndUsernames => {
-        this.props.setUsernames(postIdsAndUsernames[1]);
-        const reviewPromises = [];
-        const postMap = {};
-        for (const post of postIdsAndUsernames[0]) {
-          postMap[post.id!] = post;
-          reviewPromises.push(RequestClient.getInstance().getReviews(post.id!));
-        }
-        this.props.setAllPosts(postMap);
-        Promise.all(reviewPromises)
-          .then(reviewsLists => {
-            const reviewMap = {};
-            for (const reviews of reviewsLists) {
-              if (reviews.length > 0) {
-                reviewMap[reviews[0].postId] = reviews;
-              }
-            }
-            this.props.setAllReviews(reviewMap);
-          });
-      });
-  }
-
   public setListViewActive = () => {
     this.setState({ isListViewActive: true });
   }
@@ -301,9 +270,6 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setView: (viewType: VIEW_TYPE) => dispatch(setView(viewType)),
-    setUsernames: (usernames: Array<string>) => dispatch(setUsernames(usernames)),
-    setAllPosts: (postMap: { [postId: number]: WirePost }) => dispatch(setAllPosts(postMap)),
-    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => dispatch(setAllReviews(reviewMap)),
   };
 };
 

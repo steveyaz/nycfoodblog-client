@@ -2,11 +2,8 @@ import { Icon } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { Dispatch } from "redux";
-import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
-import { setAllReviews, setPost } from "../redux/action";
 import { AppState } from "../redux/state";
 import { NEIGHBORHOODS } from "../static/constants";
 
@@ -19,7 +16,7 @@ export namespace PostPage {
   export interface StoreProps {
     post: WirePost | undefined;
     reviews: ReadonlyArray<WireReview>;
-    setPost: (post: WirePost ) => void;
+    setAllPosts: (postMap: { [postId: number]: WirePost }) => void;
     setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => void;
   }
 
@@ -146,21 +143,6 @@ class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
     }
   }
 
-  public componentDidMount() {
-    if (this.props.post === undefined) {
-      const postId = parseInt(this.props.match.params.postId, 10);
-      const postPromise = RequestClient.getInstance().getPost(postId);
-      const reviewsPromise = RequestClient.getInstance().getReviews(postId);
-      Promise.all([postPromise, reviewsPromise])
-        .then(postAndReviews => {
-          this.props.setPost(postAndReviews[0]);
-          const reviewMap = {};
-          reviewMap[postId] = postAndReviews[1];
-          this.props.setAllReviews(reviewMap);
-        });
-    }
-  }
-
 }
 
 const mapStateToProps = (state: AppState, props: PostPage.Props) => {
@@ -171,11 +153,4 @@ const mapStateToProps = (state: AppState, props: PostPage.Props) => {
   };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setPost: (post: WirePost ) => dispatch(setPost(post)),
-    setAllReviews: (reviewMap: { [postId: number]: Array<WireReview> }) => dispatch(setAllReviews(reviewMap)),
-  };
-};
-
-export const PostPage = connect(mapStateToProps, mapDispatchToProps)(PostPageInternal);
+export const PostPage = connect(mapStateToProps)(PostPageInternal);

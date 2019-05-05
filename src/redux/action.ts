@@ -12,8 +12,8 @@ export const SET_ALL_REVIEWS = "SET_ALL_REVIEWS";
 
 export const setView = (viewType: VIEW_TYPE) => ({ type: SET_VIEW, payload: viewType });
 export const setAuthedUsername = (username: string | undefined) => ({ type: SET_AUTHED_USERNAME, payload: username });
-export const setUsernames = (usernames: Array<string>) => ({ type: SET_USERNAMES, payload: usernames });
+export const setUsernames = (usernames: ReadonlyArray<string>) => ({ type: SET_USERNAMES, payload: usernames });
 export const setPost = (post: WirePost) => ({ type: SET_POST, payload: post });
 export const setAllPosts = (postMap: { [postId: number]: WirePost }) => ({ type: SET_ALL_POSTS, payload: postMap });
 export const setReview = (review: WireReview) => ({ type: SET_REVIEW, payload: review });
-export const setAllReviews = (reviewMap: { [postId: number]: Array<WireReview> }) => ({ type: SET_ALL_REVIEWS, payload: reviewMap });
+export const setAllReviews = (reviewMap: { [postId: number]: ReadonlyArray<WireReview> }) => ({ type: SET_ALL_REVIEWS, payload: reviewMap });

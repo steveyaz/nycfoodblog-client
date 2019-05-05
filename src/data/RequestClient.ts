@@ -31,25 +31,13 @@ export class RequestClient {
       });
   }
   
-  public getAllPosts(): Promise<ReadonlyArray<WirePost>> {
+  public getAllPosts(): Promise<{ [postId: number]: WirePost }> {
     const request = new Request(BASE_URL + '/post/all', RequestInitBuilder.request().withMethod("GET").build());
     return fetch(request)
       .then(response => {
         return response.json();
-      }).then((posts: ReadonlyArray<WirePost>) => {
+      }).then((posts: { [postId: number]: WirePost }) => {
         return posts;
-      }).catch(e => {
-        return Promise.reject(e);
-      });
-  }
-
-  public getPost(id: number): Promise<WirePost> {
-    const request = new Request(BASE_URL + '/post/' + id, RequestInitBuilder.request().withMethod("GET").build());
-    return fetch(request)
-      .then(response => {
-        return response.json();
-      }).then((post: WirePost) => {
-        return post;
       }).catch(e => {
         return Promise.reject(e);
       });
@@ -67,12 +55,12 @@ export class RequestClient {
       });
   }
 
-  public getReviews(postId: number): Promise<Array<WireReview>> {
-    const request = new Request(BASE_URL + '/review/' + postId, RequestInitBuilder.request().withMethod("GET").build());
+  public getAllReviews(): Promise<{ [postId: number]: ReadonlyArray<WireReview> }> {
+    const request = new Request(BASE_URL + '/review/all', RequestInitBuilder.request().withMethod("GET").build());
     return fetch(request)
       .then(response => {
         return response.json();
-      }).then((reviews: Array<WireReview>) => {
+      }).then((reviews: { [postId: number]: ReadonlyArray<WireReview> }) => {
         return reviews;
       }).catch(e => {
         return Promise.reject(e);
