@@ -13,7 +13,6 @@ export namespace Post {
 
   export interface OwnProps {
     postId: number;
-    setActivePost: (postId: number) => void;
     onAddLocationFilter: (neighborhood: string) => void;
   }
 
@@ -25,6 +24,20 @@ export namespace Post {
 
   export type Props = OwnProps & StoreProps;
 
+}
+
+export const isPostComplete = (post: WirePost, reviews: ReadonlyArray<WireReview>): boolean => {
+  return post.id !== undefined
+    && post.addressCity.trim().length > 0
+    && post.addressState.trim().length > 0
+    && post.addressStreet.trim().length > 0
+    && post.addressZip.trim().length > 0
+    && post.instagramUrl.trim().length > 0
+    && post.latitude !== 0
+    && post.longitude !== 0
+    && post.neighborhood.trim().length > 0
+    && post.restaurantName.trim().length > 0
+    && reviews.length === 2;
 }
 
 const getBackgroundUrl = (instagramUrl: string) => {
@@ -46,9 +59,6 @@ const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
 class PostInternal extends React.PureComponent<Post.Props, {}> {
 
   public render() {
-    if (this.props.post.instagramUrl.trim().length === 0 || this.props.reviews.length !== 2) {
-      return <div />;
-    }
     const backgroundImage = this.props.post.instagramUrl ?
       { backgroundImage: "url('" + getBackgroundUrl(this.props.post.instagramUrl) + "')" }
       : {};

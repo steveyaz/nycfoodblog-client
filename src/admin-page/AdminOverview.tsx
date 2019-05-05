@@ -3,6 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
+import { isPostComplete } from "../overview-page/Post";
 import { AppState } from "../redux/state";
 import { ADMIN_VIEW_STATE } from "./AdminPage";
 
@@ -42,18 +43,6 @@ class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
   }
 
   private renderPostRow = (post: WirePost, reviews: ReadonlyArray<WireReview>) => {
-    // we assume 2 reviews only
-    const isComplete = post.id !== undefined
-      && post.addressCity.trim().length > 0
-      && post.addressState.trim().length > 0
-      && post.addressStreet.trim().length > 0
-      && post.addressZip.trim().length > 0
-      && post.instagramUrl.trim().length > 0
-      && post.latitude !== 0
-      && post.longitude !== 0
-      && post.neighborhood.trim().length > 0
-      && post.restaurantName.trim().length > 0
-      && reviews.length === 2;
     let isReviewedByUser = false;
     reviews.forEach(review => {
       if (review.username === this.props.authedUsername) {
@@ -63,7 +52,7 @@ class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
     return (
       <div className="admin-overview-post-row" key={post.id}>
         <div className="admin-overview-post-grouping">
-          { isComplete
+          { isPostComplete(post, reviews)
             ? <Icon className="admin-overview-post-complete" icon="endorsed" iconSize={24} />
             : <Icon className="admin-overview-post-incomplete" icon="error" iconSize={24} />
           }

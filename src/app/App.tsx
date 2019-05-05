@@ -4,7 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { createStore } from "redux";
 import { AdminPage } from "../admin-page/AdminPage";
 import { DataProvider } from "../data/DataProvider";
-import { MainContent } from "../overview-page/MainContent";
+import { OverviewPage } from "../overview-page/OverviewPage";
 import { PostPage } from "../post-page/PostPage";
 import { reducer } from "../redux/reducer";
 import { Header } from "./Header";
@@ -22,7 +22,7 @@ export class App extends React.Component {
             <BrowserRouter>
               <ScrollToTop>
                 <Header />
-                <Route exact={true} path="/" component={MainContent} />
+                <Route exact={true} path="/" component={OverviewPage} />
                 <Route exact={true} path="/post/:postId" component={PostPage} />
                 <Route exact={true} path="/admin" component={AdminPage} />
               </ScrollToTop>
