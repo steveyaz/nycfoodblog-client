@@ -55,7 +55,7 @@ class AuthFormInternal extends React.PureComponent<AuthForm.Props, AuthForm.Stat
   private handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     RequestClient.getInstance().login(this.state.username, this.state.password).then(isAuthed => {
       if (isAuthed) {
-        this.props.setAuthedUsername(this.state.username);
+        this.props.setAuthedUsername(this.state.username.toLowerCase());
       }
     });
     event.preventDefault();

@@ -45,13 +45,6 @@ const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
   return (score / reviews.length).toString();
 }
 
-const getCasedUsername = (username: string): string => {
-  let casedUsername = username.toLowerCase();
-  const firstLetter = casedUsername.charAt(0).toUpperCase();
-  casedUsername = firstLetter + casedUsername.slice(1, casedUsername.length);
-  return casedUsername;
-}
-
 const getOrderString = (order: ReadonlyArray<string>): string => {
   let orderString = "We ordered... ";
   order.forEach(item => orderString += item.toLowerCase() + ", ");
@@ -105,7 +98,7 @@ class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
               <div className="postpage-bottom">
                 {this.props.reviews.map(review => { return (
                   <div className="postpage-review" key={review.postId + review.username}>
-                    <div className="postpage-review-name">{getCasedUsername(review.username)}</div>
+                    <div className="postpage-review-name">{review.username}</div>
                     <div className="postpage-review-content">
                       <div className="postpage-review-left">
                         <div className="postpage-review-score">
