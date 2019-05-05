@@ -12,6 +12,7 @@ import { PostPage } from "../post-page/PostPage";
 import { reducer } from "../redux/reducer";
 import "./App.css";
 import { Header } from "./Header";
+import { ScrollToTop } from "./ScrollToTop";
 
 const store = createStore(reducer);
 
@@ -22,10 +23,12 @@ export class App extends React.Component {
       <Provider store={store}>
         <div className="app-content">
           <BrowserRouter>
-            <Header />
-            <Route exact={true} path="/" component={MainContent} />
-            <Route exact={true} path="/post/:postId" component={PostPage} />
-            <Route exact={true} path="/admin" component={AdminPage} />
+            <ScrollToTop>
+              <Header />
+              <Route exact={true} path="/" component={MainContent} />
+              <Route exact={true} path="/post/:postId" component={PostPage} />
+              <Route exact={true} path="/admin" component={AdminPage} />
+            </ScrollToTop>
           </BrowserRouter>
         </div>
       </Provider>
