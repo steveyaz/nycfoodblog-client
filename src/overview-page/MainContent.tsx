@@ -185,25 +185,21 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
 
   public componentDidMount() {
     const usernamesPromise = RequestClient.getInstance().getAllUsernames();
-    const postsPromise = RequestClient.getInstance().getAllPostsIds();
+    const postsPromise = RequestClient.getInstance().getAllPosts();
     Promise.all([postsPromise, usernamesPromise])
       .then(postIdsAndUsernames => {
         this.props.setUsernames(postIdsAndUsernames[1]);
-        const postPromises = [];
         const reviewPromises = [];
-        for (const postId of postIdsAndUsernames[0]) {
-          postPromises.push(RequestClient.getInstance().getPost(postId));
-          reviewPromises.push(RequestClient.getInstance().getReviews(postId));
+        const postMap = {};
+        for (const post of postIdsAndUsernames[0]) {
+          postMap[post.id!] = post;
+          reviewPromises.push(RequestClient.getInstance().getReviews(post.id!));
         }
-        Promise.all([Promise.all(postPromises), Promise.all(reviewPromises)])
-          .then(postsAndReviews => {
-            const postMap = {};
-            for (const post of postsAndReviews[0]) {
-              postMap[post.id!] = post;
-            }
-            this.props.setAllPosts(postMap);
+        this.props.setAllPosts(postMap);
+        Promise.all(reviewPromises)
+          .then(reviewsLists => {
             const reviewMap = {};
-            for (const reviews of postsAndReviews[1]) {
+            for (const reviews of reviewsLists) {
               if (reviews.length > 0) {
                 reviewMap[reviews[0].postId] = reviews;
               }

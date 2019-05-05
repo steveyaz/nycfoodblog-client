@@ -31,13 +31,13 @@ export class RequestClient {
       });
   }
   
-  public getAllPostsIds(): Promise<number[]> {
+  public getAllPosts(): Promise<ReadonlyArray<WirePost>> {
     const request = new Request(BASE_URL + '/post/all', RequestInitBuilder.request().withMethod("GET").build());
     return fetch(request)
       .then(response => {
         return response.json();
-      }).then((ids: number[]) => {
-        return ids;
+      }).then((posts: ReadonlyArray<WirePost>) => {
+        return posts;
       }).catch(e => {
         return Promise.reject(e);
       });
