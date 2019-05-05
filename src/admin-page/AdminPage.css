@@ -20,7 +20,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 600px;
+  width: 380px;
   margin-top: 16px;
   padding: 8px;
   border: 1px;
@@ -48,4 +48,5 @@
 
 .admin-overview-row-button {
   margin-left: 8px;
+  width: 90px;
 }
