@@ -1,4 +1,4 @@
-.auth {
+.auth-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,7 +12,7 @@
   border-radius: 3px;
 }
 
-.logged-in {
+.auth-form-authenticated {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -20,22 +20,22 @@
 
 }
 
-.user-greeting {
+.auth-form-user-greeting {
   margin-bottom: 8px;
   font-weight: 700;
   text-transform: capitalize;
 }
 
-.login-form {
+.auth-form-login {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.login-form-field {
+.auth-form-login-field {
   width: 280px;
 }
 
-.login-form-button {
+.auth-form-login-button {
   width: 100px;
 }

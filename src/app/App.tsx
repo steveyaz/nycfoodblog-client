@@ -6,8 +6,9 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
 import { createStore } from "redux";
-import { MainContent } from "../main/MainContent";
-import { PostPage } from "../post/PostPage";
+import { AdminPage } from "../admin-page/AdminPage";
+import { MainContent } from "../overview-page/MainContent";
+import { PostPage } from "../post-page/PostPage";
 import { reducer } from "../redux/reducer";
 import "./App.css";
 import { Header } from "./Header";
@@ -24,6 +25,7 @@ export class App extends React.Component {
             <Header />
             <Route exact={true} path="/" component={MainContent} />
             <Route exact={true} path="/post/:postId" component={PostPage} />
+            <Route exact={true} path="/admin" component={AdminPage} />
           </BrowserRouter>
         </div>
       </Provider>

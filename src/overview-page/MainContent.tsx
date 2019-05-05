@@ -9,16 +9,15 @@ import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Dispatch } from "redux";
+import { PostForm } from "../admin-page/PostForm";
+import { ReviewForm } from "../admin-page/ReviewForm";
 import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
-import { Post } from "../post/Post";
-import { PostDetails } from "../post/PostDetails";
-import { PostForm } from "../post/PostForm";
 import { setAllPosts, setAllReviews, setUsernames, setView } from "../redux/action";
 import { AppState, VIEW_TYPE } from "../redux/state";
-import { ReviewForm } from "../review/ReviewForm";
 import { NEIGHBORHOODS } from "../static/constants";
+import { Post } from "./Post";
 
 export namespace MainContent {
 
@@ -36,7 +35,6 @@ export namespace MainContent {
 
   export interface State {
     activePostId?: number;
-    postDetailsOpen: boolean;
     appliedFilters: Array<{ type: string, label: string }>;
     isListViewActive: boolean;
   }
@@ -84,7 +82,7 @@ const filterItemPredicate: ItemPredicate<{ type: string, label: string }> = (que
 }
 
 class MainContentInternal extends React.PureComponent<MainContent.Props, MainContent.State> {
-  public state: MainContent.State = { postDetailsOpen: false, appliedFilters: EMPTY_ARRAY, isListViewActive: true }
+  public state: MainContent.State = { appliedFilters: EMPTY_ARRAY, isListViewActive: true }
 
   public render() {
 
@@ -181,7 +179,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
             postId={this.state.activePostId!}
           />
         }
-        <PostDetails postId={this.state.activePostId!} isOpen={this.state.postDetailsOpen} onDetailsClose={this.hideDetails} />
       </div>
     );
   }
@@ -231,10 +228,6 @@ class MainContentInternal extends React.PureComponent<MainContent.Props, MainCon
   private handleAddPost = () => {
     this.setState({ activePostId: undefined });
     this.props.setView("ADD_OR_EDIT_POST");
-  }
-
-  private hideDetails = () => {
-    this.setState({ postDetailsOpen: false });
   }
 
   private handleNeighborhoodSelect = (neighborhood: string) => {

@@ -75,9 +75,7 @@ class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
   public render() {
     if (this.props.post === undefined) {
       return (
-        <div className="post-page">
-          LOADING
-        </div>
+        <div />
       );
     } else {
       return (
@@ -149,16 +147,18 @@ class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
   }
 
   public componentDidMount() {
-    const postId = parseInt(this.props.match.params.postId, 10);
-    const postPromise = RequestClient.getInstance().getPost(postId);
-    const reviewsPromise = RequestClient.getInstance().getReviews(postId);
-    Promise.all([postPromise, reviewsPromise])
-      .then(postAndReviews => {
-        this.props.setPost(postAndReviews[0]);
-        const reviewMap = {};
-        reviewMap[postId] = postAndReviews[1];
-        this.props.setAllReviews(reviewMap);
-      });
+    if (this.props.post === undefined) {
+      const postId = parseInt(this.props.match.params.postId, 10);
+      const postPromise = RequestClient.getInstance().getPost(postId);
+      const reviewsPromise = RequestClient.getInstance().getReviews(postId);
+      Promise.all([postPromise, reviewsPromise])
+        .then(postAndReviews => {
+          this.props.setPost(postAndReviews[0]);
+          const reviewMap = {};
+          reviewMap[postId] = postAndReviews[1];
+          this.props.setAllReviews(reviewMap);
+        });
+    }
   }
 
 }

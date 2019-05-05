@@ -1,32 +1,19 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Auth } from "../auth/Auth";
 import logo from "../static/rosie.png";
 
-export namespace Header {
-  export interface State {
-    displayAuth: boolean;
-  }
-}
-
-export class Header extends React.Component<{}, Header.State> {
-  public state: Header.State = { displayAuth: false };
+export class Header extends React.Component {
 
   public render() {
     return (
       <div className="header-wrapper">
-        <div className="easter-egg" onClick={this.toggleAuthDisplay}>❤️ Sonya</div>
+        <Link className="easter-egg" to={`/admin`}>❤️ Sonya</Link>
         <header className="header">
           <Link to={`/`}><img src={logo} className="header-logo" alt="Rosie!" /></Link>
           <h1 className="header-title">The NYC Food Blog</h1>
         </header>
-        { this.state.displayAuth && <Auth /> }
       </div>
     );
-  }
-
-  private toggleAuthDisplay = () => {
-    this.setState({ displayAuth: !this.state.displayAuth });
   }
 
 }

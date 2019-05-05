@@ -1,0 +1,150 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 300px;
+  max-width: 300px;
+  margin: 16px;
+}
+
+.post.-add-post {
+  align-items: center;
+  justify-content: center;
+}
+
+.post-score {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 36px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #3C3C3C;
+  left: -12px;
+  top: -12px;
+  font-size: 24px;
+  background: white;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #3C3C3C;
+}
+
+.post-image {
+  height: 200px;
+  border-radius: 3px 3px 0 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.post-below-image {
+  border-width: 0 1px 1px 1px;
+  border-style: solid;
+  border-color: #E1E8ED;
+  border-radius: 0 0 3px 3px;
+  background: white;
+  padding: 4px;
+}
+
+.post-description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.post-tags {
+  margin-top: 8px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.post-expand {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-right: 4px;
+  color: #5C7080;
+}
+
+.post-expand:hover {
+  color: #394B59;
+}
+
+.post-expand-button {
+  margin-left: 4px;
+}
+
+.restaurant-name {
+  font-size: 24px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  align-self: flex-start;
+  color: #394B59;
+}
+
+.location {
+  padding: 2px;
+  margin: 2px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #738694;
+}
+
+.location:hover {
+  color: gray;
+  cursor: pointer;
+}
+
+.tag {
+  background: #E1E8ED;
+  padding: 2px;
+  margin: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #CED9E0;
+  border-radius: 3px;
+  font-family: 'Open Sans', sans-serif;
+  text-transform: lowercase;
+  color: #5C7080;
+}
+
+.tag:hover {
+  background: #CED9E0;
+  color: #5C7080;
+  cursor: pointer;
+}
+
+.post-description-button {
+  margin-right: 8px;
+  margin-top: 4px;
+  height: 12px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-form-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 16px;
+  margin-bottom: 60px;
+}
+
+.post-form-submit {
+  margin-right: 8px;
+}
+
+.lat-long-form-field {
+  display: flex;
+  flex-direction: row;
+}
+
+.lat-long {
+  padding-left: 8px;
+}
