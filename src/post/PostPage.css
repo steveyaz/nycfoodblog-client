@@ -42,6 +42,12 @@
   border-top: 1px #738694 solid;
 }
 
+@media only screen {
+  .postpage-content {
+    flex-direction: column;
+  }
+}
+
 .postpage-instagram-section {
   margin: 6px 0px 0px 36px;
   width: 440px;
