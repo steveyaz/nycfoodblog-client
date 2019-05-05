@@ -38,13 +38,32 @@
 .postpage-content {
   display: flex;
   flex-direction: row;
-  padding-top: 12px;
+  padding: 12px;
   border-top: 1px #738694 solid;
 }
 
 @media only screen and (max-width: 960px) {
-  .postpage-content {
+  .postpage-header > .postpage-restaurant-name {
+    font-size: 38px;
+  }
+
+  .postpage > .postpage-content {
     flex-direction: column;
+  }
+
+  .postpage-content > .postpage-instagram-section {
+    width: 370px;
+    margin: 6px 0px 0px 0px;
+  }
+
+  .postpage-instagram-section > .postpage-instagram-iframe {
+    width: 370px;
+    min-height: 700px;
+  }
+
+  .postpage-content > .postpage-review-section {
+    width: 370px;
+    padding: 12px 0px 0px 0px;
   }
 }
 
@@ -62,8 +81,8 @@
 .postpage-review-section {
   display: flex;
   flex-direction: column;
-  padding: 12px 0px 0px 18px;
   width: 420px;
+  padding: 12px 0px 0px 18px;
 }
 
 .postpage-top {
