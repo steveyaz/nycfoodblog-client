@@ -24,6 +24,15 @@ export namespace AdminOverview {
 
 }
 
+const writePostLinkToClipboard = (event: React.MouseEvent<HTMLDivElement>) => {
+  const textField = document.createElement('textarea')
+  textField.innerText = `https://nycfoodblog.net/post/${event.currentTarget.id}`;
+  document.body.appendChild(textField);
+  textField.select();
+  document.execCommand('copy');
+  textField.remove();
+}
+
 class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
 
   public render() {
@@ -60,6 +69,7 @@ class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
             <div className="admin-overview-post-name">{post.restaurantName}</div>
             <div className="admin-overview-post-review-count">Review count: {reviews.length}</div>
             <div className="admin-overview-post-review-value">Current avg: [ {getReviewScore(reviews)} / 10 ]</div>
+            <div className="admin-overview-post-review-url" id={post.id!.toString()} onClick={writePostLinkToClipboard}>Copy URL <Icon icon="clipboard" iconSize={12} /></div>
           </div>
         </div>
         <div className="admin-overview-post-grouping">
@@ -85,6 +95,7 @@ class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
     this.props.setEditPostId(parseInt(event.currentTarget.id, 10));
     this.props.setAdminView("ADD_EDIT_REVIEW");
   }
+  
 
 }
 

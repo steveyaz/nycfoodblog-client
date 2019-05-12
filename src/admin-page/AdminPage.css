@@ -53,6 +53,16 @@
   font-size: 14px;
 }
 
+.admin-overview-post-review-url {
+  margin-top: 4px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.admin-overview-post-review-url-input {
+  display: none;
+}
+
 .admin-overview-row-button {
   margin-left: 8px;
   width: 90px;
