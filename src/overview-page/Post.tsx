@@ -37,6 +37,7 @@ export const isPostComplete = (post: WirePost, reviews: ReadonlyArray<WireReview
     && post.longitude !== 0
     && post.neighborhood.trim().length > 0
     && post.restaurantName.trim().length > 0
+    && post.cost > 0
     && reviews.length === 2;
 }
 
