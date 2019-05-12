@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
+import { getReviewScore } from "../overview-page/Post";
 import { AppState } from "../redux/state";
 import { NEIGHBORHOODS } from "../static/constants";
 
@@ -32,17 +33,6 @@ export namespace PostPage {
 const getEmbedUrl = (instagramUrl: string): string => {
   const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
   return instagramUrl.match(regex) + "embed";
-}
-
-const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
-  if (reviews.length === 0) {
-    return "?";
-  }
-  let score = 0;
-  reviews.forEach(review => {
-    score += review.ecRating + review.foodRating + review.vibesRating;
-  });
-  return (score / reviews.length).toString();
 }
 
 const getOrderString = (order: ReadonlyArray<string>): string => {

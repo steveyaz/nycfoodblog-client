@@ -42,8 +42,15 @@
   color: #B83211;
 }
 
-.admin-overview-post-name {
+.admin-overview-post-info {
+  display: flex;
+  flex-direction: column;
   margin-left: 8px;
+  font-size: 12px;
+}
+
+.admin-overview-post-name {
+  font-size: 14px;
 }
 
 .admin-overview-row-button {

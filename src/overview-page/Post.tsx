@@ -40,12 +40,7 @@ export const isPostComplete = (post: WirePost, reviews: ReadonlyArray<WireReview
     && reviews.length === 2;
 }
 
-const getBackgroundUrl = (instagramUrl: string) => {
-  const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
-  return instagramUrl.match(regex) + "media/?size=m";
-}
-
-const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
+export const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
   if (reviews.length === 0) {
     return "?";
   }
@@ -54,6 +49,11 @@ const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
     score += review.ecRating + review.foodRating + review.vibesRating;
   });
   return (score / reviews.length).toString();
+}
+
+const getBackgroundUrl = (instagramUrl: string) => {
+  const regex = /https\:\/\/www\.instagram\.com\/p\/.+\//i;
+  return instagramUrl.match(regex) + "media/?size=m";
 }
 
 class PostInternal extends React.PureComponent<Post.Props, {}> {

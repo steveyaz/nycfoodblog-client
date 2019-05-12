@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { WirePost } from "../data/WirePost";
 import { WireReview } from "../data/WireReview";
-import { isPostComplete } from "../overview-page/Post";
+import { getReviewScore, isPostComplete } from "../overview-page/Post";
 import { AppState } from "../redux/state";
 import { ADMIN_VIEW_STATE } from "./AdminPage";
 
@@ -56,7 +56,11 @@ class AdminOverviewInternal extends React.Component<AdminOverview.Props> {
             ? <Icon className="admin-overview-post-complete" icon="endorsed" iconSize={24} />
             : <Icon className="admin-overview-post-incomplete" icon="error" iconSize={24} />
           }
-          <div className="admin-overview-post-name">{post.restaurantName}</div>
+          <div className="admin-overview-post-info">
+            <div className="admin-overview-post-name">{post.restaurantName}</div>
+            <div className="admin-overview-post-review-count">Review count: {reviews.length}</div>
+            <div className="admin-overview-post-review-value">Current avg: [ {getReviewScore(reviews)} / 10 ]</div>
+          </div>
         </div>
         <div className="admin-overview-post-grouping">
           <Button className="admin-overview-row-button" text="Edit Post" icon="edit" id={post.id!.toString(10)} onClick={this.handleEditPost} />
