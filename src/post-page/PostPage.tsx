@@ -44,6 +44,14 @@ const getOrderString = (order: ReadonlyArray<string>): string => {
   return orderString;
 }
 
+const getCostString = (cost: number): string => {
+  let costString = "";
+  for (let i = 0; i < cost; i++) {
+    costString += "$";
+  }
+  return costString;
+}
+
 class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
 
   public state: PostPage.State = { isLoading: false, instagramContentHight: 0 }
@@ -77,7 +85,7 @@ class PostPageInternal extends React.PureComponent<PostPage.Props, {}> {
                 </div>
                 <div className="postpage-review-secondary">
                   <div className="postpage-order">{getOrderString(this.props.post.order)}</div>
-                  <div className="postpage-price">${this.props.post.cost}</div>
+                  <div className="postpage-price">{getCostString(this.props.post.cost)}</div>
                   <div className="postpage-tags">
                     {this.props.post.tags && this.props.post.tags.map(tag => {
                       return <div key={tag} className="tag">{tag}</div>

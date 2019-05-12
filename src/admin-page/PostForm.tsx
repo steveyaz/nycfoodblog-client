@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RequestClient } from "../data/RequestClient";
 import { WirePost } from "../data/WirePost";
-import { CurrencyFormField } from "../forms/CurrencyFormField";
+import { CostFormField } from "../forms/CostFormField";
 import { DateFormField } from "../forms/DateFormField";
 import { FormFieldWrapper } from "../forms/FormFieldWrapper";
 import { MultiTextFormField } from "../forms/MultiTextFormField";
@@ -70,7 +70,7 @@ class PostFormInternal extends React.PureComponent<PostForm.Props, WirePost> {
           </div>
         </FormFieldWrapper>
         <TextFormField id="instagramUrl" label="Instagram URL" value={this.state.instagramUrl} onValueChange={this.handleValueChange} />
-        <CurrencyFormField id="cost" label="Bill Total $" value={this.state.cost} onValueChange={this.handleValueChange} />
+        <CostFormField id="cost" label="Cost" value={this.state.cost} onValueChange={this.handleValueChange} />
         <MultiTextFormField id="order" label="Order" value={this.state.order} onValueChange={this.handleValueChange} />
         <MultiTextFormField id="tags" label="Tags" value={this.state.tags} onValueChange={this.handleValueChange} />
         <div className="post-form-buttons">
