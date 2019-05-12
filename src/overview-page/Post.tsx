@@ -48,7 +48,11 @@ export const getReviewScore = (reviews: ReadonlyArray<WireReview>): string => {
   reviews.forEach(review => {
     score += review.ecRating + review.foodRating + review.vibesRating;
   });
-  return (score / reviews.length).toString();
+  let strScore = (score / reviews.length).toString()
+  if (score % reviews.length === 0) {
+    strScore += ".0";
+  }
+  return strScore;
 }
 
 const getBackgroundUrl = (instagramUrl: string) => {
