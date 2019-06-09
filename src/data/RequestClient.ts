@@ -3,7 +3,7 @@ import { WirePost } from "./WirePost";
 import { WireReview } from "./WireReview";
 
 // const BASE_URL = 'http://localhost:8090';
-const BASE_URL = 'https://nycfoodblog.net/api';
+const BASE_URL = 'https://thenycfoodblog.com/api';
 
 export class RequestClient {
 
