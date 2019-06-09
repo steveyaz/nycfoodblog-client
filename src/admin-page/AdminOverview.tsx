@@ -26,7 +26,7 @@ export namespace AdminOverview {
 
 const writePostLinkToClipboard = (event: React.MouseEvent<HTMLDivElement>) => {
   const textField = document.createElement('textarea')
-  textField.innerText = `https://nycfoodblog.net/post/${event.currentTarget.id}`;
+  textField.innerText = `https://thenycfoodblog.com/post/${event.currentTarget.id}`;
   document.body.appendChild(textField);
   textField.select();
   document.execCommand('copy');
