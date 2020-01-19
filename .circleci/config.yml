@@ -57,11 +57,11 @@ jobs:
 
       - run:
           name: Delete old site
-          command: ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com rm -rf /var/www/html/efs-mount-point/nycfoodblog/*
+          command: ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-210-44-111.compute-1.amazonaws.com rm -rf /var/www/html/efs-mount-point/nycfoodblog/*
 
       - run:
           name: Deploy Site
-          command: scp -o StrictHostKeyChecking=no -r build/* ec2-user@ec2-34-207-239-10.compute-1.amazonaws.com:/var/www/html/efs-mount-point/nycfoodblog/
+          command: scp -o StrictHostKeyChecking=no -r build/* ec2-user@ec2-3-210-44-111.compute-1.amazonaws.com:/var/www/html/efs-mount-point/nycfoodblog/
 
 workflows:
   version: 2
