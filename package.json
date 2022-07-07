@@ -14,7 +14,7 @@
     "@types/react-router-dom": "^4.3.2",
     "ajv": "^6.4.0",
     "leaflet": "^1.4.0",
-    "moment": "^2.22.1",
+    "moment": "^2.29.4",
     "react": "^16.8.6",
     "react-datepicker": "^1.4.1",
     "react-dom": "^16.8.6",
